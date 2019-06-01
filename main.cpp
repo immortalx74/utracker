@@ -37,7 +37,7 @@ int main()
     create_pattern(patterns_list, 64, module); // create default pattern
 	
     ACTIVE_CELL active_cell;
-    active_cell.X = 306;
+    active_cell.X = cell_width;
     active_cell.Y = 131;
     active_cell.ROW = 0;
     active_cell.COL = 0;
@@ -232,7 +232,7 @@ int main()
 			ImGui::SetTooltip("Move instrument up");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 306));
+		ImGui::SetCursorPos(ImVec2(220, cell_width));
 		if (ImGui::Button("v##instrument_down"))
 		{
 			//
@@ -334,7 +334,7 @@ int main()
 		//=========================================
 		
 		// draw track headers
-		ImGui::SetNextWindowContentSize(ImVec2((tracks * 120) + 108, 17));
+		ImGui::SetNextWindowContentSize(ImVec2((tracks * 120) + 108, cell_height));
 		ImGui::SetCursorPosX(46);
 		ImGui::BeginChild("##trackheaders", ImVec2(0, 60), false);
 		ImGui::SetScrollX(grid_scroll_x);
@@ -371,7 +371,7 @@ int main()
 		ImGui::Columns(1);
 		
 		// draw row headers
-		ImGui::SetNextWindowContentSize(ImVec2(30, (pattern_rows * 17) + 30));
+		ImGui::SetNextWindowContentSize(ImVec2(cell_width, (pattern_rows * cell_height) + cell_width));
 		ImGui::BeginChild("##rowheaders", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
 		ImGui::SetScrollY(grid_scroll_y);
 		ImGui::SetCursorPosY(8);
@@ -385,7 +385,7 @@ int main()
 		
 		ImGui::SetCursorPosY(72);
 		ImGui::SetCursorPosX(38);
-		ImGui::SetNextWindowContentSize(ImVec2(tracks * 120, pattern_rows * 17));
+		ImGui::SetNextWindowContentSize(ImVec2(tracks * 120, pattern_rows * cell_height));
 		ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 		
 		if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
@@ -397,10 +397,10 @@ int main()
 			
 			if (ImGui::IsMouseClicked(0))
 			{
-				active_cell.COL = floor((mousex - winx)) / 30;
-				active_cell.ROW = floor((mousey - winy)) / 17;
-				active_cell.X = active_cell.COL * 30 + winx;
-				active_cell.Y = active_cell.ROW * 17 + winy;
+				active_cell.COL = floor((mousex - winx)) / cell_width;
+				active_cell.ROW = floor((mousey - winy)) / cell_height;
+				active_cell.X = active_cell.COL * cell_width + winx;
+				active_cell.Y = active_cell.ROW * cell_height + winy;
 				if (selection_exists)
 				{
 					selection_exists = false;
@@ -416,29 +416,29 @@ int main()
 			{
 				selection.START_X = active_cell.X;
 				selection.START_Y = active_cell.Y;
-				selection.END_X = (floor((mousex - winx) / 30) + 1) * 30 + winx;
-				selection.END_Y = (floor((mousey - winy) / 17) + 1) * 17 + winy;
+				selection.END_X = (floor((mousex - winx) / cell_width) + 1) * cell_width + winx;
+				selection.END_Y = (floor((mousey - winy) / cell_height) + 1) * cell_height + winy;
 			}
 			else if (mousex > active_cell.X && mousey < active_cell.Y)
 			{
 				selection.START_X = active_cell.X;
-				selection.START_Y = active_cell.Y + 17;
-				selection.END_X = (floor((mousex - winx) / 30) + 1) * 30 + winx;
-				selection.END_Y = (floor((mousey - winy) / 17)) * 17 + winy;
+				selection.START_Y = active_cell.Y + cell_height;
+				selection.END_X = (floor((mousex - winx) / cell_width) + 1) * cell_width + winx;
+				selection.END_Y = (floor((mousey - winy) / cell_height)) * cell_height + winy;
 			}
 			else if (mousex < active_cell.X && mousey > active_cell.Y)
 			{
-				selection.START_X = (floor((mousex - winx) / 30)) * 30 + winx;
+				selection.START_X = (floor((mousex - winx) / cell_width)) * cell_width + winx;
 				selection.START_Y = active_cell.Y;
-				selection.END_X = active_cell.X + 30;
-				selection.END_Y = (floor((mousey - winy) / 17) + 1) * 17 + winy;
+				selection.END_X = active_cell.X + cell_width;
+				selection.END_Y = (floor((mousey - winy) / cell_height) + 1) * cell_height + winy;
 			}
 			else if (mousex < active_cell.X && mousey < active_cell.Y)
 			{
-				selection.START_X = (floor((mousex - winx) / 30)) * 30 + winx;
-				selection.START_Y = (floor((mousey - winy) / 17)) * 17 + winy;
-				selection.END_X = active_cell.X + 30;
-				selection.END_Y = active_cell.Y + 17;
+				selection.START_X = (floor((mousex - winx) / cell_width)) * cell_width + winx;
+				selection.START_Y = (floor((mousey - winy) / cell_height)) * cell_height + winy;
+				selection.END_X = active_cell.X + cell_width;
+				selection.END_Y = active_cell.Y + cell_height;
 			}
 
 			// auto scroll if selection out of bounds
@@ -447,25 +447,25 @@ int main()
 
 			if (ImGui::GetMousePos().y > ImGui::GetWindowHeight() + ImGui::GetWindowPos().y - 40)
 			{
-				sy += 17;
+				sy += cell_height;
 				ImGui::SetScrollY(sy);
 			}
 
 			if (ImGui::GetMousePos().x > ImGui::GetWindowWidth() + ImGui::GetWindowPos().x - 40)
 			{
-				sx += 17;
+				sx += cell_height;
 				ImGui::SetScrollX(sx);
 			}
 
 			if (ImGui::GetMousePos().y < ImGui::GetWindowPos().y + 40)
 			{
-				sy -= 17;
+				sy -= cell_height;
 				ImGui::SetScrollY(sy);
 			}
 
 			if (ImGui::GetMousePos().x < ImGui::GetWindowPos().x + 40)
 			{
-				sx -= 17;
+				sx -= cell_height;
 				ImGui::SetScrollX(sx);
 			}
 			
@@ -492,44 +492,44 @@ int main()
 		
 		for (int r = 0; r < pattern_rows; r += nth_row_highlight)
 		{
-			draw_list->AddRectFilled(ImVec2(c.x, c.y), ImVec2(c.x + (tracks * 120) - 8, c.y + 17), col_nth_row_highlight);
-			c.y += nth_row_highlight * 17;
+			draw_list->AddRectFilled(ImVec2(c.x, c.y), ImVec2(c.x + (tracks * 120) - 8, c.y + cell_height), col_nth_row_highlight);
+			c.y += nth_row_highlight * cell_height;
 		}
 		
 		// draw active row
 		draw_list->AddRectFilled(ImVec2(c.x, active_cell.Y - ImGui::GetScrollY()),
-								 ImVec2(c.x + (tracks * 120) - 8, active_cell.Y + 17 - ImGui::GetScrollY()), col_active_row);
+								 ImVec2(c.x + (tracks * 120) - 8, active_cell.Y + cell_height - ImGui::GetScrollY()), col_active_row);
 		
 		// draw active cell
 		draw_list->AddRectFilled(ImVec2(active_cell.X - ImGui::GetScrollX(), active_cell.Y - ImGui::GetScrollY()),
-								 ImVec2(active_cell.X + 30 - ImGui::GetScrollX(), active_cell.Y + 17 - ImGui::GetScrollY()), col_active_cell);
+								 ImVec2(active_cell.X + cell_width - ImGui::GetScrollX(), active_cell.Y + cell_height - ImGui::GetScrollY()), col_active_cell);
 		
 		//TEMP!!!!! scroll cursor out of bounds test
 		ImVec2 rect_start, rect_end;
 		rect_start.x = active_cell.X - ImGui::GetScrollX(); rect_start.y = active_cell.Y - ImGui::GetScrollY();
-		rect_end.x = active_cell.X + 30 - ImGui::GetScrollX(); rect_end.y = active_cell.Y + 17 - ImGui::GetScrollY();
+		rect_end.x = active_cell.X + cell_width - ImGui::GetScrollX(); rect_end.y = active_cell.Y + cell_height - ImGui::GetScrollY();
 		if (!ImGui::IsRectVisible(rect_start,rect_end))
 		{
 			float sx = ImGui::GetScrollX();
 			float sy = ImGui::GetScrollY();
 			if (active_cell.LAST_CURSOR_ACTION == DOWN)
 			{
-				sy += 17;
+				sy += cell_height;
 				ImGui::SetScrollY(sy);
 			}
 			else if (active_cell.LAST_CURSOR_ACTION == UP)
 			{
-				sy -= 17;
+				sy -= cell_height;
 				ImGui::SetScrollY(sy);
 			}
 			else if (active_cell.LAST_CURSOR_ACTION == RIGHT)
 			{
-				sx += 30;
+				sx += cell_width;
 				ImGui::SetScrollX(sx);
 			}
 			else if (active_cell.LAST_CURSOR_ACTION == LEFT)
 			{
-				sx -= 30;
+				sx -= cell_width;
 				ImGui::SetScrollX(sx);
 			}
 			
@@ -594,7 +594,7 @@ int main()
 			if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)
 			{
 				active_cell.LAST_CURSOR_ACTION = DOWN;
-				active_cell.Y += 17;
+				active_cell.Y += cell_height;
 				active_cell.ROW++;
 
 				if (active_cell.ROW == patterns_list[active_pattern].ROWS - 1)
@@ -610,7 +610,7 @@ int main()
 			else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_UpArrow]) && active_cell.ROW > 0)
 			{
 				active_cell.LAST_CURSOR_ACTION = UP;
-				active_cell.Y -= 17;
+				active_cell.Y -= cell_height;
 				active_cell.ROW--;
 
 				if (active_cell.ROW == 0)
@@ -626,7 +626,7 @@ int main()
 			else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_RightArrow]) && active_cell.COL < (tracks * 4) - 1)
 			{
 				active_cell.LAST_CURSOR_ACTION = RIGHT;
-				active_cell.X += 30;
+				active_cell.X += cell_width;
 				active_cell.COL++;
 
 				if (active_cell.COL == (tracks * 4) - 1)
@@ -642,7 +642,7 @@ int main()
 			else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_LeftArrow]) && active_cell.COL > 0)
 			{
 				active_cell.LAST_CURSOR_ACTION = LEFT;
-				active_cell.X -= 30;
+				active_cell.X -= cell_width;
 				active_cell.COL--;
 
 				if (active_cell.COL == 0)
