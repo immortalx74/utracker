@@ -95,6 +95,9 @@ int key_repeat_counter = key_repeat_delay;
 bool selection_begin = false;
 bool selection_exists = false;
 
+float cell_width = 30.0f;
+float cell_height = 17.0f;
+
 std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","Play",
 	"Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
 

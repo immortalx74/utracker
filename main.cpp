@@ -3,17 +3,29 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
+
+#include "fmod/fmod.hpp"
+#include "fmod/fmod_errors.h"
+
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include <string>
 #include <iostream>
 #include <array>
 #include "misc.cpp"
+bool play = false;
 
+void ERRCHECK(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        exit(-1);
+    }
+}
 
 int main()
 {
-	
 	load_textures();
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "Tracker alpha", sf::Style::Default);
 	window.setFramerateLimit(60);
@@ -21,6 +33,26 @@ int main()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     sf::Clock deltaClock;
+
+    //======================================================================
+    FMOD::System     *system;
+    FMOD::Sound      *sound1, *sound2, *sound3;
+    FMOD::Channel    *channel = 0;
+    FMOD_RESULT       result;
+    int               key;
+    unsigned int      version;
+
+    result = FMOD::System_Create(&system);
+    ERRCHECK(result);
+
+    result = system->init(32, FMOD_INIT_NORMAL, 0);
+    ERRCHECK(result);
+
+    result = system->createSound("drumloop.wav", FMOD_HARDWARE, 0, &sound1);
+    ERRCHECK(result);
+
+
+    //======================================================================
 	
     // create containers
     std::vector<PATTERN> patterns_list;
