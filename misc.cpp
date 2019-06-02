@@ -53,6 +53,7 @@ struct UI_SIZING
 
 	float TRACK_HEADERS_START = 46;
 	float TRACK_HEADERS_HEIGHT = 60;
+	float TRACK_SLIDERS_WIDTH = 104;
 };
 
 struct PATTERN
@@ -240,8 +241,6 @@ bool create_instrument(std::vector<INSTRUMENT> &instruments_list)
 
 bool create_track(std::vector<TRACK> &tracks_list)
 {
-	int last_track_index = tracks_list.size() - 1;
-	
 	if (tracks_list.size() == MAX_TRACKS_PER_MODULE)
 	{
 		return false;
@@ -256,4 +255,9 @@ bool create_track(std::vector<TRACK> &tracks_list)
 	tracks_list.push_back(new_track);
 	
 	return true;
+}
+
+void cell_set(int row, int col, std::vector<NOTE_DATA> &module)
+{
+	module[row][col].NOTE = "C-5";
 }

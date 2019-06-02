@@ -9,3 +9,11 @@ imgui/*
 *.ilk
 *.exe
 *.png
+lib
+lib/*
+include
+include/*
+*.log
+fmod
+fmod/*
+*.ini

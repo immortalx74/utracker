@@ -381,7 +381,7 @@ int main()
 			ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
 			ImGui::Text(track_text.c_str());
 			ImGui::PopStyleColor();
-			ImGui::PushItemWidth(104);
+			ImGui::PushItemWidth(UI.TRACK_SLIDERS_WIDTH);
 			ImGui::PushID(std::to_string(t).c_str());
 			ImGui::SliderInt("##trackvolume", &tracks_list[t].VOLUME, 0, 64, "v:%02d");
 			if (ImGui::IsItemClicked(1))
@@ -397,7 +397,7 @@ int main()
 			}
 			ImGui::PopID();
 			ImGui::PopItemWidth();
-			ImGui::SetColumnWidth(-1, 120);
+			ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
 			ImGui::NextColumn();
 		}
 		
@@ -617,7 +617,7 @@ int main()
 				}
 			}
 			
-			ImGui::SetColumnWidth(-1, 120);
+			ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
 			ImGui::NextColumn();
 		}
 		
