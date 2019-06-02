@@ -7,7 +7,7 @@
 
 struct UI_SIZING
 {
-	float MARGIN = 0;
+	float MARGIN = 4;
 
 	float LEFT_PANE_X = 0;
 	float LEFT_PANE_Y = 0;
@@ -17,12 +17,13 @@ struct UI_SIZING
 	float TOOLBAR_X = 0;
 	float TOOLBAR_Y = 0;
 	float TOOLBAR_WIDTH = 0;
-	float TOOLBAR_HEIGHT = 0;
+	float TOOLBAR_HEIGHT = 48;
  
 	float MAIN_X = 0;
 	float MAIN_Y = 0;
 	float MAIN_WIDTH = 0;
 	float MAIN_HEIGHT = 0;
+	float MAIN_PADDING = 70;
  
 	float GRID_X = 0;
 	float GRID_Y = 0;
@@ -45,6 +46,13 @@ struct UI_SIZING
 	float PATTERN_OPTIONS_MODAL_HEIGHT = 200;
 	float INSTRUMENT_OPTIONS_MODAL_WIDTH = 400;
 	float INSTRUMENT_OPTIONS_MODAL_HEIGHT = 200;
+
+	float TRACK_WIDTH = 120;
+	float CELL_WIDTH = 30;
+	float CELL_HEIGHT = 17;
+
+	float TRACK_HEADERS_START = 46;
+	float TRACK_HEADERS_HEIGHT = 60;
 };
 
 struct PATTERN
@@ -136,9 +144,6 @@ int key_repeat_counter = key_repeat_delay;
 
 bool selection_begin = false;
 bool selection_exists = false;
-
-float cell_width = 30.0f;
-float cell_height = 17.0f;
 
 std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","Play",
 	"Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
@@ -252,4 +257,3 @@ bool create_track(std::vector<TRACK> &tracks_list)
 	
 	return true;
 }
-
