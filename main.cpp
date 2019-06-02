@@ -13,7 +13,6 @@
 #include <iostream>
 #include <array>
 #include "misc.cpp"
-bool play = false;
 
 void ERRCHECK(FMOD_RESULT result)
 {
@@ -36,11 +35,9 @@ int main()
 
     //======================================================================
     FMOD::System     *system;
-    FMOD::Sound      *sound1, *sound2, *sound3;
+    FMOD::Sound      *sound;
     FMOD::Channel    *channel = 0;
     FMOD_RESULT       result;
-    int               key;
-    unsigned int      version;
 
     result = FMOD::System_Create(&system);
     ERRCHECK(result);
@@ -48,7 +45,7 @@ int main()
     result = system->init(32, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
 
-    result = system->createSound("drumloop.wav", FMOD_HARDWARE, 0, &sound1);
+    result = system->createSound("drumloop.wav", FMOD_HARDWARE, 0, &sound);
     ERRCHECK(result);
 
 
@@ -68,6 +65,8 @@ int main()
 	
     create_pattern(patterns_list, 64, module); // create default pattern
 	
+	UI_SIZING UI;
+
     ACTIVE_CELL active_cell;
     active_cell.X = cell_width;
     active_cell.Y = 131;
@@ -98,25 +97,26 @@ int main()
 		}
 
 		ImGui::SFML::Update(window, deltaClock.restart());
-		
-		//============================================================================================
+
 		io.KeyRepeatRate = 0.035f;
 		
 		ImGui::PushStyleColor(ImGuiCol_Button, col_button);
 		
 		// Left pane
 		int app_window_height = io.DisplaySize.y;
-		ImGui::SetNextWindowSize(ImVec2(260, app_window_height));
-		ImGui::SetNextWindowPos(ImVec2(4, 0));
+		ImGui::SetNextWindowSize(ImVec2(UI.LEFT_PANE_WIDTH, app_window_height));
+		ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_X + UI.MARGIN, UI.LEFT_PANE_Y));
 		ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 		
 		// Patterns list
 		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
 		ImGui::Text("Patterns");
 		ImGui::PopStyleColor();
-		ImGui::PushItemWidth(200);
 		
-		if (ImGui::ListBoxHeader("##patlist", 20, 10)) // label, items_count, height_in_items
+		UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
+		UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
+
+		if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 		{   
 			for (int i = 0; i < patterns_list.size(); ++i)
 			{
@@ -127,15 +127,16 @@ int main()
 			}
 		}
 		ImGui::ListBoxFooter();
-		ImGui::PopItemWidth();
 		
 		// Instruments list 
 		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
 		ImGui::Text("Instruments");
-		ImGui::PopStyleColor();    
-		ImGui::PushItemWidth(200);
+		ImGui::PopStyleColor();
 		
-		if (ImGui::ListBoxHeader("##inslist", 20, 10)) // label, items_count, height_in_items
+		UI.INSTRUMENTS_LIST_X = ImGui::GetCursorPosX();
+		UI.INSTRUMENTS_LIST_Y = ImGui::GetCursorPosY();
+
+		if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTRUMENTS_LIST_HEIGHT))) // label, items_count, height_in_items
 		{   
 			for (int i = 0; i < instruments_list.size(); ++i)
 			{
@@ -146,11 +147,10 @@ int main()
 			}
 		}
 		ImGui::ListBoxFooter();
-		ImGui::PopItemWidth();
 		
 		// Draw sliders
-		ImGui::PushItemWidth(100);
-		ImGui::SetCursorPosY(428);
+		ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
 		
 		ImGui::SliderInt("Octave", &octave, 0, 9);
 		ImGui::SliderInt("Bpm", &bpm, 32, 512);
@@ -164,7 +164,7 @@ int main()
 		ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 		
 		// Draw Pattern buttons
-		ImGui::SetCursorPos(ImVec2(220, 27));
+		ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
 		if (ImGui::Button("+##pattern_add"))
 		{
 			create_pattern(patterns_list, 64, module);
@@ -176,7 +176,7 @@ int main()
 		}
 		
 		
-		ImGui::SetCursorPos(ImVec2(220, 47));
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("-##pattern_del"))
 		{
 			//
@@ -187,7 +187,7 @@ int main()
 			ImGui::SetTooltip("Delete Pattern");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 67));
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("^##pattern_up"))
 		{
 			//
@@ -198,7 +198,7 @@ int main()
 			ImGui::SetTooltip("Move pattern up");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 87));
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("v##pattern_down"))
 		{
 			//
@@ -209,7 +209,7 @@ int main()
 			ImGui::SetTooltip("Move pattern down");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 107));
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("o##pattern_edit"))
 		{
 			ImGui::OpenPopup("Pattern options");
@@ -220,7 +220,7 @@ int main()
 			ImGui::SetTooltip("Open pattern options");
 		}
 		
-		ImGui::SetNextWindowSize(ImVec2(400, 200));
+		ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
 		
 		bool p_opened = true;
 		
@@ -231,7 +231,7 @@ int main()
 		
 		
 		// Draw Instrument buttons
-		ImGui::SetCursorPos(ImVec2(220, 246));
+		ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN, UI.INSTRUMENTS_LIST_Y));
 		if (ImGui::Button("+##instrument_add"))
 		{
 			create_instrument(instruments_list);
@@ -242,7 +242,7 @@ int main()
 			ImGui::SetTooltip("Add Instrument");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 266));
+		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("-##instrument_del"))
 		{
 			//
@@ -253,7 +253,7 @@ int main()
 			ImGui::SetTooltip("Delete Instrument");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 286));
+		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("^##instrument_up"))
 		{
 			//
@@ -264,7 +264,7 @@ int main()
 			ImGui::SetTooltip("Move instrument up");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, cell_width));
+		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("v##instrument_down"))
 		{
 			//
@@ -275,7 +275,7 @@ int main()
 			ImGui::SetTooltip("Move instrument down");
 		}
 		
-		ImGui::SetCursorPos(ImVec2(220, 326));
+		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
 		if (ImGui::Button("o##instrument_edit"))
 		{
 			ImGui::OpenPopup("Instrument options");
@@ -286,7 +286,7 @@ int main()
 			ImGui::SetTooltip("Open instrument options");
 		}
 		
-		ImGui::SetNextWindowSize(ImVec2(400, 200));
+		ImGui::SetNextWindowSize(ImVec2(UI.INSTRUMENT_OPTIONS_MODAL_WIDTH, UI.INSTRUMENT_OPTIONS_MODAL_HEIGHT));
 		
 		if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoResize))
 		{
