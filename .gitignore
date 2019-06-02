@@ -1,0 +1,11 @@
+*.dll
+*.exe
+*.lib
+imgui
+imgui/*
+*.obj
+*.pdb
+*.wav
+*.ilk
+*.exe
+*.png
