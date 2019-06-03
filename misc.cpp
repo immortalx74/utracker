@@ -211,7 +211,6 @@ bool create_pattern(std::vector<PATTERN> &patterns_list, int rows, std::vector<s
             cur_track_row_data.VOLUME = 0.0f;
             cur_track_row_data.FX = -1;
             cur_track_row_data.FX_PARAM = -1;
-			
             row.push_back(cur_track_row_data);
         }
 		
@@ -257,7 +256,8 @@ bool create_track(std::vector<TRACK> &tracks_list)
 	return true;
 }
 
-void cell_set(int row, int col, std::vector<NOTE_DATA> &module)
+void cell_set(int row, int track, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>> &module)
 {
-	module[row][col].NOTE = "C-5";
+	module[row][track].NAME = nd.NAME;
+	module[row][track].VOLUME = nd.VOLUME;
 }

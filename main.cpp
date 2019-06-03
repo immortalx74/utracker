@@ -599,7 +599,9 @@ int main()
 				
 				if (module[i][j].VOLUME != 0.0f)
 				{
-					ImGui::Text(std::to_string(module[i][j].VOLUME).c_str());
+					std::string volstring = "v" + std::to_string((int)module[i][j].VOLUME);
+					// ImGui::Text(std::to_string((int)module[i][j].VOLUME).c_str());
+					ImGui::Text(volstring.c_str());
 				}
 				else
 				{
@@ -615,10 +617,10 @@ int main()
 				{
 					ImGui::Text("---");
 				}
+				ImGui::NextColumn();
 			}
 			
 			ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
-			ImGui::NextColumn();
 		}
 		
 		ImGui::Columns(1);
@@ -689,6 +691,16 @@ int main()
 				{
 					selection_exists = false;
 				}
+			}
+			else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Z]))
+			{
+				
+				NOTE_DATA nd;
+				nd.NAME = "C-5";
+				// nd.VOLUME = 12;
+				cell_set(active_cell.ROW, active_cell.COL/4, nd, module);
+				std::cout << io.KeyMap[80];
+				
 			}
 		}
 		
