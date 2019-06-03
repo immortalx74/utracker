@@ -699,8 +699,19 @@ int main()
 				nd.NAME = "C-5";
 				// nd.VOLUME = 12;
 				cell_set(active_cell.ROW, active_cell.COL/4, nd, module);
-				std::cout << io.KeyMap[80];
-				
+			}
+
+			// for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
+			// {
+			// 	if (ImGui::IsKeyPressed(i))
+			// 	{
+			// 		// int k = ImGui::GetKeyIndex(i);
+			// 		std::cout << i << std::endl;
+			// 	}
+			// }
+			if (ImGui::IsKeyPressed(0))
+			{
+				std::cout << "fdfd";
 			}
 		}
 		
