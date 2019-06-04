@@ -89,7 +89,7 @@ struct NOTE_DATA
 	std::string NAME;
 	float FREQUENCY;
 	int INSTRUMENT;
-	float VOLUME;
+	int VOLUME;
 	int FX;
 	int FX_PARAM;
 };
@@ -131,7 +131,7 @@ int col_column_separator = IM_COL32(255,0,0,255);
 
 int tracks = 8;
 int active_pattern = 0;
-int active_instrument = -1;
+int active_instrument = 0;
 int octave = 5;
 int bpm = 125;
 int ticks_per_row = 6;
@@ -208,8 +208,8 @@ bool CreatePattern(std::vector<PATTERN> &patterns_list, int rows, std::vector<st
 			
             cur_track_row_data.NAME = "---";
             cur_track_row_data.FREQUENCY = 0.0f;
-            cur_track_row_data.INSTRUMENT = -1;
-            cur_track_row_data.VOLUME = -1;
+            cur_track_row_data.INSTRUMENT = 0;
+            cur_track_row_data.VOLUME = 0;
             cur_track_row_data.FX = -1;
             cur_track_row_data.FX_PARAM = -1;
             row.push_back(cur_track_row_data);
@@ -267,7 +267,12 @@ bool CreateTrack(std::vector<TRACK> &tracks_list)
 
 void CellSet(int row, int col, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>> &module)
 {
-	if (col % 4 == 0) module[row][col / 4].NAME = nd.NAME;
+	if (col % 4 == 0)
+	{
+		module[row][col / 4].NAME = nd.NAME;
+		module[row][col / 4].INSTRUMENT = nd.INSTRUMENT;
+		module[row][col / 4].VOLUME = nd.VOLUME;
+	}
 	if (col % 4 == 1) module[row][col / 4].INSTRUMENT = nd.INSTRUMENT;
 	if (col % 4 == 2) module[row][col / 4].VOLUME = nd.VOLUME;
 	if (col % 4 == 3) module[row][col / 4].FX = nd.FX;
@@ -344,4 +349,26 @@ int KeyToInstrument(int key)
 		default:	return -1;
 	}
 	return instr;
+}
+
+int KeyToVolume(int key)
+{
+	int vol;
+
+	switch (key)
+	{
+		case 26:	vol = 0; break; // 0
+		case 27:	vol = 1; break; // 0
+		case 28:	vol = 2; break; // 0
+		case 29:	vol = 3; break; // 0
+		case 30:	vol = 4; break; // 0
+		case 31:	vol = 5; break; // 0
+		case 32:	vol = 6; break; // 0
+		case 33:	vol = 7; break; // 0
+		case 34:	vol = 8; break; // 0
+		case 35:	vol = 9; break; // 0
+
+		default:	return -1;
+	}
+	return vol;
 }

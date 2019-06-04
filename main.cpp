@@ -137,7 +137,7 @@ int main()
 		UI.INSTRUMENTS_LIST_X = ImGui::GetCursorPosX();
 		UI.INSTRUMENTS_LIST_Y = ImGui::GetCursorPosY();
 
-		if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTRUMENTS_LIST_HEIGHT))) // label, items_count, height_in_items
+		if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTRUMENTS_LIST_HEIGHT)))
 		{   
 			for (int i = 0; i < instruments_list.size(); ++i)
 			{
@@ -588,11 +588,18 @@ int main()
 				ImGui::Text(module[i][j].NAME.c_str());
 				ImGui::SameLine();
 				
-				if (module[i][j].INSTRUMENT != -1)
+				if (module[i][j].INSTRUMENT != 0)
 				{
 					int instr = module[i][j].INSTRUMENT;
 					std::string instr_str = std::to_string(instr);
-					if (instr < 10) instr_str = " 0" + instr_str;
+					if (instr < 10) 
+					{
+						instr_str = " 0" + instr_str;
+					}
+					else
+					{
+						instr_str = " " + instr_str;
+					}
 					ImGui::Text(instr_str.c_str());
 				}
 				else
@@ -601,9 +608,19 @@ int main()
 				}
 				ImGui::SameLine();
 				
-				if (module[i][j].VOLUME != -1)
+				if (module[i][j].VOLUME != 0.0f)
 				{
-					ImGui::Text(std::to_string((int)module[i][j].VOLUME).c_str());
+					int vol = module[i][j].VOLUME;
+					std::string vol_str = std::to_string(vol);
+					if (vol < 10)
+					{
+						vol_str = " 0" + vol_str;
+					}
+					else
+					{
+						vol_str = " " + vol_str;
+					}
+					ImGui::Text(vol_str.c_str());
 				}
 				else
 				{
@@ -695,12 +712,11 @@ int main()
 				}
 			}
 
-			// note entry test
+			// note entry
 			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
 			{
 				if (ImGui::IsKeyPressed(i))
 				{
-					std::cout << i << std::endl;
 					if (active_cell.COL % 4 == 0) // note cell
 					{
 						std::string keychar = KeyToNote(i, octave);
@@ -709,6 +725,17 @@ int main()
 						{
 							NOTE_DATA nd;
 							nd.NAME = keychar;
+							int cur_instr = module[active_cell.ROW][active_cell.COL/4].INSTRUMENT;
+							int cur_vol = module[active_cell.ROW][active_cell.COL/4].VOLUME;
+
+							if (cur_instr == 0 && active_instrument > 0)
+							{
+								nd.INSTRUMENT = active_instrument;
+							}
+							if (cur_vol == 0)
+							{
+								nd.VOLUME = 64;
+							}
 							CellSet(active_cell.ROW, active_cell.COL, nd, module);
 						}
 					}
@@ -718,14 +745,49 @@ int main()
 
 						if (keychar != -1)
 						{
+							int cur_value = module[active_cell.ROW][active_cell.COL/4].INSTRUMENT;
+							int second_digit = (cur_value % 10);
+							int new_value;
+
+							if (cur_value > 0)
+							{
+								new_value = (second_digit * 10) + keychar;
+							}
+							else if (cur_value == 0)
+							{
+								new_value = keychar;
+							}
+							
 							NOTE_DATA nd;
-							nd.INSTRUMENT = keychar;
+							nd.INSTRUMENT = new_value;
 							CellSet(active_cell.ROW, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 2) // volume cell
 					{
-						//
+						int keychar = KeyToVolume(i);
+
+						if (keychar != -1)
+						{
+							int cur_value = module[active_cell.ROW][active_cell.COL/4].VOLUME;
+							int second_digit = (cur_value % 10);
+							int new_value;
+
+							if (cur_value > 0)
+							{
+								new_value = (second_digit * 10) + keychar;
+							}
+							else if (cur_value == 0)
+							{
+								new_value = keychar;
+							}
+							
+							if (new_value > 64) new_value = 64;
+
+							NOTE_DATA nd;
+							nd.VOLUME = new_value;
+							CellSet(active_cell.ROW, active_cell.COL, nd, module);
+						}
 					}
 					else if (active_cell.COL % 4 == 1) // fx + param cell
 					{
