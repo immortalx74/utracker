@@ -1,0 +1,7 @@
+{
+	"shell_cmd": "build.bat",
+	"file_regex": "^((?:\\w\\:)?[^\\:\\n]+\\.[A-Za-z]+)\\((\\d+)\\)\\ ?: (?:fatal )?(?:error|warning) \\w\\d+: ()([^\\n]+)$",
+	"working_dir": "${folder}",
+	"selector": "source.c, source.cpp",
+	"shell":true,
+}

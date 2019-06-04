@@ -152,7 +152,8 @@ std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","P
 bool show_demo = false;
 std::vector<sf::Texture> toolbar_buttons;
 
-void load_textures()
+
+void LoadTextures()
 {
 	int x_offset = 0;
 	
@@ -169,7 +170,7 @@ void load_textures()
 	}
 }
 
-bool create_pattern(std::vector<PATTERN> &patterns_list, int rows, std::vector<std::vector<NOTE_DATA>> &module)
+bool CreatePattern(std::vector<PATTERN> &patterns_list, int rows, std::vector<std::vector<NOTE_DATA>> &module)
 {
 	int last_pattern_rows = 0;
 	int last_pattern_offset = 0;
@@ -208,7 +209,7 @@ bool create_pattern(std::vector<PATTERN> &patterns_list, int rows, std::vector<s
             cur_track_row_data.NAME = "---";
             cur_track_row_data.FREQUENCY = 0.0f;
             cur_track_row_data.INSTRUMENT = -1;
-            cur_track_row_data.VOLUME = 0.0f;
+            cur_track_row_data.VOLUME = -1;
             cur_track_row_data.FX = -1;
             cur_track_row_data.FX_PARAM = -1;
             row.push_back(cur_track_row_data);
@@ -220,7 +221,7 @@ bool create_pattern(std::vector<PATTERN> &patterns_list, int rows, std::vector<s
 	return true;
 }
 
-bool create_instrument(std::vector<INSTRUMENT> &instruments_list)
+bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 {
 	int last_instrument_index = instruments_list.size() - 1;
 	
@@ -230,7 +231,15 @@ bool create_instrument(std::vector<INSTRUMENT> &instruments_list)
 	}
 	
 	INSTRUMENT new_instrument;
-	new_instrument.NAME = "Instrument" + std::to_string(last_instrument_index + 1);
+	if (instruments_list.size() == 0)
+	{
+		new_instrument.NAME = "No Instrument";
+	}
+	else
+	{
+		new_instrument.NAME = "Instrument" + std::to_string(last_instrument_index + 1);	
+	}
+	
 	new_instrument.SAMPLE_MAP = 0; // TEMP!
 	
 	instruments_list.push_back(new_instrument);
@@ -238,7 +247,7 @@ bool create_instrument(std::vector<INSTRUMENT> &instruments_list)
 	return true;
 }
 
-bool create_track(std::vector<TRACK> &tracks_list)
+bool CreateTrack(std::vector<TRACK> &tracks_list)
 {
 	if (tracks_list.size() == MAX_TRACKS_PER_MODULE)
 	{
@@ -256,13 +265,83 @@ bool create_track(std::vector<TRACK> &tracks_list)
 	return true;
 }
 
-void cell_set(int row, int track, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>> &module)
+void CellSet(int row, int col, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>> &module)
 {
-	module[row][track].NAME = nd.NAME;
-	module[row][track].VOLUME = nd.VOLUME;
+	if (col % 4 == 0) module[row][col / 4].NAME = nd.NAME;
+	if (col % 4 == 1) module[row][col / 4].INSTRUMENT = nd.INSTRUMENT;
+	if (col % 4 == 2) module[row][col / 4].VOLUME = nd.VOLUME;
+	if (col % 4 == 3) module[row][col / 4].FX = nd.FX;
 }
 
-// std::string key_to_note()
-// {
+std::string KeyToNote(int key, int cur_octave)
+{
+	// std::array<std::string, 13> notes = {"C-","C#","D-","D#","E-","F-","F#","G-","G#","A-","A#","B-","B#"};
+	std::string note;
 	
-// }
+	switch (key)
+	{
+		// A B C D E F G H I J K  L   M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z
+		// 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+		case 16: 	note = "C-"; cur_octave--; break; //Q key
+		case 22: 	note = "C#"; cur_octave--; break; //W key
+		case 4: 	note = "D-"; cur_octave--; break; //E key
+		case 17: 	note = "D#"; cur_octave--; break; //R key
+		case 19: 	note = "E-"; cur_octave--; break; //T key
+		case 24: 	note = "F-"; cur_octave--; break; //Y key
+		case 20: 	note = "F#"; cur_octave--; break; //U key
+		case 8: 	note = "G-"; cur_octave--; break; //I key
+		case 14: 	note = "G#"; cur_octave--; break; //O key
+		case 15: 	note = "A-"; cur_octave--; break; //P key
+		case 46: 	note = "A#"; cur_octave--; break; //[ key
+		case 47: 	note = "B-"; cur_octave--; break; //] key
+
+		case 0: 	note = "C-"; break; //A key
+		case 18: 	note = "C#"; break; //S key
+		case 3: 	note = "D-"; break; //D key
+		case 5: 	note = "D#"; break; //F key
+		case 6: 	note = "E-"; break; //G key
+		case 7: 	note = "F-"; break; //H key
+		case 9: 	note = "F#"; break; //J key
+		case 10: 	note = "G-"; break; //K key
+		case 11: 	note = "G#"; break; //L key
+		case 48: 	note = "A-"; break; //; key
+		case 51: 	note = "A#"; break; //' key
+
+		case 25: 	note = "C-"; cur_octave++; break; //Z key
+		case 23: 	note = "C#"; cur_octave++; break; //X key
+		case 2: 	note = "D-"; cur_octave++; break; //C key
+		case 21: 	note = "D#"; cur_octave++; break; //V key
+		case 1: 	note = "E-"; cur_octave++; break; //B key
+		case 13: 	note = "F-"; cur_octave++; break; //N key
+		case 12: 	note = "F#"; cur_octave++; break; //M key
+		case 49: 	note = "G-"; cur_octave++; break; //, key
+		case 50: 	note = "G#"; cur_octave++; break; //. key
+		case 52: 	note = "A-"; cur_octave++; break; /// key
+
+		default:	return "invalid";
+	}
+
+	return note + std::to_string(cur_octave);
+}
+
+int KeyToInstrument(int key)
+{
+	int instr;
+
+	switch (key)
+	{
+		case 26:	instr = 0; break; // 0
+		case 27:	instr = 1; break; // 0
+		case 28:	instr = 2; break; // 0
+		case 29:	instr = 3; break; // 0
+		case 30:	instr = 4; break; // 0
+		case 31:	instr = 5; break; // 0
+		case 32:	instr = 6; break; // 0
+		case 33:	instr = 7; break; // 0
+		case 34:	instr = 8; break; // 0
+		case 35:	instr = 9; break; // 0
+
+		default:	return -1;
+	}
+	return instr;
+}

@@ -25,7 +25,7 @@ void ERRCHECK(FMOD_RESULT result)
 
 int main()
 {
-	load_textures();
+	LoadTextures();
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "Tracker alpha", sf::Style::Default);
 	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
@@ -58,12 +58,13 @@ int main()
     
     for (int i = 0; i < tracks; ++i)
     {
-        create_track(tracks_list);
+        CreateTrack(tracks_list);
     }
 	
     std::vector<std::vector<NOTE_DATA>> module;
 	
-    create_pattern(patterns_list, 64, module); // create default pattern
+    CreatePattern(patterns_list, 64, module); // create default pattern
+    CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
 	
 	UI_SIZING UI;
 
@@ -152,7 +153,7 @@ int main()
 		ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
 		
-		ImGui::SliderInt("Octave", &octave, 0, 9);
+		ImGui::SliderInt("Octave", &octave, 1, 8);
 		ImGui::SliderInt("Bpm", &bpm, 32, 512);
 		ImGui::SliderInt("Ticks/Row", &ticks_per_row, 1, 32);
 		ImGui::SliderInt("Step", &step, 0, 32);
@@ -167,7 +168,7 @@ int main()
 		ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
 		if (ImGui::Button("+##pattern_add"))
 		{
-			create_pattern(patterns_list, 64, module);
+			CreatePattern(patterns_list, 64, module);
 		}
 		
 		if (ImGui::IsItemHovered())
@@ -234,7 +235,7 @@ int main()
 		ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN, UI.INSTRUMENTS_LIST_Y));
 		if (ImGui::Button("+##instrument_add"))
 		{
-			create_instrument(instruments_list);
+			CreateInstrument(instruments_list);
 		}
 		
 		if (ImGui::IsItemHovered())
@@ -589,7 +590,10 @@ int main()
 				
 				if (module[i][j].INSTRUMENT != -1)
 				{
-					ImGui::Text(std::to_string(module[i][j].INSTRUMENT).c_str());
+					int instr = module[i][j].INSTRUMENT;
+					std::string instr_str = std::to_string(instr);
+					if (instr < 10) instr_str = " 0" + instr_str;
+					ImGui::Text(instr_str.c_str());
 				}
 				else
 				{
@@ -597,11 +601,9 @@ int main()
 				}
 				ImGui::SameLine();
 				
-				if (module[i][j].VOLUME != 0.0f)
+				if (module[i][j].VOLUME != -1)
 				{
-					std::string volstring = "v" + std::to_string((int)module[i][j].VOLUME);
-					// ImGui::Text(std::to_string((int)module[i][j].VOLUME).c_str());
-					ImGui::Text(volstring.c_str());
+					ImGui::Text(std::to_string((int)module[i][j].VOLUME).c_str());
 				}
 				else
 				{
@@ -692,27 +694,46 @@ int main()
 					selection_exists = false;
 				}
 			}
-			else if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Z]))
+
+			// note entry test
+			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
 			{
-				
-				NOTE_DATA nd;
-				nd.NAME = "C-5";
-				// nd.VOLUME = 12;
-				cell_set(active_cell.ROW, active_cell.COL/4, nd, module);
+				if (ImGui::IsKeyPressed(i))
+				{
+					std::cout << i << std::endl;
+					if (active_cell.COL % 4 == 0) // note cell
+					{
+						std::string keychar = KeyToNote(i, octave);
+
+						if (keychar != "invalid")
+						{
+							NOTE_DATA nd;
+							nd.NAME = keychar;
+							CellSet(active_cell.ROW, active_cell.COL, nd, module);
+						}
+					}
+					else if (active_cell.COL % 4 == 1) // instrument cell
+					{
+						int keychar = KeyToInstrument(i);
+
+						if (keychar != -1)
+						{
+							NOTE_DATA nd;
+							nd.INSTRUMENT = keychar;
+							CellSet(active_cell.ROW, active_cell.COL, nd, module);
+						}
+					}
+					else if (active_cell.COL % 4 == 2) // volume cell
+					{
+						//
+					}
+					else if (active_cell.COL % 4 == 1) // fx + param cell
+					{
+						//
+					}
+				}
 			}
 
-			// for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
-			// {
-			// 	if (ImGui::IsKeyPressed(i))
-			// 	{
-			// 		// int k = ImGui::GetKeyIndex(i);
-			// 		std::cout << i << std::endl;
-			// 	}
-			// }
-			if (ImGui::IsKeyPressed(0))
-			{
-				std::cout << "fdfd";
-			}
 		}
 		
 		ImGui::EndChild();
