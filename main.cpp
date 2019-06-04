@@ -12,7 +12,9 @@
 #include <string>
 #include <iostream>
 #include <array>
+#include "print.cpp"
 #include "misc.cpp"
+
 
 void ERRCHECK(FMOD_RESULT result)
 {
@@ -585,11 +587,22 @@ int main()
 		{
 			for (int j = 0; j < tracks; ++j)
 			{
-				ImGui::Text(module[i][j].NAME.c_str());
+				if (module[i][j].NAME != "---")
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, col_note);
+					ImGui::Text(module[i][j].NAME.c_str());
+					ImGui::PopStyleColor();		
+				}
+				else
+				{
+					ImGui::Text(module[i][j].NAME.c_str());	
+				}
+
 				ImGui::SameLine();
 				
 				if (module[i][j].INSTRUMENT != 0)
 				{
+					ImGui::PushStyleColor(ImGuiCol_Text, col_instrument);
 					int instr = module[i][j].INSTRUMENT;
 					std::string instr_str = std::to_string(instr);
 					if (instr < 10) 
@@ -601,6 +614,7 @@ int main()
 						instr_str = " " + instr_str;
 					}
 					ImGui::Text(instr_str.c_str());
+					ImGui::PopStyleColor();
 				}
 				else
 				{
@@ -610,6 +624,7 @@ int main()
 				
 				if (module[i][j].VOLUME != 0.0f)
 				{
+					ImGui::PushStyleColor(ImGuiCol_Text, col_volume);
 					int vol = module[i][j].VOLUME;
 					std::string vol_str = std::to_string(vol);
 					if (vol < 10)
@@ -621,6 +636,7 @@ int main()
 						vol_str = " " + vol_str;
 					}
 					ImGui::Text(vol_str.c_str());
+					ImGui::PopStyleColor();
 				}
 				else
 				{
@@ -732,9 +748,17 @@ int main()
 							{
 								nd.INSTRUMENT = active_instrument;
 							}
+							else
+							{
+								nd.INSTRUMENT = cur_instr;
+							}
 							if (cur_vol == 0)
 							{
 								nd.VOLUME = 64;
+							}
+							else
+							{
+								nd.VOLUME = cur_vol;
 							}
 							CellSet(active_cell.ROW, active_cell.COL, nd, module);
 						}

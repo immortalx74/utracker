@@ -129,6 +129,10 @@ int col_selection = IM_COL32(90,90,90,255);
 int col_button = IM_COL32(0,0,0,255);
 int col_column_separator = IM_COL32(255,0,0,255);
 
+int col_note = IM_COL32(100,130,200,255);
+int col_instrument = IM_COL32(200,200,60,255);
+int col_volume = IM_COL32(20,170,20,255);
+
 int tracks = 8;
 int active_pattern = 0;
 int active_instrument = 0;
@@ -335,16 +339,16 @@ int KeyToInstrument(int key)
 
 	switch (key)
 	{
-		case 26:	instr = 0; break; // 0
-		case 27:	instr = 1; break; // 0
-		case 28:	instr = 2; break; // 0
-		case 29:	instr = 3; break; // 0
-		case 30:	instr = 4; break; // 0
-		case 31:	instr = 5; break; // 0
-		case 32:	instr = 6; break; // 0
-		case 33:	instr = 7; break; // 0
-		case 34:	instr = 8; break; // 0
-		case 35:	instr = 9; break; // 0
+		case 26:case 75:	instr = 0; break; // 0
+		case 27:case 76:	instr = 1; break; // 0
+		case 28:case 77:	instr = 2; break; // 0
+		case 29:case 78:	instr = 3; break; // 0
+		case 30:case 79:	instr = 4; break; // 0
+		case 31:case 80:	instr = 5; break; // 0
+		case 32:case 81:	instr = 6; break; // 0
+		case 33:case 82:	instr = 7; break; // 0
+		case 34:case 83:	instr = 8; break; // 0
+		case 35:case 84:	instr = 9; break; // 0
 
 		default:	return -1;
 	}
@@ -357,16 +361,16 @@ int KeyToVolume(int key)
 
 	switch (key)
 	{
-		case 26:	vol = 0; break; // 0
-		case 27:	vol = 1; break; // 0
-		case 28:	vol = 2; break; // 0
-		case 29:	vol = 3; break; // 0
-		case 30:	vol = 4; break; // 0
-		case 31:	vol = 5; break; // 0
-		case 32:	vol = 6; break; // 0
-		case 33:	vol = 7; break; // 0
-		case 34:	vol = 8; break; // 0
-		case 35:	vol = 9; break; // 0
+		case 26:case 75:	vol = 0; break; // 0
+		case 27:case 76:	vol = 1; break; // 0
+		case 28:case 77:	vol = 2; break; // 0
+		case 29:case 78:	vol = 3; break; // 0
+		case 30:case 79:	vol = 4; break; // 0
+		case 31:case 80:	vol = 5; break; // 0
+		case 32:case 81:	vol = 6; break; // 0
+		case 33:case 82:	vol = 7; break; // 0
+		case 34:case 83:	vol = 8; break; // 0
+		case 35:case 84:	vol = 9; break; // 0
 
 		default:	return -1;
 	}
