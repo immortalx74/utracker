@@ -119,6 +119,13 @@ struct SELECTION
 	int END_Y;
 };
 
+enum APP_STATE
+{
+	PLAY_MODULE,
+	PLAY_PATTERN,
+	EDITOR
+};
+
 
 int col_btn_repeat = IM_COL32(255,130,0,255);
 int col_title_text = IM_COL32(255,130,0,255);
@@ -128,6 +135,7 @@ int col_nth_row_highlight = IM_COL32(60,60,60,255);
 int col_selection = IM_COL32(90,90,90,255);
 int col_button = IM_COL32(0,0,0,255);
 int col_column_separator = IM_COL32(255,0,0,255);
+int col_row_headers = IM_COL32(80,80,80,255);
 
 int col_note = IM_COL32(100,130,200,255);
 int col_instrument = IM_COL32(200,200,60,255);

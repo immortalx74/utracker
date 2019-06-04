@@ -70,6 +70,8 @@ int main()
 	
 	UI_SIZING UI;
 
+	APP_STATE application_state = EDITOR;
+
     ACTIVE_CELL active_cell;
     active_cell.X = UI.CELL_WIDTH;
     active_cell.Y = 131;
@@ -320,14 +322,25 @@ int main()
 				ImGui::SameLine();
 			}
 			
+			// check button presses
 			if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24)))
 			{
-				if (i == 8) // repeat button toggle
+				if (i == 8) // repeat
 				{
 					btn_repeat = !btn_repeat;
 				}
+
+				if (i == 4) // play
+				{
+					application_state = PLAY_MODULE;
+				}
+
+				if (i == 7) // stop
+				{
+					application_state = EDITOR;
+				}
 			}
-			
+
 			if (ImGui::IsItemHovered())
 			{
 				ImGui::SetTooltip(toolbar_tooltips[i].c_str());
@@ -741,8 +754,8 @@ int main()
 						{
 							NOTE_DATA nd;
 							nd.NAME = keychar;
-							int cur_instr = module[active_cell.ROW][active_cell.COL/4].INSTRUMENT;
-							int cur_vol = module[active_cell.ROW][active_cell.COL/4].VOLUME;
+							int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
+							int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
 
 							if (cur_instr == 0 && active_instrument > 0)
 							{
@@ -760,7 +773,15 @@ int main()
 							{
 								nd.VOLUME = cur_vol;
 							}
-							CellSet(active_cell.ROW, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+
+							// apply step to cursor
+							if (active_cell.ROW + step < pattern_end)
+							{
+								active_cell.LAST_CURSOR_ACTION = DOWN;
+								active_cell.ROW += step;
+								active_cell.Y += step * UI.CELL_HEIGHT;
+							}
 						}
 					}
 					else if (active_cell.COL % 4 == 1) // instrument cell
@@ -769,7 +790,7 @@ int main()
 
 						if (keychar != -1)
 						{
-							int cur_value = module[active_cell.ROW][active_cell.COL/4].INSTRUMENT;
+							int cur_value = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
 							int second_digit = (cur_value % 10);
 							int new_value;
 
@@ -784,7 +805,7 @@ int main()
 							
 							NOTE_DATA nd;
 							nd.INSTRUMENT = new_value;
-							CellSet(active_cell.ROW, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 2) // volume cell
@@ -793,7 +814,7 @@ int main()
 
 						if (keychar != -1)
 						{
-							int cur_value = module[active_cell.ROW][active_cell.COL/4].VOLUME;
+							int cur_value = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
 							int second_digit = (cur_value % 10);
 							int new_value;
 
@@ -810,7 +831,7 @@ int main()
 
 							NOTE_DATA nd;
 							nd.VOLUME = new_value;
-							CellSet(active_cell.ROW, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 1) // fx + param cell
@@ -819,7 +840,18 @@ int main()
 					}
 				}
 			}
+		}
 
+		// play
+		if (application_state == PLAY_PATTERN)
+		{
+			for (int i = pattern_start; i < pattern_end; ++i)
+			{
+				for (int j = 0; j < tracks; ++j)
+				{
+					
+				}
+			}
 		}
 		
 		ImGui::EndChild();
