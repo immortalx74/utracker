@@ -14,6 +14,7 @@
 #include <array>
 #include "print.cpp"
 #include "misc.cpp"
+#include <Windows.h>
 
 
 void ERRCHECK(FMOD_RESULT result)
@@ -23,6 +24,25 @@ void ERRCHECK(FMOD_RESULT result)
         printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
         exit(-1);
     }
+}
+
+void RowTick(int ms)
+{
+	LARGE_INTEGER start, stop, freq;
+	QueryPerformanceCounter(&freq);
+	QueryPerformanceCounter(&start);
+	bool looping = true;
+	do
+	{
+		QueryPerformanceCounter(&stop);
+
+		if (100000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
+		{
+			looping = false;
+			break;
+		}
+	}
+	while (looping);
 }
 
 int main()
@@ -54,7 +74,7 @@ int main()
     //======================================================================
 	
     // create containers
-    std::vector<PATTERN> patterns_list;
+    std::vector<PATTERN_> PATTERN_s_list;
     std::vector<INSTRUMENT> instruments_list;
     std::vector<TRACK> tracks_list;
     
@@ -65,7 +85,7 @@ int main()
 	
     std::vector<std::vector<NOTE_DATA>> module;
 	
-    CreatePattern(patterns_list, 64, module); // create default pattern
+    CreatePATTERN_(PATTERN_s_list, 64, module); // create default PATTERN_
     CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
 	
 	UI_SIZING UI;
@@ -113,21 +133,21 @@ int main()
 		ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_X + UI.MARGIN, UI.LEFT_PANE_Y));
 		ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 		
-		// Patterns list
+		// PATTERN_s list
 		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
-		ImGui::Text("Patterns");
+		ImGui::Text("PATTERN_s");
 		ImGui::PopStyleColor();
 		
-		UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
-		UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
+		UI.PATTERN_S_LIST_X = ImGui::GetCursorPosX();
+		UI.PATTERN_S_LIST_Y = ImGui::GetCursorPosY();
 
-		if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
+		if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERN_S_LIST_WIDTH, UI.PATTERN_S_LIST_HEIGHT)))
 		{   
-			for (int i = 0; i < patterns_list.size(); ++i)
+			for (int i = 0; i < PATTERN_s_list.size(); ++i)
 			{
-				if (ImGui::Selectable(patterns_list[i].NAME.c_str(), active_pattern == i))
+				if (ImGui::Selectable(PATTERN_s_list[i].NAME.c_str(), active_PATTERN_ == i))
 				{
-					active_pattern = i;
+					active_PATTERN_ = i;
 				}
 			}
 		}
@@ -168,68 +188,68 @@ int main()
 		ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 		ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 		
-		// Draw Pattern buttons
-		ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
-		if (ImGui::Button("+##pattern_add"))
+		// Draw PATTERN_ buttons
+		ImGui::SetCursorPos(ImVec2(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN, UI.PATTERN_S_LIST_Y));
+		if (ImGui::Button("+##PATTERN__add"))
 		{
-			CreatePattern(patterns_list, 64, module);
+			CreatePATTERN_(PATTERN_s_list, 64, module);
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Add Pattern");
+			ImGui::SetTooltip("Add PATTERN_");
 		}
 		
 		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("-##pattern_del"))
+		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("-##PATTERN__del"))
 		{
 			//
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Delete Pattern");
+			ImGui::SetTooltip("Delete PATTERN_");
 		}
 		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("^##pattern_up"))
+		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("^##PATTERN__up"))
 		{
 			//
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Move pattern up");
+			ImGui::SetTooltip("Move PATTERN_ up");
 		}
 		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("v##pattern_down"))
+		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("v##PATTERN__down"))
 		{
 			//
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Move pattern down");
+			ImGui::SetTooltip("Move PATTERN_ down");
 		}
 		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("o##pattern_edit"))
+		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("o##PATTERN__edit"))
 		{
-			ImGui::OpenPopup("Pattern options");
+			ImGui::OpenPopup("PATTERN_ options");
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Open pattern options");
+			ImGui::SetTooltip("Open PATTERN_ options");
 		}
 		
-		ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(UI.PATTERN__OPTIONS_MODAL_WIDTH, UI.PATTERN__OPTIONS_MODAL_HEIGHT));
 		
 		bool p_opened = true;
 		
-		if (ImGui::BeginPopupModal("Pattern options", &p_opened, ImGuiWindowFlags_NoResize))
+		if (ImGui::BeginPopupModal("PATTERN_ options", &p_opened, ImGuiWindowFlags_NoResize))
 		{
 			ImGui::EndPopup();
 		}
@@ -359,9 +379,9 @@ int main()
 		ImGui::PopStyleColor();
 		
 		// main
-		int pattern_start = patterns_list[active_pattern].OFFSET;
-		int pattern_rows = patterns_list[active_pattern].ROWS;
-		int pattern_end = pattern_start + pattern_rows;
+		int PATTERN__start = PATTERN_s_list[active_PATTERN_].OFFSET;
+		int PATTERN__rows = PATTERN_s_list[active_PATTERN_].ROWS;
+		int PATTERN__end = PATTERN__start + PATTERN__rows;
 
 		UI.MAIN_X = ImGui::GetCursorPosX();
 		UI.MAIN_Y = ImGui::GetCursorPosY();
@@ -421,12 +441,12 @@ int main()
 		ImGui::Columns(1);
 		
 		// draw row headers
-		ImGui::SetNextWindowContentSize(ImVec2(UI.CELL_WIDTH, (pattern_rows * UI.CELL_HEIGHT) + UI.CELL_WIDTH));
+		ImGui::SetNextWindowContentSize(ImVec2(UI.CELL_WIDTH, (PATTERN__rows * UI.CELL_HEIGHT) + UI.CELL_WIDTH));
 		ImGui::BeginChild("##rowheaders", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
 		ImGui::SetScrollY(grid_scroll_y);
 		ImGui::SetCursorPosY(8);
 
-		for (int p = 0; p < pattern_rows; ++p)
+		for (int p = 0; p < PATTERN__rows; ++p)
 		{
 			std::string row_text = std::to_string(p);
 			std::string row_text_zeros = std::string(3 - row_text.length(), '0') + row_text;
@@ -436,7 +456,7 @@ int main()
 		
 		ImGui::SetCursorPosY(UI.MAIN_X + UI.TRACK_HEADERS_HEIGHT + UI.MARGIN);
 		ImGui::SetCursorPosX(UI.CELL_WIDTH + 8);
-		ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, pattern_rows * UI.CELL_HEIGHT));
+		ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, PATTERN__rows * UI.CELL_HEIGHT));
 		ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 		
 		if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
@@ -540,20 +560,26 @@ int main()
 		// draw nth row highlights
 		ImVec2 c = ImGui::GetCursorScreenPos();
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-		
-		for (int r = 0; r < pattern_rows; r += nth_row_highlight)
+		ImVec2 highlight_tl;
+		ImVec2 highlight_br;
+
+		for (int r = 0; r < PATTERN__rows; r += nth_row_highlight)
 		{
-			draw_list->AddRectFilled(ImVec2(c.x, c.y), ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT), col_nth_row_highlight);
+			highlight_tl = ImVec2(c.x, c.y);
+			highlight_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
+			draw_list->AddRectFilled(highlight_tl, highlight_br, col_nth_row_highlight);
 			c.y += nth_row_highlight * UI.CELL_HEIGHT;
 		}
 		
 		// draw active row
-		draw_list->AddRectFilled(ImVec2(c.x, active_cell.Y - ImGui::GetScrollY()),
-								 ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY()), col_active_row);
+		ImVec2 row_tl = ImVec2(c.x, active_cell.Y - ImGui::GetScrollY());
+		ImVec2 row_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH)-8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
+		draw_list->AddRectFilled(row_tl, row_br, col_active_row);
 		
 		// draw active cell
-		draw_list->AddRectFilled(ImVec2(active_cell.X - ImGui::GetScrollX(), active_cell.Y - ImGui::GetScrollY()),
-								 ImVec2(active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(), active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY()), col_active_cell);
+		ImVec2 cell_tl = ImVec2(active_cell.X - ImGui::GetScrollX(), active_cell.Y - ImGui::GetScrollY());
+		ImVec2 cell_br = ImVec2(active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(), active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
+		draw_list->AddRectFilled(cell_tl, cell_br, col_active_cell);
 		
 		//TEMP!!!!! scroll cursor out of bounds test
 		ImVec2 rect_start, rect_end;
@@ -589,14 +615,15 @@ int main()
 		// draw selection
 		if (selection_exists)
 		{
-			draw_list->AddRectFilled(ImVec2(selection.START_X - ImGui::GetScrollX(), selection.START_Y - ImGui::GetScrollY()),
-									 ImVec2(selection.END_X - ImGui::GetScrollX(), selection.END_Y - ImGui::GetScrollY()), col_selection);
+			ImVec2 selection_tl = ImVec2(selection.START_X - ImGui::GetScrollX(), selection.START_Y - ImGui::GetScrollY());
+			ImVec2 selection_br = ImVec2(selection.END_X - ImGui::GetScrollX(), selection.END_Y - ImGui::GetScrollY());
+			draw_list->AddRectFilled(selection_tl, selection_br, col_selection);
 		}
 		
 		ImGui::Columns(tracks);
 		
 		// grid drawing loop
-		for (int i = pattern_start; i < pattern_end; ++i)
+		for (int i = PATTERN__start; i < PATTERN__end; ++i)
 		{
 			for (int j = 0; j < tracks; ++j)
 			{
@@ -676,13 +703,13 @@ int main()
 		// get keyboard
 		if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 		{
-			if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)
+			if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < PATTERN__rows - 1)
 			{
 				active_cell.LAST_CURSOR_ACTION = DOWN;
 				active_cell.Y += UI.CELL_HEIGHT;
 				active_cell.ROW++;
 
-				if (active_cell.ROW == patterns_list[active_pattern].ROWS - 1)
+				if (active_cell.ROW == PATTERN_s_list[active_PATTERN_].ROWS - 1)
 				{
 					ImGui::SetScrollY(ImGui::GetScrollMaxY());
 				}
@@ -754,8 +781,8 @@ int main()
 						{
 							NOTE_DATA nd;
 							nd.NAME = keychar;
-							int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
-							int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
+							int cur_instr = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].INSTRUMENT;
+							int cur_vol = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].VOLUME;
 
 							if (cur_instr == 0 && active_instrument > 0)
 							{
@@ -773,10 +800,10 @@ int main()
 							{
 								nd.VOLUME = cur_vol;
 							}
-							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + PATTERN__start, active_cell.COL, nd, module);
 
 							// apply step to cursor
-							if (active_cell.ROW + step < pattern_end)
+							if (active_cell.ROW + step < PATTERN__end)
 							{
 								active_cell.LAST_CURSOR_ACTION = DOWN;
 								active_cell.ROW += step;
@@ -790,7 +817,7 @@ int main()
 
 						if (keychar != -1)
 						{
-							int cur_value = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
+							int cur_value = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].INSTRUMENT;
 							int second_digit = (cur_value % 10);
 							int new_value;
 
@@ -805,7 +832,7 @@ int main()
 							
 							NOTE_DATA nd;
 							nd.INSTRUMENT = new_value;
-							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + PATTERN__start, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 2) // volume cell
@@ -814,7 +841,7 @@ int main()
 
 						if (keychar != -1)
 						{
-							int cur_value = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
+							int cur_value = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].VOLUME;
 							int second_digit = (cur_value % 10);
 							int new_value;
 
@@ -831,7 +858,7 @@ int main()
 
 							NOTE_DATA nd;
 							nd.VOLUME = new_value;
-							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + PATTERN__start, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 1) // fx + param cell
@@ -843,15 +870,18 @@ int main()
 		}
 
 		// play
-		if (application_state == PLAY_PATTERN)
+		if (application_state == PLAY_MODULE)
 		{
-			for (int i = pattern_start; i < pattern_end; ++i)
-			{
-				for (int j = 0; j < tracks; ++j)
-				{
-					
-				}
-			}
+			// for (int i = PATTERN__start; i < PATTERN__end; ++i)
+			// {
+			// 	for (int j = 0; j < tracks; ++j)
+			// 	{
+
+			// 	}
+			// }
+			RowTick(10);
+			application_state = EDITOR;
+
 		}
 		
 		ImGui::EndChild();
