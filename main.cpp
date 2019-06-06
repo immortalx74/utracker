@@ -15,7 +15,16 @@
 #include "print.cpp"
 #include "misc.cpp"
 #include <Windows.h>
+#include <chrono>
+#include <thread>
+#include <future>
 
+using namespace std::chrono_literals;
+
+int playrow = 0;
+LARGE_INTEGER tick_start;
+LARGE_INTEGER tick_end;
+LARGE_INTEGER tick_freq;
 
 void ERRCHECK(FMOD_RESULT result)
 {
@@ -26,7 +35,7 @@ void ERRCHECK(FMOD_RESULT result)
     }
 }
 
-void RowTick(int ms)
+int RowTick(int ms)
 {
 	LARGE_INTEGER start, stop, freq;
 	QueryPerformanceCounter(&freq);
@@ -36,13 +45,36 @@ void RowTick(int ms)
 	{
 		QueryPerformanceCounter(&stop);
 
-		if (100000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
+		if (1000000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
 		{
 			looping = false;
 			break;
+			return 0;
 		}
 	}
 	while (looping);
+	return 0;
+}
+
+int PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system, FMOD::Channel *channel, FMOD::Sound *sound, APP_STATE application_state)
+{
+	FMOD_RESULT result;
+	application_state = EDITOR;
+
+	for (int i = 0; i < 60; ++i)
+	{
+		if (module[i][0].NAME != "---")
+		{
+			channel->stop();
+			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+			// ERRCHECK(result);
+		}
+		// RowTick(2);
+		// std::this_thread::sleep_for(40ms);
+		auto fut = std::async(std::launch::async, RowTick, 2);
+		fut.get();
+	}
+	return 0;
 }
 
 int main()
@@ -67,14 +99,17 @@ int main()
     result = system->init(32, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
 
-    result = system->createSound("drumloop.wav", FMOD_HARDWARE, 0, &sound);
+    result = system->createSound("pianoc5.wav", FMOD_HARDWARE, 0, &sound);
+    ERRCHECK(result);
+
+    result = sound->setMode(FMOD_LOOP_OFF);
     ERRCHECK(result);
 
 
     //======================================================================
 	
     // create containers
-    std::vector<PATTERN_> PATTERN_s_list;
+    std::vector<PATTERN_> patterns_list;
     std::vector<INSTRUMENT> instruments_list;
     std::vector<TRACK> tracks_list;
     
@@ -85,7 +120,7 @@ int main()
 	
     std::vector<std::vector<NOTE_DATA>> module;
 	
-    CreatePATTERN_(PATTERN_s_list, 64, module); // create default PATTERN_
+    CreatePattern(patterns_list, 64, module); // create default PATTERN_
     CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
 	
 	UI_SIZING UI;
@@ -133,21 +168,21 @@ int main()
 		ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_X + UI.MARGIN, UI.LEFT_PANE_Y));
 		ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 		
-		// PATTERN_s list
+		// patterns list
 		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
-		ImGui::Text("PATTERN_s");
+		ImGui::Text("patterns");
 		ImGui::PopStyleColor();
 		
-		UI.PATTERN_S_LIST_X = ImGui::GetCursorPosX();
-		UI.PATTERN_S_LIST_Y = ImGui::GetCursorPosY();
+		UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
+		UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
 
-		if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERN_S_LIST_WIDTH, UI.PATTERN_S_LIST_HEIGHT)))
+		if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 		{   
-			for (int i = 0; i < PATTERN_s_list.size(); ++i)
+			for (int i = 0; i < patterns_list.size(); ++i)
 			{
-				if (ImGui::Selectable(PATTERN_s_list[i].NAME.c_str(), active_PATTERN_ == i))
+				if (ImGui::Selectable(patterns_list[i].NAME.c_str(), active_pattern == i))
 				{
-					active_PATTERN_ = i;
+					active_pattern = i;
 				}
 			}
 		}
@@ -189,67 +224,67 @@ int main()
 		ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 		
 		// Draw PATTERN_ buttons
-		ImGui::SetCursorPos(ImVec2(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN, UI.PATTERN_S_LIST_Y));
-		if (ImGui::Button("+##PATTERN__add"))
+		ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
+		if (ImGui::Button("+##patternadd"))
 		{
-			CreatePATTERN_(PATTERN_s_list, 64, module);
+			CreatePattern(patterns_list, 64, module);
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Add PATTERN_");
+			ImGui::SetTooltip("Add Pattern");
 		}
 		
 		
-		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("-##PATTERN__del"))
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("-##patterndel"))
 		{
 			//
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Delete PATTERN_");
+			ImGui::SetTooltip("Delete Pattern");
 		}
 		
-		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("^##PATTERN__up"))
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("^##patternup"))
 		{
 			//
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Move PATTERN_ up");
+			ImGui::SetTooltip("Move Pattern up");
 		}
 		
-		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("v##PATTERN__down"))
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("v##patterndown"))
 		{
 			//
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Move PATTERN_ down");
+			ImGui::SetTooltip("Move Pattern down");
 		}
 		
-		ImGui::SetCursorPosX(UI.PATTERN_S_LIST_X + UI.PATTERN_S_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("o##PATTERN__edit"))
+		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+		if (ImGui::Button("o##patternedit"))
 		{
-			ImGui::OpenPopup("PATTERN_ options");
+			ImGui::OpenPopup("Pattern Options");
 		}
 		
 		if (ImGui::IsItemHovered())
 		{
-			ImGui::SetTooltip("Open PATTERN_ options");
+			ImGui::SetTooltip("Open Pattern Options");
 		}
 		
-		ImGui::SetNextWindowSize(ImVec2(UI.PATTERN__OPTIONS_MODAL_WIDTH, UI.PATTERN__OPTIONS_MODAL_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
 		
 		bool p_opened = true;
 		
-		if (ImGui::BeginPopupModal("PATTERN_ options", &p_opened, ImGuiWindowFlags_NoResize))
+		if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
 		{
 			ImGui::EndPopup();
 		}
@@ -379,9 +414,9 @@ int main()
 		ImGui::PopStyleColor();
 		
 		// main
-		int PATTERN__start = PATTERN_s_list[active_PATTERN_].OFFSET;
-		int PATTERN__rows = PATTERN_s_list[active_PATTERN_].ROWS;
-		int PATTERN__end = PATTERN__start + PATTERN__rows;
+		int pattern_start = patterns_list[active_pattern].OFFSET;
+		int pattern_rows = patterns_list[active_pattern].ROWS;
+		int pattern_end = pattern_start + pattern_rows;
 
 		UI.MAIN_X = ImGui::GetCursorPosX();
 		UI.MAIN_Y = ImGui::GetCursorPosY();
@@ -441,12 +476,12 @@ int main()
 		ImGui::Columns(1);
 		
 		// draw row headers
-		ImGui::SetNextWindowContentSize(ImVec2(UI.CELL_WIDTH, (PATTERN__rows * UI.CELL_HEIGHT) + UI.CELL_WIDTH));
+		ImGui::SetNextWindowContentSize(ImVec2(UI.CELL_WIDTH, (pattern_rows * UI.CELL_HEIGHT) + UI.CELL_WIDTH));
 		ImGui::BeginChild("##rowheaders", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
 		ImGui::SetScrollY(grid_scroll_y);
 		ImGui::SetCursorPosY(8);
 
-		for (int p = 0; p < PATTERN__rows; ++p)
+		for (int p = 0; p < pattern_rows; ++p)
 		{
 			std::string row_text = std::to_string(p);
 			std::string row_text_zeros = std::string(3 - row_text.length(), '0') + row_text;
@@ -456,7 +491,7 @@ int main()
 		
 		ImGui::SetCursorPosY(UI.MAIN_X + UI.TRACK_HEADERS_HEIGHT + UI.MARGIN);
 		ImGui::SetCursorPosX(UI.CELL_WIDTH + 8);
-		ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, PATTERN__rows * UI.CELL_HEIGHT));
+		ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, pattern_rows * UI.CELL_HEIGHT));
 		ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 		
 		if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
@@ -563,7 +598,7 @@ int main()
 		ImVec2 highlight_tl;
 		ImVec2 highlight_br;
 
-		for (int r = 0; r < PATTERN__rows; r += nth_row_highlight)
+		for (int r = 0; r < pattern_rows; r += nth_row_highlight)
 		{
 			highlight_tl = ImVec2(c.x, c.y);
 			highlight_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
@@ -623,7 +658,7 @@ int main()
 		ImGui::Columns(tracks);
 		
 		// grid drawing loop
-		for (int i = PATTERN__start; i < PATTERN__end; ++i)
+		for (int i = pattern_start; i < pattern_end; ++i)
 		{
 			for (int j = 0; j < tracks; ++j)
 			{
@@ -703,13 +738,13 @@ int main()
 		// get keyboard
 		if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 		{
-			if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < PATTERN__rows - 1)
+			if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)
 			{
 				active_cell.LAST_CURSOR_ACTION = DOWN;
 				active_cell.Y += UI.CELL_HEIGHT;
 				active_cell.ROW++;
 
-				if (active_cell.ROW == PATTERN_s_list[active_PATTERN_].ROWS - 1)
+				if (active_cell.ROW == patterns_list[active_pattern].ROWS - 1)
 				{
 					ImGui::SetScrollY(ImGui::GetScrollMaxY());
 				}
@@ -781,8 +816,8 @@ int main()
 						{
 							NOTE_DATA nd;
 							nd.NAME = keychar;
-							int cur_instr = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].INSTRUMENT;
-							int cur_vol = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].VOLUME;
+							int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
+							int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
 
 							if (cur_instr == 0 && active_instrument > 0)
 							{
@@ -800,10 +835,10 @@ int main()
 							{
 								nd.VOLUME = cur_vol;
 							}
-							CellSet(active_cell.ROW + PATTERN__start, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
 
 							// apply step to cursor
-							if (active_cell.ROW + step < PATTERN__end)
+							if (active_cell.ROW + step < pattern_end)
 							{
 								active_cell.LAST_CURSOR_ACTION = DOWN;
 								active_cell.ROW += step;
@@ -817,7 +852,7 @@ int main()
 
 						if (keychar != -1)
 						{
-							int cur_value = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].INSTRUMENT;
+							int cur_value = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
 							int second_digit = (cur_value % 10);
 							int new_value;
 
@@ -832,7 +867,7 @@ int main()
 							
 							NOTE_DATA nd;
 							nd.INSTRUMENT = new_value;
-							CellSet(active_cell.ROW + PATTERN__start, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 2) // volume cell
@@ -841,7 +876,7 @@ int main()
 
 						if (keychar != -1)
 						{
-							int cur_value = module[active_cell.ROW + PATTERN__start][active_cell.COL/4].VOLUME;
+							int cur_value = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
 							int second_digit = (cur_value % 10);
 							int new_value;
 
@@ -858,7 +893,7 @@ int main()
 
 							NOTE_DATA nd;
 							nd.VOLUME = new_value;
-							CellSet(active_cell.ROW + PATTERN__start, active_cell.COL, nd, module);
+							CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
 						}
 					}
 					else if (active_cell.COL % 4 == 1) // fx + param cell
@@ -869,19 +904,55 @@ int main()
 			}
 		}
 
-		// play
 		if (application_state == PLAY_MODULE)
 		{
-			// for (int i = PATTERN__start; i < PATTERN__end; ++i)
-			// {
-			// 	for (int j = 0; j < tracks; ++j)
-			// 	{
-
-			// 	}
-			// }
-			RowTick(10);
 			application_state = EDITOR;
+			auto fut = std::async(std::launch::async, PlayModule, module, system, channel, sound, application_state);
+			fut.get();
+			// fut.get();
+			// PlayModule(module, system, channel, sound, application_state);
+			// application_state = EDITOR;
+		}
 
+		// play
+		// if (application_state == PLAY_MODULE)
+		// {
+		// 	FMOD_RESULT result;
+		// 	// application_state = PLAYING;
+
+		// 	for (int i = pattern_start; i < pattern_end; ++i)
+		// 	{
+		// 		if (module[i][0].NAME != "---")
+		// 		{
+		// 			channel->stop();
+		// 			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+		// 			ERRCHECK(result);
+		// 		}
+		// 		std::thread {RowTick, 100}.detach();
+		// 		// t1.join();
+		// 	}
+		// }
+
+		// if (application_state == PLAY_MODULE)
+		// {
+		// 	FMOD_RESULT result;
+		// 	// application_state = PLAYING;
+
+		// 	if (module[playrow][0].NAME != "---")
+		// 	{
+		// 		channel->stop();
+		// 		result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+		// 		ERRCHECK(result);
+		// 	}
+		// 	// std::thread {RowTick, 100}.detach();
+		// 	if (playrow < pattern_end) playrow++;
+		// }
+
+		if (application_state == EDITOR)
+		{
+			FMOD_RESULT result;
+			result = channel->stop();
+			playrow = 0;
 		}
 		
 		ImGui::EndChild();

@@ -1,8 +1,8 @@
 #define MAX_TRACKS_PER_MODULE 32
-#define MAX_PATTERN_S_PER_MODULE 32
+#define MAX_PATTERNS_PER_MODULE 32
 #define MAX_INSTRUMENTS_PER_MODULE 32
 #define MAX_SAMPLES_PER_MODULE 32
-#define MAX_ROWS_PER_PATTERN_ 512
+#define MAX_ROWS_PER_PATTERN 512
 #define MAX_BPM 512
 
 struct UI_SIZING
@@ -30,10 +30,10 @@ struct UI_SIZING
 	float GRID_WIDTH = 0;
 	float GRID_HEIGHT = 0;
 
-	float PATTERN_S_LIST_X = 0;
-	float PATTERN_S_LIST_Y = 0;
-	float PATTERN_S_LIST_WIDTH = 200;
-	float PATTERN_S_LIST_HEIGHT = 187;
+	float PATTERNS_LIST_X = 0;
+	float PATTERNS_LIST_Y = 0;
+	float PATTERNS_LIST_WIDTH = 200;
+	float PATTERNS_LIST_HEIGHT = 187;
 
 	float INSTRUMENTS_LIST_X = 0;
 	float INSTRUMENTS_LIST_Y = 0;
@@ -42,8 +42,8 @@ struct UI_SIZING
  
 	float LEFT_SLIDERS_WIDTH = 100;
 
-	float PATTERN__OPTIONS_MODAL_WIDTH = 400;
-	float PATTERN__OPTIONS_MODAL_HEIGHT = 200;
+	float PATTERN_OPTIONS_MODAL_WIDTH = 400;
+	float PATTERN_OPTIONS_MODAL_HEIGHT = 200;
 	float INSTRUMENT_OPTIONS_MODAL_WIDTH = 400;
 	float INSTRUMENT_OPTIONS_MODAL_HEIGHT = 200;
 
@@ -122,7 +122,8 @@ struct SELECTION
 enum APP_STATE
 {
 	PLAY_MODULE,
-	PLAY_PATTERN_,
+	PLAY_PATTERN,
+	PLAYING,
 	EDITOR
 };
 
@@ -142,7 +143,7 @@ int col_instrument = IM_COL32(200,200,60,255);
 int col_volume = IM_COL32(20,170,20,255);
 
 int tracks = 8;
-int active_PATTERN_ = 0;
+int active_pattern = 0;
 int active_instrument = 0;
 int octave = 5;
 int bpm = 125;
@@ -182,35 +183,35 @@ void LoadTextures()
 	}
 }
 
-bool CreatePATTERN_(std::vector<PATTERN_> &PATTERN_s_list, int rows, std::vector<std::vector<NOTE_DATA>> &module)
+bool CreatePattern(std::vector<PATTERN_> &patterns_list, int rows, std::vector<std::vector<NOTE_DATA>> &module)
 {
-	int last_PATTERN__rows = 0;
-	int last_PATTERN__offset = 0;
-	int last_PATTERN__index = PATTERN_s_list.size() - 1;
+	int last_pattern_rows = 0;
+	int last_pattern_offset = 0;
+	int last_pattern_index = patterns_list.size() - 1;
 	int offset;
 	
-	if (PATTERN_s_list.size() > 0)
+	if (patterns_list.size() > 0)
 	{
-		last_PATTERN__rows = PATTERN_s_list.back().ROWS;
-		last_PATTERN__offset = PATTERN_s_list.back().OFFSET;
+		last_pattern_rows = patterns_list.back().ROWS;
+		last_pattern_offset = patterns_list.back().OFFSET;
 	}
 	
-	offset = last_PATTERN__rows + last_PATTERN__offset;
+	offset = last_pattern_rows + last_pattern_offset;
 	
-	if (PATTERN_s_list.size() == MAX_PATTERN_S_PER_MODULE || rows > MAX_ROWS_PER_PATTERN_)
+	if (patterns_list.size() == MAX_PATTERNS_PER_MODULE || rows > MAX_ROWS_PER_PATTERN)
 	{
 		return false;
 	}
 	
-	PATTERN_ new_PATTERN_;
-	new_PATTERN_.NAME = "PATTERN:" + std::to_string(last_PATTERN__index + 1);
-	new_PATTERN_.ROWS = rows;
-	new_PATTERN_.OFFSET = offset;
+	PATTERN_ new_pattern;
+	new_pattern.NAME = "PATTERN:" + std::to_string(last_pattern_index + 1);
+	new_pattern.ROWS = rows;
+	new_pattern.OFFSET = offset;
 	
-	PATTERN_s_list.push_back(new_PATTERN_);
+	patterns_list.push_back(new_pattern);
 	
 	// grow module
-    for (int i = new_PATTERN_.OFFSET; i < new_PATTERN_.OFFSET + new_PATTERN_.ROWS; ++i)
+    for (int i = new_pattern.OFFSET; i < new_pattern.OFFSET + new_pattern.ROWS; ++i)
     {
         std::vector<NOTE_DATA> row;
 		
