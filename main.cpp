@@ -20,11 +20,13 @@
 #include <future>
 
 using namespace std::chrono_literals;
-
+std::future<bool> globalfut;
+std::atomic<bool> run = false;
 int playrow = 0;
 LARGE_INTEGER tick_start;
 LARGE_INTEGER tick_end;
 LARGE_INTEGER tick_freq;
+APP_STATE application_state = EDITOR;
 
 void ERRCHECK(FMOD_RESULT result)
 {
@@ -45,36 +47,43 @@ int RowTick(int ms)
 	{
 		QueryPerformanceCounter(&stop);
 
-		if (1000000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
+		if (10000000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
 		{
 			looping = false;
-			break;
 			return 0;
+			break;
 		}
 	}
 	while (looping);
 	return 0;
 }
 
-int PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system, FMOD::Channel *channel, FMOD::Sound *sound, APP_STATE application_state)
+bool PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system, FMOD::Channel *channel, FMOD::Sound *sound, APP_STATE application_state, std::atomic_bool & run)
 {
 	FMOD_RESULT result;
-	application_state = EDITOR;
 
-	for (int i = 0; i < 60; ++i)
+	if (run)
 	{
-		if (module[i][0].NAME != "---")
+		for (int i = 0; i < 60; ++i)
 		{
-			channel->stop();
-			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-			// ERRCHECK(result);
+			if (module[i][0].NAME != "---")
+			{
+				channel->stop();
+				result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+				ERRCHECK(result);
+			}
+			std::future<int> fut = std::async(std::launch::async, RowTick, 10);
+			playrow++;
+
+			if (application_state == EDITOR)
+			{
+				run = false;
+				return false;
+			}
 		}
-		// RowTick(2);
-		// std::this_thread::sleep_for(40ms);
-		auto fut = std::async(std::launch::async, RowTick, 2);
-		fut.get();
 	}
-	return 0;
+	playrow = 0;
+	return false;
 }
 
 int main()
@@ -125,7 +134,7 @@ int main()
 	
 	UI_SIZING UI;
 
-	APP_STATE application_state = EDITOR;
+	// APP_STATE application_state = EDITOR;
 
     ACTIVE_CELL active_cell;
     active_cell.X = UI.CELL_WIDTH;
@@ -388,11 +397,14 @@ int main()
 				if (i == 4) // play
 				{
 					application_state = PLAY_MODULE;
+					std::cout << application_state << std::endl;
 				}
 
 				if (i == 7) // stop
 				{
+					run = false;
 					application_state = EDITOR;
+					std::cout << application_state << std::endl;
 				}
 			}
 
@@ -906,58 +918,28 @@ int main()
 
 		if (application_state == PLAY_MODULE)
 		{
-			application_state = EDITOR;
-			auto fut = std::async(std::launch::async, PlayModule, module, system, channel, sound, application_state);
-			fut.get();
-			// fut.get();
-			// PlayModule(module, system, channel, sound, application_state);
-			// application_state = EDITOR;
+			run = true;
+			application_state = PLAYING;
+			globalfut = std::async(std::launch::async, PlayModule, module, system, channel, sound, application_state, std::ref(run));
 		}
-
-		// play
-		// if (application_state == PLAY_MODULE)
-		// {
-		// 	FMOD_RESULT result;
-		// 	// application_state = PLAYING;
-
-		// 	for (int i = pattern_start; i < pattern_end; ++i)
-		// 	{
-		// 		if (module[i][0].NAME != "---")
-		// 		{
-		// 			channel->stop();
-		// 			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-		// 			ERRCHECK(result);
-		// 		}
-		// 		std::thread {RowTick, 100}.detach();
-		// 		// t1.join();
-		// 	}
-		// }
-
-		// if (application_state == PLAY_MODULE)
-		// {
-		// 	FMOD_RESULT result;
-		// 	// application_state = PLAYING;
-
-		// 	if (module[playrow][0].NAME != "---")
-		// 	{
-		// 		channel->stop();
-		// 		result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-		// 		ERRCHECK(result);
-		// 	}
-		// 	// std::thread {RowTick, 100}.detach();
-		// 	if (playrow < pattern_end) playrow++;
-		// }
 
 		if (application_state == EDITOR)
 		{
 			FMOD_RESULT result;
 			result = channel->stop();
 			playrow = 0;
+			run = false;
+		}
+
+		if (application_state == PLAYING)
+		{
+			active_cell.LAST_CURSOR_ACTION = DOWN;
+			active_cell.ROW = playrow;
+			active_cell.Y = active_cell.ROW * 17;
 		}
 		
 		ImGui::EndChild();
 		ImGui::End();
-		
 		
 		// demo window
 		if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_PageDown)))
