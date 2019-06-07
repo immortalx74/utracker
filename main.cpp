@@ -12,79 +12,11 @@
 #include <string>
 #include <iostream>
 #include <array>
+#include <Windows.h>
+#include <future>
 #include "print.cpp"
 #include "misc.cpp"
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-#include <future>
-
-using namespace std::chrono_literals;
-std::future<bool> globalfut;
-std::atomic<bool> run = false;
-int playrow = 0;
-LARGE_INTEGER tick_start;
-LARGE_INTEGER tick_end;
-LARGE_INTEGER tick_freq;
-APP_STATE application_state = EDITOR;
-
-void ERRCHECK(FMOD_RESULT result)
-{
-    if (result != FMOD_OK)
-    {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-        exit(-1);
-    }
-}
-
-int RowTick(int ms)
-{
-	LARGE_INTEGER start, stop, freq;
-	QueryPerformanceCounter(&freq);
-	QueryPerformanceCounter(&start);
-	bool looping = true;
-	do
-	{
-		QueryPerformanceCounter(&stop);
-
-		if (10000000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
-		{
-			looping = false;
-			return 0;
-			break;
-		}
-	}
-	while (looping);
-	return 0;
-}
-
-bool PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system, FMOD::Channel *channel, FMOD::Sound *sound, APP_STATE application_state, std::atomic_bool & run)
-{
-	FMOD_RESULT result;
-
-	if (run)
-	{
-		for (int i = 0; i < 60; ++i)
-		{
-			if (module[i][0].NAME != "---")
-			{
-				channel->stop();
-				result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-				ERRCHECK(result);
-			}
-			std::future<int> fut = std::async(std::launch::async, RowTick, 10);
-			playrow++;
-
-			if (application_state == EDITOR)
-			{
-				run = false;
-				return false;
-			}
-		}
-	}
-	playrow = 0;
-	return false;
-}
+#include "playback.cpp"
 
 int main()
 {
@@ -134,8 +66,6 @@ int main()
 	
 	UI_SIZING UI;
 
-	// APP_STATE application_state = EDITOR;
-
     ACTIVE_CELL active_cell;
     active_cell.X = UI.CELL_WIDTH;
     active_cell.Y = 131;
@@ -164,7 +94,6 @@ int main()
             ImGui::SFML::ProcessEvent(event);
             if (event.type == sf::Event::Closed) window.close();
 		}
-
 		ImGui::SFML::Update(window, deltaClock.restart());
 
 		io.KeyRepeatRate = 0.035f;
@@ -402,9 +331,9 @@ int main()
 
 				if (i == 7) // stop
 				{
-					run = false;
+
 					application_state = EDITOR;
-					std::cout << application_state << std::endl;
+
 				}
 			}
 
@@ -918,9 +847,10 @@ int main()
 
 		if (application_state == PLAY_MODULE)
 		{
-			run = true;
 			application_state = PLAYING;
-			globalfut = std::async(std::launch::async, PlayModule, module, system, channel, sound, application_state, std::ref(run));
+			// globalfut = std::async(std::launch::async, PlayModule, module, system, channel, sound);
+			// globalfut = std::async(std::launch::async, PlayRow, module, system, channel, sound, pattern_start + active_cell.ROW, tracks);
+			globalfut = std::async(std::launch::async, PlayPattern, module, system, channel, sound, pattern_start, pattern_end, tracks);
 		}
 
 		if (application_state == EDITOR)
@@ -928,7 +858,6 @@ int main()
 			FMOD_RESULT result;
 			result = channel->stop();
 			playrow = 0;
-			run = false;
 		}
 
 		if (application_state == PLAYING)

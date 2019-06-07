@@ -5,6 +5,14 @@
 #define MAX_ROWS_PER_PATTERN 512
 #define MAX_BPM 512
 
+std::future<bool> globalfut;
+std::future<bool> globalfut2;
+int playrow = 0;
+LARGE_INTEGER tick_start;
+LARGE_INTEGER tick_end;
+LARGE_INTEGER tick_freq;
+
+
 struct UI_SIZING
 {
 	float MARGIN = 4;
@@ -127,7 +135,7 @@ enum APP_STATE
 	EDITOR
 };
 
-
+APP_STATE application_state = EDITOR;
 int col_btn_repeat = IM_COL32(255,130,0,255);
 int col_title_text = IM_COL32(255,130,0,255);
 int col_active_cell = IM_COL32(255,130,0,255);
@@ -165,6 +173,15 @@ std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","P
 bool show_demo = false;
 std::vector<sf::Texture> toolbar_buttons;
 
+
+void ERRCHECK(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        exit(-1);
+    }
+}
 
 void LoadTextures()
 {
