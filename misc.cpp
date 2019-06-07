@@ -136,6 +136,7 @@ enum APP_STATE
 };
 
 APP_STATE application_state = EDITOR;
+
 int col_btn_repeat = IM_COL32(255,130,0,255);
 int col_title_text = IM_COL32(255,130,0,255);
 int col_active_cell = IM_COL32(255,130,0,255);

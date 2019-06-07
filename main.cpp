@@ -105,7 +105,7 @@ int main()
 		ImGui::SetNextWindowSize(ImVec2(UI.LEFT_PANE_WIDTH, app_window_height));
 		ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_X + UI.MARGIN, UI.LEFT_PANE_Y));
 		ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-		
+
 		// patterns list
 		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
 		ImGui::Text("patterns");
@@ -847,6 +847,7 @@ int main()
 
 		if (application_state == PLAY_MODULE)
 		{
+			ImGui::SetScrollY(0);
 			application_state = PLAYING;
 			// globalfut = std::async(std::launch::async, PlayModule, module, system, channel, sound);
 			// globalfut = std::async(std::launch::async, PlayRow, module, system, channel, sound, pattern_start + active_cell.ROW, tracks);
@@ -864,7 +865,7 @@ int main()
 		{
 			active_cell.LAST_CURSOR_ACTION = DOWN;
 			active_cell.ROW = playrow;
-			active_cell.Y = active_cell.ROW * 17;
+			active_cell.Y = 132 + ((playrow-1) * UI.CELL_HEIGHT);
 		}
 		
 		ImGui::EndChild();

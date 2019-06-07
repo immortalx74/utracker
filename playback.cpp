@@ -4,6 +4,7 @@ bool RowTick(int ms)
 	QueryPerformanceCounter(&freq);
 	QueryPerformanceCounter(&start);
 	bool looping = true;
+
 	do
 	{
 		QueryPerformanceCounter(&stop);
@@ -11,12 +12,12 @@ bool RowTick(int ms)
 		if (10000000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
 		{
 			looping = false;
-			return 0;
-			break;
+			return true;
 		}
 	}
+
 	while (looping);
-	return 0;
+	return true;
 }
 
 bool PlayRow(
@@ -28,7 +29,7 @@ bool PlayRow(
 	int track_count)
 {
 	FMOD_RESULT result;
-	float f = 44100;
+
 	for (int i = 0; i < track_count; ++i)
 	{
 		if (module[row][i].NAME != "---")
