@@ -58,7 +58,7 @@ bool PlayPattern(
 			PlayRow(module, system, channel, sound, 0, track_count);
 		}
 
-		globalfut2 = std::async(std::launch::async, RowTick, 10);
+		future_tick = std::async(std::launch::async, RowTick, 10);
 		playrow++;
 
 		if (application_state == EDITOR)
@@ -82,8 +82,8 @@ bool PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system
 			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
 			ERRCHECK(result);
 		}
-		// std::future<int> fut = std::async(std::launch::async, RowTick, 10);
-		globalfut2 = std::async(std::launch::async, RowTick, 10);
+
+		future_tick = std::async(std::launch::async, RowTick, 10);
 		playrow++;
 
 		if (application_state == EDITOR)

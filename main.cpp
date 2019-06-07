@@ -7,6 +7,7 @@
 #include "fmod/fmod.hpp"
 #include "fmod/fmod_errors.h"
 
+#include <cmath>
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include <string>
@@ -16,7 +17,10 @@
 #include <future>
 #include "print.cpp"
 #include "misc.cpp"
+#include "helpers.cpp"
 #include "playback.cpp"
+#include "toolbar.cpp"
+#include "listbuttons.cpp"
 
 int main()
 {
@@ -64,7 +68,7 @@ int main()
     CreatePattern(patterns_list, 64, module); // create default PATTERN_
     CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
 	
-	UI_SIZING UI;
+	// UI_SIZING UI;
 
     ACTIVE_CELL active_cell;
     active_cell.X = UI.CELL_WIDTH;
@@ -161,198 +165,13 @@ int main()
 		ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 		ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 		
-		// Draw PATTERN_ buttons
-		ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
-		if (ImGui::Button("+##patternadd"))
-		{
-			CreatePattern(patterns_list, 64, module);
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Add Pattern");
-		}
-		
-		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("-##patterndel"))
-		{
-			//
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Delete Pattern");
-		}
-		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("^##patternup"))
-		{
-			//
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Move Pattern up");
-		}
-		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("v##patterndown"))
-		{
-			//
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Move Pattern down");
-		}
-		
-		ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("o##patternedit"))
-		{
-			ImGui::OpenPopup("Pattern Options");
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Open Pattern Options");
-		}
-		
-		ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
-		
-		bool p_opened = true;
-		
-		if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
-		{
-			ImGui::EndPopup();
-		}
-		
-		
-		// Draw Instrument buttons
-		ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN, UI.INSTRUMENTS_LIST_Y));
-		if (ImGui::Button("+##instrument_add"))
-		{
-			CreateInstrument(instruments_list);
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Add Instrument");
-		}
-		
-		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("-##instrument_del"))
-		{
-			//
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Delete Instrument");
-		}
-		
-		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("^##instrument_up"))
-		{
-			//
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Move instrument up");
-		}
-		
-		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("v##instrument_down"))
-		{
-			//
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Move instrument down");
-		}
-		
-		ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
-		if (ImGui::Button("o##instrument_edit"))
-		{
-			ImGui::OpenPopup("Instrument options");
-		}
-		
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Open instrument options");
-		}
-		
-		ImGui::SetNextWindowSize(ImVec2(UI.INSTRUMENT_OPTIONS_MODAL_WIDTH, UI.INSTRUMENT_OPTIONS_MODAL_HEIGHT));
-		
-		if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoResize))
-		{
-			ImGui::EndPopup();
-		}
-		
-		ImGui::End();
+		// Draw patterns and instruments list's buttons
+		DrawListButtons(patterns_list, instruments_list, module);
 		
 		// Draw toolbar
 		UI.TOOLBAR_X = UI.LEFT_PANE_X + UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN);
 		UI.TOOLBAR_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_X - UI.LEFT_PANE_WIDTH - (3 * UI.MARGIN);
-
-		ImGui::SetNextWindowSize(ImVec2(UI.TOOLBAR_WIDTH, UI.TOOLBAR_HEIGHT));
-		ImGui::SetNextWindowPos(ImVec2(UI.TOOLBAR_X, UI.TOOLBAR_Y));
-		ImGui::Begin("toolbar", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-		
-		for (int i = 0; i < 13; ++i)
-		{
-			if (btn_repeat && i == 8)
-			{
-				ImGui::PushStyleColor(ImGuiCol_Button, col_btn_repeat);
-				btn_repeat_changed = !btn_repeat_changed;
-			}
-			
-			if (i == 4 || i == 9 || i == 12)
-			{
-				ImGui::Image(toolbar_buttons[13], ImVec2(24, 24)); // separator
-				ImGui::SameLine();
-			}
-			
-			// check button presses
-			if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24)))
-			{
-				if (i == 8) // repeat
-				{
-					btn_repeat = !btn_repeat;
-				}
-
-				if (i == 4) // play
-				{
-					application_state = PLAY_MODULE;
-					std::cout << application_state << std::endl;
-				}
-
-				if (i == 7) // stop
-				{
-
-					application_state = EDITOR;
-
-				}
-			}
-
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip(toolbar_tooltips[i].c_str());
-			}
-			
-			if (btn_repeat_changed)
-			{
-				btn_repeat_changed = !btn_repeat_changed;
-				ImGui::PopStyleColor();
-			}
-			ImGui::SameLine();
-		}
-		
-		ImGui::End();
-		
-		ImGui::PopStyleColor();
+		DrawToolbar(toolbar_buttons, toolbar_tooltips);
 		
 		// main
 		int pattern_start = patterns_list[active_pattern].OFFSET;
@@ -752,6 +571,9 @@ int main()
 					if (active_cell.COL % 4 == 0) // note cell
 					{
 						std::string keychar = KeyToNote(i, octave);
+						float fff = NoteToFrequency(keychar);
+						std::cout.precision(20);
+						std::cout << fff << std::endl;
 
 						if (keychar != "invalid")
 						{
@@ -851,7 +673,7 @@ int main()
 			application_state = PLAYING;
 			// globalfut = std::async(std::launch::async, PlayModule, module, system, channel, sound);
 			// globalfut = std::async(std::launch::async, PlayRow, module, system, channel, sound, pattern_start + active_cell.ROW, tracks);
-			globalfut = std::async(std::launch::async, PlayPattern, module, system, channel, sound, pattern_start, pattern_end, tracks);
+			future_play = std::async(std::launch::async, PlayPattern, module, system, channel, sound, pattern_start, pattern_end, tracks);
 		}
 
 		if (application_state == EDITOR)
