@@ -47,7 +47,7 @@ int main()
     result = system->init(32, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
 
-    result = system->createSound("pianoc5.wav", FMOD_SOFTWARE, 0, &sound);
+    result = system->createSound("res/pianoc5.wav", FMOD_SOFTWARE, 0, &sound);
     ERRCHECK(result);
 
     result = sound->setMode(FMOD_LOOP_OFF);
