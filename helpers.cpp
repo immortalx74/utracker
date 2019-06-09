@@ -124,6 +124,7 @@ void CellSet(int row, int col, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>>
 	if (col % 4 == 0)
 	{
 		module[row][col / 4].NAME = nd.NAME;
+		module[row][col / 4].FREQUENCY = nd.FREQUENCY;
 		module[row][col / 4].INSTRUMENT = nd.INSTRUMENT;
 		module[row][col / 4].VOLUME = nd.VOLUME;
 	}
@@ -231,9 +232,10 @@ double NoteToFrequency(std::string note)
 {
 	int position = 0;
 	std::string base = note.substr(0,2);
-	int octave = (int)note.at(2)-'0';
+	int octave = (int)note.at(2)-'0'; // mike's hack
+
 	std::array<std::string, 12> note_sequence {"C-","C#","D-","D#","E-","F-","F#","G-","G#","A-","A#","B-"};
-	std::cout << octave << std::endl;
+
 	for (int i = 0; i < note_sequence.size(); ++i)
 	{
 		if (base == note_sequence[i])

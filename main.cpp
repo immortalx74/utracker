@@ -7,6 +7,7 @@
 #include "fmod/fmod.hpp"
 #include "fmod/fmod_errors.h"
 
+#include <chrono>
 #include <cmath>
 #include "imgui.h"
 #include "imgui-SFML.h"
@@ -41,10 +42,12 @@ int main()
     result = FMOD::System_Create(&system);
     ERRCHECK(result);
 
+    // system->setOutput(FMOD_OUTPUTTYPE_ASIO);
+
     result = system->init(32, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
 
-    result = system->createSound("pianoc5.wav", FMOD_HARDWARE, 0, &sound);
+    result = system->createSound("pianoc5.wav", FMOD_SOFTWARE, 0, &sound);
     ERRCHECK(result);
 
     result = sound->setMode(FMOD_LOOP_OFF);
@@ -99,7 +102,7 @@ int main()
             if (event.type == sf::Event::Closed) window.close();
 		}
 		ImGui::SFML::Update(window, deltaClock.restart());
-
+		system->update();
 		io.KeyRepeatRate = 0.035f;
 		
 		ImGui::PushStyleColor(ImGuiCol_Button, col_button);
@@ -172,7 +175,7 @@ int main()
 		UI.TOOLBAR_X = UI.LEFT_PANE_X + UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN);
 		UI.TOOLBAR_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_X - UI.LEFT_PANE_WIDTH - (3 * UI.MARGIN);
 		DrawToolbar(toolbar_buttons, toolbar_tooltips);
-		
+
 		// main
 		int pattern_start = patterns_list[active_pattern].OFFSET;
 		int pattern_rows = patterns_list[active_pattern].ROWS;
@@ -571,14 +574,17 @@ int main()
 					if (active_cell.COL % 4 == 0) // note cell
 					{
 						std::string keychar = KeyToNote(i, octave);
-						float fff = NoteToFrequency(keychar);
-						std::cout.precision(20);
-						std::cout << fff << std::endl;
 
 						if (keychar != "invalid")
 						{
 							NOTE_DATA nd;
 							nd.NAME = keychar;
+
+							float freq = NoteToFrequency(keychar);
+							nd.FREQUENCY = freq;
+
+							// PlayNote(system, channel, sound, freq);
+
 							int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
 							int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
 
