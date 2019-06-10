@@ -55,7 +55,7 @@ void PlayNote(
 	FMOD_RESULT result;
 
 	channel->stop();
-	result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+	result = system->playSound(FMOD_CHANNEL_REUSE, sound, false, &channel);
 	ERRCHECK(result);
 
 	result = channel->setFrequency(frequency);
@@ -65,7 +65,7 @@ void PlayNote(
 bool PlayRow(
 	std::vector<std::vector<NOTE_DATA>> &module,
 	FMOD::System *system,
-	FMOD::Channel *channel,
+	FMOD::Channel **channel,
 	FMOD::Sound *sound,
 	int row,
 	int track_count)
@@ -77,13 +77,11 @@ bool PlayRow(
 	{
 		if (module[row][i].NAME != "---")
 		{
-			// channel->stop();
-			channel->setPaused(true);
-			result = system->playSound(FMOD_CHANNEL_REUSE, sound, false, &channel);
+			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, channel);
 			ERRCHECK(result);
 
 			freq = module[row][i].FREQUENCY;
-			result = channel->setFrequency(freq);
+			result = (*channel)->setFrequency(freq);
 			ERRCHECK(result);
 		}
 	}
@@ -101,40 +99,29 @@ bool PlayPattern(
 {
 	FMOD_RESULT result;
 	float freq;
-	bool isplaying = false;
+	int chans_playing = 0;
+
 	for (int i = start; i < end; ++i)
 	{
 		if (module[i][0].NAME != "---")
 		{
-			if (channel->isPlaying(&isplaying))
-			{
-				channel->stop();
-				std::cout << "fdfd";
-			}
-
-			// PlayRow(module, system, channel, sound, i, track_count);
-			result = system->playSound(FMOD_CHANNEL_REUSE, sound, false, &channel);
-			// ERRCHECK(result);
-
-			freq = module[i][0].FREQUENCY;
-			result = channel->setFrequency(freq);
-			// ERRCHECK(result);
+			PlayRow(module, system, &channel, sound, i, track_count);
 		}
 
-		// future_tick = std::async(std::launch::async, RowTick, 100);
-		
-		RowTick(100);
+		future_tick = std::async(std::launch::async, RowTick, 100);
 		playrow++;
 
 		if (application_state == EDITOR)
 		{
 			channel->stop();
 			return true;
+
 		}
 	}
 
 	return true;
 }
+
 
 bool PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system, FMOD::Channel *channel, FMOD::Sound *sound)
 {

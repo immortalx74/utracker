@@ -14,7 +14,7 @@ void LoadTextures()
 	for (int i = 0; i < 14; ++i)
 	{
 	    sf::Texture t;
-	    if (!t.loadFromFile("res/test.png", sf::IntRect(x_offset, 0, 24, 24)))
+	    if (!t.loadFromFile("res/toolbar.png", sf::IntRect(x_offset, 0, 24, 24)))
 	    {
 	        std::cout << "error";
 	    }

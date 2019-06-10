@@ -6,7 +6,6 @@
 
 #include "fmod/fmod.hpp"
 #include "fmod/fmod_errors.h"
-
 #include <chrono>
 #include <cmath>
 #include "imgui.h"
@@ -44,7 +43,7 @@ int main()
 
     // system->setOutput(FMOD_OUTPUTTYPE_ASIO);
 
-    result = system->init(32, FMOD_INIT_NORMAL, 0);
+    result = system->init(500, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
 
     result = system->createSound("res/pianoc5.wav", FMOD_SOFTWARE, 0, &sound);
@@ -52,7 +51,6 @@ int main()
 
     result = sound->setMode(FMOD_LOOP_OFF);
     ERRCHECK(result);
-
 
     //======================================================================
 	
@@ -569,7 +567,9 @@ int main()
 			// note entry
 			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
 			{
-				if (ImGui::IsKeyPressed(i))
+                
+                
+                if (ImGui::IsKeyPressed(i))
 				{
 					if (active_cell.COL % 4 == 0) // note cell
 					{
@@ -583,7 +583,7 @@ int main()
 							float freq = NoteToFrequency(keychar);
 							nd.FREQUENCY = freq;
 
-							// PlayNote(system, channel, sound, freq);
+							PlayNote(system, channel, sound, freq);
 
 							int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
 							int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
@@ -677,11 +677,9 @@ int main()
 		{
 			ImGui::SetScrollY(0);
 			application_state = PLAYING;
-			// globalfut = std::async(std::launch::async, PlayModule, module, system, channel, sound);
-			// globalfut = std::async(std::launch::async, PlayRow, module, system, channel, sound, pattern_start + active_cell.ROW, tracks);
-			future_play = std::async(std::launch::async, PlayPattern, module, system, channel, sound, pattern_start, pattern_end, tracks);
-		}
-
+			future_play = std::async(std::launch::async, PlayPattern, module, system, channel,sound, pattern_start, pattern_end, tracks);
+        }
+		
 		if (application_state == EDITOR)
 		{
 			FMOD_RESULT result;

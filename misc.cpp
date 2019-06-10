@@ -12,7 +12,6 @@ LARGE_INTEGER tick_start;
 LARGE_INTEGER tick_end;
 LARGE_INTEGER tick_freq;
 
-
 struct UI_SIZING
 {
 	float MARGIN = 4;
