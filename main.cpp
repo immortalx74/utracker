@@ -22,6 +22,12 @@
 #include "toolbar.cpp"
 #include "listbuttons.cpp"
 
+    // ACTIVE_CELL active_cell;
+    // active_cell.X = UI.CELL_WIDTH;
+    // active_cell.Y = 131;
+    // active_cell.ROW = 0;
+    // active_cell.COL = 0;
+
 int main()
 {
 	LoadTextures();
@@ -36,6 +42,7 @@ int main()
     FMOD::System     *system;
     FMOD::Sound      *sound;
     FMOD::Channel    *channel = 0;
+    FMOD::ChannelGroup *channelgroup;
     FMOD_RESULT       result;
 
     result = FMOD::System_Create(&system);
@@ -52,26 +59,20 @@ int main()
     result = sound->setMode(FMOD_LOOP_OFF);
     ERRCHECK(result);
 
+    result = system->createChannelGroup("mychannels", &channelgroup);
+    ERRCHECK(result);
+
     //======================================================================
-	
-    // create containers
-    std::vector<PATTERN_> patterns_list;
-    std::vector<INSTRUMENT> instruments_list;
-    std::vector<TRACK> tracks_list;
     
+   // create default tracks
     for (int i = 0; i < tracks; ++i)
     {
         CreateTrack(tracks_list);
     }
 	
-    std::vector<std::vector<NOTE_DATA>> module;
-	
     CreatePattern(patterns_list, 64, module); // create default PATTERN_
     CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
-	
-	// UI_SIZING UI;
 
-    ACTIVE_CELL active_cell;
     active_cell.X = UI.CELL_WIDTH;
     active_cell.Y = 131;
     active_cell.ROW = 0;
@@ -162,10 +163,18 @@ int main()
 		
 		ImGui::PopItemWidth();
 		
-		// // show mouse coords
+		// show mouse coords
 		ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 		ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 		
+		// show app state
+		std::string as;
+		if (application_state == 0) as ="PLAY_MODULE";
+		if (application_state == 1) as ="PLAY_PATTERN";
+		if (application_state == 2) as ="PLAYING";
+		if (application_state == 3) as ="EDITOR";
+
+		ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());		
 		// Draw patterns and instruments list's buttons
 		DrawListButtons(patterns_list, instruments_list, module);
 		
@@ -673,11 +682,19 @@ int main()
 			}
 		}
 
+		if (application_state == PLAY_PATTERN)
+		{
+			ImGui::SetScrollY(0);
+			application_state = PLAYING;
+			future_play = std::async(std::launch::async, PlayPattern, module, system, channel,sound, channelgroup, pattern_start, pattern_end, tracks);
+        }
+
 		if (application_state == PLAY_MODULE)
 		{
 			ImGui::SetScrollY(0);
 			application_state = PLAYING;
-			future_play = std::async(std::launch::async, PlayPattern, module, system, channel,sound, pattern_start, pattern_end, tracks);
+			int end = patterns_list.size();
+			future_play = std::async(std::launch::async, PlayModule, module, system, channel,sound, channelgroup, 0, end, tracks);
         }
 		
 		if (application_state == EDITOR)
@@ -692,6 +709,13 @@ int main()
 			active_cell.LAST_CURSOR_ACTION = DOWN;
 			active_cell.ROW = playrow;
 			active_cell.Y = 132 + ((playrow-1) * UI.CELL_HEIGHT);
+
+			if (active_cell.ROW >= 63)
+			{
+				ImGui::SetScrollY(0);
+				active_cell.ROW = 0;
+				active_cell.Y = 132;
+			}
 		}
 		
 		ImGui::EndChild();

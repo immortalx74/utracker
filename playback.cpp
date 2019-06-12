@@ -67,11 +67,14 @@ bool PlayRow(
 	FMOD::System *system,
 	FMOD::Channel **channel,
 	FMOD::Sound *sound,
+	FMOD::ChannelGroup *channelgroup,
 	int row,
 	int track_count)
 {
 	FMOD_RESULT result;
 	float freq;
+	(*channel)->setChannelGroup(channelgroup);
+	channelgroup->stop();
 
 	for (int i = 0; i < track_count; ++i)
 	{
@@ -93,6 +96,7 @@ bool PlayPattern(
 	FMOD::System *system,
 	FMOD::Channel *channel,
 	FMOD::Sound *sound,
+	FMOD::ChannelGroup *channelgroup,
 	int start,
 	int end,
 	int track_count)
@@ -105,17 +109,16 @@ bool PlayPattern(
 	{
 		if (module[i][0].NAME != "---")
 		{
-			PlayRow(module, system, &channel, sound, i, track_count);
+			PlayRow(module, system, &channel, sound, channelgroup, i, track_count);
 		}
 
-		future_tick = std::async(std::launch::async, RowTick, 100);
+		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/ticks_per_row);
 		playrow++;
 
 		if (application_state == EDITOR)
 		{
-			channel->stop();
+			channelgroup->stop();
 			return true;
-
 		}
 	}
 
@@ -123,28 +126,43 @@ bool PlayPattern(
 }
 
 
-bool PlayModule(std::vector<std::vector<NOTE_DATA>> module, FMOD::System *system, FMOD::Channel *channel, FMOD::Sound *sound)
+bool PlayModule(
+	std::vector<std::vector<NOTE_DATA>> &module,
+	FMOD::System *system,
+	FMOD::Channel *channel,
+	FMOD::Sound *sound,
+	FMOD::ChannelGroup *channelgroup,
+	int start,
+	int end,
+	int track_count)
 {
 	FMOD_RESULT result;
+	float freq;
+	int pat_start;
+	int pat_rows;
+	int pat_end;
 
-	for (int i = 0; i < 60; ++i)
+	for (int i = start; i < end; ++i)
 	{
-		if (module[i][0].NAME != "---")
+	pat_start = patterns_list[active_pattern].OFFSET;
+	pat_rows = patterns_list[active_pattern].ROWS;
+	pat_end = pat_start + pat_rows;
+
+		PlayPattern(module, system, channel, sound, channelgroup, pat_start, pat_end, track_count);
+
+		playrow = 0;
+
+		if (active_pattern < end - 1)
 		{
-			channel->stop();
-			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
-			ERRCHECK(result);
+			active_pattern++;
 		}
-
-		future_tick = std::async(std::launch::async, RowTick, 10);
-		playrow++;
-
+		
 		if (application_state == EDITOR)
 		{
-			return false;
+			channelgroup->stop();
+			return true;
 		}
 	}
-	
-	playrow = 0;
-	return false;
+
+	return true;
 }

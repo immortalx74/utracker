@@ -26,16 +26,19 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 				btn_repeat = !btn_repeat;
 			}
 
-			if (i == 4) // play
+			if (i == 4) // play module
 			{
 				application_state = PLAY_MODULE;
 			}
 
+			if (i == 5) // play pattern
+			{
+				application_state = PLAY_PATTERN;
+			}
+
 			if (i == 7) // stop
 			{
-
 				application_state = EDITOR;
-
 			}
 		}
 

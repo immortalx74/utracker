@@ -136,6 +136,7 @@ enum APP_STATE
 
 APP_STATE application_state = EDITOR;
 UI_SIZING UI;
+ACTIVE_CELL active_cell;
 
 int col_btn_repeat = IM_COL32(255,130,0,255);
 int col_title_text = IM_COL32(255,130,0,255);
@@ -173,3 +174,10 @@ std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","P
 
 bool show_demo = false;
 std::vector<sf::Texture> toolbar_buttons;
+
+// create containers
+std::vector<PATTERN_> patterns_list;
+std::vector<INSTRUMENT> instruments_list;
+std::vector<TRACK> tracks_list;
+std::vector<std::vector<NOTE_DATA>> module;
+
