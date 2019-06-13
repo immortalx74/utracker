@@ -1,28 +1,6 @@
 typedef std::chrono::milliseconds ms;
 typedef std::chrono::duration<float> fsec;
 
-bool RowTick(int mils)
-{
-	bool looping = true;
-
-	auto start = std::chrono::high_resolution_clock::now();
-	auto stop = start;
-	do
-	{
-		stop = std::chrono::high_resolution_clock::now();
-		fsec fs = stop - start;
-		ms d = std::chrono::duration_cast<ms>(fs);
-
-		if (d.count() >= mils)
-		{
-			looping = false;
-			return true;
-		}
-	}
-	while(looping);
-	return true;
-}
-
 // bool RowTick(int ms)
 // {
 // 	LARGE_INTEGER start, stop, freq;
@@ -45,6 +23,42 @@ bool RowTick(int mils)
 // 	while (looping);
 // 	return true;
 // }
+
+bool RowTick(int mils)
+{
+	bool looping = true;
+
+	auto start = std::chrono::high_resolution_clock::now();
+	auto stop = start;
+	do
+	{
+		stop = std::chrono::high_resolution_clock::now();
+		fsec fs = stop - start;
+		ms d = std::chrono::duration_cast<ms>(fs);
+
+		if (d.count() >= mils)
+		{
+			looping = false;
+			return true;
+		}
+	}
+	while(looping);
+	return true;
+}
+
+
+bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int track_count)
+{
+	for (int i = 0; i < track_count; ++i)
+	{
+		if (module[row][i].NAME != "---")
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
 
 void PlayNote(
 	FMOD::System *system,
@@ -107,7 +121,7 @@ bool PlayPattern(
 
 	for (int i = start; i < end; ++i)
 	{
-		if (module[i][0].NAME != "---")
+		if (RowHasContent(module, i, track_count))
 		{
 			PlayRow(module, system, &channel, sound, channelgroup, i, track_count);
 		}
@@ -156,13 +170,13 @@ bool PlayModule(
 		{
 			active_pattern++;
 		}
-		
+
 		if (application_state == EDITOR)
 		{
 			channelgroup->stop();
 			return true;
 		}
 	}
-
+	application_state = EDITOR;
 	return true;
 }

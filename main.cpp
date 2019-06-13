@@ -22,12 +22,6 @@
 #include "toolbar.cpp"
 #include "listbuttons.cpp"
 
-    // ACTIVE_CELL active_cell;
-    // active_cell.X = UI.CELL_WIDTH;
-    // active_cell.Y = 131;
-    // active_cell.ROW = 0;
-    // active_cell.COL = 0;
-
 int main()
 {
 	LoadTextures();
@@ -73,8 +67,8 @@ int main()
     CreatePattern(patterns_list, 64, module); // create default PATTERN_
     CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
 
-    active_cell.X = UI.CELL_WIDTH;
-    active_cell.Y = 131;
+    active_cell.X = 306;
+    active_cell.Y = 132;
     active_cell.ROW = 0;
     active_cell.COL = 0;
     
@@ -114,7 +108,7 @@ int main()
 
 		// patterns list
 		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
-		ImGui::Text("patterns");
+		ImGui::Text("Patterns");
 		ImGui::PopStyleColor();
 		
 		UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
@@ -155,19 +149,25 @@ int main()
 		// Draw sliders
 		ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
-		
 		ImGui::SliderInt("Octave", &octave, 1, 8);
-		ImGui::SliderInt("Bpm", &bpm, 32, 512);
+		ImGui::SliderInt("BPM", &bpm, 32, 512);
 		ImGui::SliderInt("Ticks/Row", &ticks_per_row, 1, 32);
 		ImGui::SliderInt("Step", &step, 0, 32);
 		
 		ImGui::PopItemWidth();
 		
 		// show mouse coords
+		ImGui::Spacing();
 		ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 		ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
+
+		ImGui::Text("cell_x:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.X).c_str());
+		ImGui::Text("cell_y:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.Y).c_str());
+		ImGui::Text("cell_row:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.ROW).c_str());
+		ImGui::Text("cell_col:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.COL).c_str());
 		
 		// show app state
+		ImGui::Spacing();
 		std::string as;
 		if (application_state == 0) as ="PLAY_MODULE";
 		if (application_state == 1) as ="PLAY_PATTERN";
@@ -193,13 +193,21 @@ int main()
 
 		if (UI.LEFT_PANE_WIDTH + (tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING > io.DisplaySize.x)
 		{
-			UI.MAIN_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_WIDTH;
-			UI.MAIN_HEIGHT = io.DisplaySize.y - UI.TOOLBAR_HEIGHT;
+			UI.MAIN_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_WIDTH - UI.MARGIN;
 		}
 		else
 		{
 			UI.MAIN_WIDTH = (tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING;
-			UI.MAIN_HEIGHT = io.DisplaySize.y - UI.TOOLBAR_HEIGHT;
+		}
+
+		if (UI.TOOLBAR_HEIGHT + (pattern_rows * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN > io.DisplaySize.y)
+		{
+			UI.MAIN_HEIGHT = io.DisplaySize.y - UI.TOOLBAR_HEIGHT - UI.MARGIN;
+
+		}
+		else
+		{
+			UI.MAIN_HEIGHT = (pattern_rows * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN;
 		}
 
 		ImGui::SetNextWindowSize(ImVec2(UI.MAIN_WIDTH, UI.MAIN_HEIGHT));
@@ -273,10 +281,13 @@ int main()
 			
 			if (ImGui::IsMouseClicked(0))
 			{
-				active_cell.COL = floor((mousex - winx)) / UI.CELL_WIDTH;
-				active_cell.ROW = floor((mousey - winy)) / UI.CELL_HEIGHT;
+				int cell_col = floor((mousex - winx)) / UI.CELL_WIDTH;
+				int cell_row = floor((mousey - winy)) / UI.CELL_HEIGHT;
+				if (cell_col <= (tracks * 4) - 1) active_cell.COL = cell_col;
+				if (cell_row < pattern_rows) active_cell.ROW = cell_row;
 				active_cell.X = active_cell.COL * UI.CELL_WIDTH + winx;
 				active_cell.Y = active_cell.ROW * UI.CELL_HEIGHT + winy;
+
 				if (selection_exists)
 				{
 					selection_exists = false;
@@ -684,6 +695,7 @@ int main()
 
 		if (application_state == PLAY_PATTERN)
 		{
+			playrow = 0;
 			ImGui::SetScrollY(0);
 			application_state = PLAYING;
 			future_play = std::async(std::launch::async, PlayPattern, module, system, channel,sound, channelgroup, pattern_start, pattern_end, tracks);
@@ -710,7 +722,7 @@ int main()
 			active_cell.ROW = playrow;
 			active_cell.Y = 132 + ((playrow-1) * UI.CELL_HEIGHT);
 
-			if (active_cell.ROW >= 63)
+			if (active_cell.ROW >= patterns_list[active_pattern].ROWS - 1)
 			{
 				ImGui::SetScrollY(0);
 				active_cell.ROW = 0;

@@ -60,9 +60,47 @@ void DrawListButtons(std::vector<PATTERN_> &patterns_list, std::vector<INSTRUMEN
 	ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
 
 	bool p_opened = true;
+	static int r = 64;	
 
 	if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
 	{
+		ImGui::PushItemWidth(200);
+		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+		ImGui::Text("Number of rows");
+		ImGui::SliderInt("##numofrows", &r, 1, 64);
+		ImGui::PopStyleColor();
+
+		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+		ImGui::Text("Pattern name");
+
+		static char current_pattern_name[24] = "";
+		// strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+
+		ImGui::InputText("##patternname", current_pattern_name, 24, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank);
+
+		ImGui::PopStyleColor();
+		ImGui::PopItemWidth();
+
+		float modal_width = ImGui::GetWindowSize().x;
+		float modal_height = ImGui::GetWindowSize().y;
+		ImGui::SetCursorPos(ImVec2(modal_width- 180, modal_height - 30));
+
+		if (ImGui::Button("OK", ImVec2(80,0)))
+		{
+			if (strlen(current_pattern_name) == 0)
+			{
+				strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+			}
+
+			patterns_list[active_pattern].NAME = current_pattern_name;
+			patterns_list[active_pattern].ROWS = r;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(80,0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		ImGui::EndPopup();
 	}
 
