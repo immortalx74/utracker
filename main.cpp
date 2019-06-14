@@ -39,7 +39,7 @@ int main()
 
     sf::Clock deltaClock;
 
-    //======================================================================
+    //========================================================
     FMOD::System     *system;
     FMOD::Sound      *sound;
     FMOD::Channel    *channel = 0;
@@ -64,8 +64,6 @@ int main()
     result = system->createChannelGroup("mychannels", &channelgroup);
     ERRCHECK(result);
 
-    //======================================================================
-    
    // create default tracks
     for (int i = 0; i < tracks; ++i)
     {
