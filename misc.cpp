@@ -7,7 +7,7 @@
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
-int playrow = 0;
+// int playrow = 0;
 LARGE_INTEGER tick_start;
 LARGE_INTEGER tick_end;
 LARGE_INTEGER tick_freq;

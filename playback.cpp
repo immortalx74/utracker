@@ -60,20 +60,23 @@ bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int tra
 	return false;
 }
 
-void PlayNote(
+bool PlayNote(
 	FMOD::System *system,
 	FMOD::Channel *channel,
 	FMOD::Sound *sound,
+	FMOD::ChannelGroup *channelgroup,
 	float frequency)
 {
 	FMOD_RESULT result;
 
-	channel->stop();
 	result = system->playSound(FMOD_CHANNEL_REUSE, sound, false, &channel);
 	ERRCHECK(result);
 
+	channel->setChannelGroup(channelgroup);
+	
 	result = channel->setFrequency(frequency);
 	ERRCHECK(result);
+	return true;
 }
 
 bool PlayRow(
@@ -96,6 +99,8 @@ bool PlayRow(
 		{
 			result = system->playSound(FMOD_CHANNEL_FREE, sound, false, channel);
 			ERRCHECK(result);
+
+			(*channel)->setChannelGroup(channelgroup);
 
 			freq = module[row][i].FREQUENCY;
 			result = (*channel)->setFrequency(freq);
@@ -127,7 +132,10 @@ bool PlayPattern(
 		}
 
 		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/ticks_per_row);
-		playrow++;
+		if (future_tick.get() && i < end - 1)
+		{
+			active_cell.ROW++;
+		}
 
 		if (application_state == EDITOR)
 		{
@@ -163,8 +171,6 @@ bool PlayModule(
 	pat_end = pat_start + pat_rows;
 
 		PlayPattern(module, system, channel, sound, channelgroup, pat_start, pat_end, track_count);
-
-		playrow = 0;
 
 		if (active_pattern < end - 1)
 		{

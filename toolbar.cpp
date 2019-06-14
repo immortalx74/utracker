@@ -28,12 +28,18 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 
 			if (i == 4) // play module
 			{
-				application_state = PLAY_MODULE;
+				if (application_state != PLAYING)
+				{
+					application_state = PLAY_MODULE;
+				}
 			}
 
 			if (i == 5) // play pattern
 			{
-				application_state = PLAY_PATTERN;
+				if (application_state != PLAYING)
+				{
+					application_state = PLAY_PATTERN;
+				}
 			}
 
 			if (i == 7) // stop

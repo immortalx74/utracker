@@ -1,3 +1,7 @@
+//=============================================================================================
+// -replace active_cell.ROW++. Set current play-row from loop iterator in playpattern/playmodule
+//
+//=============================================================================================
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -10,6 +14,9 @@
 #include <cmath>
 #include "imgui.h"
 #include "imgui-SFML.h"
+
+#include <SFML/Window/Cursor.hpp>
+
 #include <string>
 #include <iostream>
 #include <array>
@@ -43,6 +50,7 @@ int main()
     ERRCHECK(result);
 
     // system->setOutput(FMOD_OUTPUTTYPE_ASIO);
+    system->setOutput(FMOD_OUTPUTTYPE_WASAPI);
 
     result = system->init(500, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
@@ -85,6 +93,7 @@ int main()
 	float mousey = 0;
 	float winx = 0;
 	float winy = 0;
+	bool key_pressed = false;
 	
     while (window.isOpen())
     {
@@ -587,10 +596,16 @@ int main()
 			// note entry
 			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
 			{
-                
-                
-                if (ImGui::IsKeyPressed(i))
+				if (ImGui::IsKeyReleased(i))
 				{
+					channelgroup->stop();
+					key_pressed = false;
+				}
+             
+                if (ImGui::IsKeyPressed(i) && !key_pressed)
+				{
+					key_pressed = true;
+
 					if (active_cell.COL % 4 == 0) // note cell
 					{
 						std::string keychar = KeyToNote(i, octave);
@@ -603,8 +618,8 @@ int main()
 							float freq = NoteToFrequency(keychar);
 							nd.FREQUENCY = freq;
 
-							PlayNote(system, channel, sound, freq);
-
+							PlayNote(system, channel, sound, channelgroup, freq);
+\
 							int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
 							int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
 
@@ -695,7 +710,7 @@ int main()
 
 		if (application_state == PLAY_PATTERN)
 		{
-			playrow = 0;
+			active_cell.ROW = 0;
 			ImGui::SetScrollY(0);
 			application_state = PLAYING;
 			future_play = std::async(std::launch::async, PlayPattern, module, system, channel,sound, channelgroup, pattern_start, pattern_end, tracks);
@@ -703,6 +718,7 @@ int main()
 
 		if (application_state == PLAY_MODULE)
 		{
+			active_cell.ROW = 0;
 			ImGui::SetScrollY(0);
 			application_state = PLAYING;
 			int end = patterns_list.size();
@@ -713,15 +729,12 @@ int main()
 		{
 			FMOD_RESULT result;
 			result = channel->stop();
-			playrow = 0;
 		}
 
 		if (application_state == PLAYING)
 		{
 			active_cell.LAST_CURSOR_ACTION = DOWN;
-			active_cell.ROW = playrow;
-			active_cell.Y = 132 + ((playrow-1) * UI.CELL_HEIGHT);
-
+			active_cell.Y = 132 + (active_cell.ROW * UI.CELL_HEIGHT);
 			if (active_cell.ROW >= patterns_list[active_pattern].ROWS - 1)
 			{
 				ImGui::SetScrollY(0);
