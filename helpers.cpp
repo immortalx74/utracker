@@ -87,11 +87,19 @@ bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 	INSTRUMENT new_instrument;
 	if (instruments_list.size() == 0)
 	{
-		new_instrument.NAME = "No Instrument";
+		new_instrument.NAME = "00:No Instrument";
 	}
 	else
 	{
-		new_instrument.NAME = "Instrument:" + std::to_string(last_instrument_index + 1);	
+		// new_instrument.NAME = "Instrument:" + std::to_string(last_instrument_index + 1);	
+		if (instruments_list.size() <= 9)
+		{
+			new_instrument.NAME = "0" + std::to_string(last_instrument_index + 1) + ":(no name)";
+		}
+		else
+		{
+			new_instrument.NAME = std::to_string(last_instrument_index + 1) + ":(no name)";
+		}
 	}
 	
 	new_instrument.SAMPLE_MAP = 0; // TEMP!

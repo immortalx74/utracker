@@ -141,6 +141,7 @@ ACTIVE_CELL active_cell;
 int col_btn_repeat = IM_COL32(255,130,0,255);
 int col_title_text = IM_COL32(255,130,0,255);
 int col_active_cell = IM_COL32(255,130,0,255);
+int col_active_cell_border = IM_COL32(255,255,255,255);
 int col_active_row = IM_COL32(77,77,135,255);
 int col_nth_row_highlight = IM_COL32(60,60,60,255);
 int col_selection = IM_COL32(90,90,90,255);
@@ -180,4 +181,3 @@ std::vector<PATTERN_> patterns_list;
 std::vector<INSTRUMENT> instruments_list;
 std::vector<TRACK> tracks_list;
 std::vector<std::vector<NOTE_DATA>> module;
-

@@ -20,16 +20,29 @@ draw_list->AddRectFilled(row_tl, row_br, col_active_row);
 // draw active cell
 ImVec2 cell_tl = ImVec2(active_cell.X - ImGui::GetScrollX(), active_cell.Y - ImGui::GetScrollY());
 ImVec2 cell_br = ImVec2(active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(), active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
+
 draw_list->AddRectFilled(cell_tl, cell_br, col_active_cell);
+
+if (ImGui::IsWindowFocused())
+{
+	
+	draw_list->AddRect(cell_tl, cell_br, col_active_cell_border);
+}
 
 //TEMP!!!!! scroll cursor out of bounds test
 ImVec2 rect_start, rect_end;
-rect_start.x = active_cell.X - ImGui::GetScrollX(); rect_start.y = active_cell.Y - ImGui::GetScrollY();
-rect_end.x = active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(); rect_end.y = active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY();
+// rect_start.x = active_cell.X - ImGui::GetScrollX(); rect_start.y = active_cell.Y - ImGui::GetScrollY();
+// rect_end.x = active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(); rect_end.y = active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY();
+
+
+rect_start.x = active_cell.X+14 - ImGui::GetScrollX(); rect_start.y = active_cell.Y+8 - ImGui::GetScrollY();
+rect_end.x = active_cell.X + 15 - ImGui::GetScrollX(); rect_end.y = active_cell.Y + 9 - ImGui::GetScrollY();
+
 if (!ImGui::IsRectVisible(rect_start,rect_end))
 {
 	float sx = ImGui::GetScrollX();
 	float sy = ImGui::GetScrollY();
+
 	if (active_cell.LAST_CURSOR_ACTION == DOWN)
 	{
 		sy += UI.CELL_HEIGHT;
@@ -133,7 +146,9 @@ for (int i = pattern_start; i < pattern_end; ++i)
 		{
 			ImGui::Text("---");
 		}
+		// ImGui::PushStyleColor(ImGuiCol_Separator, col_volume);
 		ImGui::NextColumn();
+		// ImGui::PopStyleColor();
 	}
 	
 	ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
