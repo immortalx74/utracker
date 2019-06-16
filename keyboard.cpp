@@ -7,11 +7,6 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 		active_cell.Y += UI.CELL_HEIGHT;
 		active_cell.ROW++;
 
-		if (active_cell.ROW == patterns_list[active_pattern].ROWS - 1)
-		{
-			ImGui::SetScrollY(ImGui::GetScrollMaxY());
-		}
-
 		if (selection_exists)
 		{
 			selection_exists = false;
@@ -22,11 +17,6 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 		active_cell.LAST_CURSOR_ACTION = UP;
 		active_cell.Y -= UI.CELL_HEIGHT;
 		active_cell.ROW--;
-
-		if (active_cell.ROW == 0)
-		{
-			ImGui::SetScrollY(0);
-		}
 
 		if (selection_exists)
 		{
@@ -39,11 +29,6 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 		active_cell.X += UI.CELL_WIDTH;
 		active_cell.COL++;
 
-		if (active_cell.COL == (tracks * 4) - 1)
-		{
-			ImGui::SetScrollX(ImGui::GetScrollMaxX());
-		}
-
 		if (selection_exists)
 		{
 			selection_exists = false;
@@ -54,11 +39,6 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 		active_cell.LAST_CURSOR_ACTION = LEFT;
 		active_cell.X -= UI.CELL_WIDTH;
 		active_cell.COL--;
-
-		if (active_cell.COL == 0)
-		{
-			ImGui::SetScrollX(0);
-		}
 
 		if (selection_exists)
 		{
@@ -78,7 +58,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
         if (ImGui::IsKeyPressed(i) && !key_pressed)
 		{
 			key_pressed = true;
-
+			print("ssss");
 			if (active_cell.COL % 4 == 0) // note cell
 			{
 				std::string keychar = KeyToNote(i, octave);

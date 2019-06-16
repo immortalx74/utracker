@@ -29,17 +29,34 @@ if (ImGui::IsWindowFocused())
 	draw_list->AddRect(cell_tl, cell_br, col_active_cell_border);
 }
 
-//TEMP!!!!! scroll cursor out of bounds test
+// Auto scroll when using arrow keys / on playback
 ImVec2 rect_start, rect_end;
-// rect_start.x = active_cell.X - ImGui::GetScrollX(); rect_start.y = active_cell.Y - ImGui::GetScrollY();
-// rect_end.x = active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(); rect_end.y = active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY();
-
 
 rect_start.x = active_cell.X+14 - ImGui::GetScrollX(); rect_start.y = active_cell.Y+8 - ImGui::GetScrollY();
-rect_end.x = active_cell.X + 15 - ImGui::GetScrollX(); rect_end.y = active_cell.Y + 9 - ImGui::GetScrollY();
+rect_end.x = active_cell.X+15 - ImGui::GetScrollX(); rect_end.y = active_cell.Y+9 - ImGui::GetScrollY();
 
-if (!ImGui::IsRectVisible(rect_start,rect_end))
+if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
 {
+	// int total_visible_rows = (ImGui::GetWindowHeight() - (2 * UI.CELL_HEIGHT)) / UI.CELL_HEIGHT;
+	// int first_visible_row = (int)ImGui::GetScrollY() / 17;
+	// int last_visible_row = total_visible_rows + first_visible_row;
+
+	// if (active_cell.ROW > last_visible_row)
+	// {
+	// 	float sss = ceil(ConvertRange(total_visible_rows, pattern_rows - 1, 0, pattern_rows - total_visible_rows - 1, active_cell.ROW));
+	// 	ImGui::SetScrollY(sss * 17);
+	// 	print(sss);
+	// }
+
+	// if (active_cell.ROW < first_visible_row)
+	// {
+	// 	float sss = ceil(ConvertRange(0, pattern_rows - first_visible_row - 1, 0, pattern_rows - total_visible_rows - 1, active_cell.ROW));
+	// 	ImGui::SetScrollY(sss * 17);
+	// 	print(sss);
+	// }
+
+
+
 	float sx = ImGui::GetScrollX();
 	float sy = ImGui::GetScrollY();
 

@@ -256,3 +256,9 @@ double NoteToFrequency(std::string note)
 	double n = (1378.125 * pow(2, octave)) * pow(1.059463, position); // 1378.125 = C-0 frequency
 	return n;
 }
+
+float ConvertRange (float from_min, float from_max, float to_min, float to_max, float value)
+{
+	float result = (((value - from_min) / (from_max - from_min)) * (to_max - to_min)) + to_min;
+	return result;
+}

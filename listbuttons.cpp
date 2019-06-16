@@ -161,10 +161,56 @@ void DrawListButtons(std::vector<PATTERN_> &patterns_list, std::vector<INSTRUMEN
 		ImGui::SetTooltip("Open instrument options");
 	}
 
+	// prevent instrument options from opening when "No Instrument" is selected
+	if (active_instrument <= 0)
+	{
+		p_opened = false;
+	}
+
 	ImGui::SetNextWindowSize(ImVec2(UI.INSTRUMENT_OPTIONS_MODAL_WIDTH, UI.INSTRUMENT_OPTIONS_MODAL_HEIGHT));
 
 	if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoResize))
 	{
+		ImGui::PushItemWidth(200);
+		ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+		ImGui::Text("Instrument name");
+
+		static char current_instrument_name[24] = "";
+		// strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+
+		ImGui::InputText("##instrumentnname", current_instrument_name, 24, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank);
+
+		ImGui::PopStyleColor();
+		ImGui::PopItemWidth();
+
+		float modal_width = ImGui::GetWindowSize().x;
+		float modal_height = ImGui::GetWindowSize().y;
+		ImGui::SetCursorPos(ImVec2(modal_width- 180, modal_height - 30));
+
+		if (ImGui::Button("OK", ImVec2(80,0)))
+		{
+			if (strlen(current_instrument_name) == 0)
+			{
+				strcpy(current_instrument_name, instruments_list[active_instrument].NAME.c_str());
+			}
+
+			if (active_instrument <= 9)
+			{
+				instruments_list[active_instrument].NAME = "0" + std::to_string(active_instrument) + ":" + current_instrument_name;
+			}
+			else
+			{
+				instruments_list[active_instrument].NAME = std::to_string(active_instrument) + ":" + current_instrument_name;
+			}
+
+			
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(80,0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		ImGui::EndPopup();
 	}
 

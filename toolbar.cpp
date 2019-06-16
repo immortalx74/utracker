@@ -21,6 +21,11 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 		// check button presses
 		if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24)))
 		{
+			if (i == 1)
+			{
+				// filedialog.Open();
+			}
+
 			if (i == 8) // repeat
 			{
 				btn_repeat = !btn_repeat;

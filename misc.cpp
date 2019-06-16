@@ -166,6 +166,7 @@ int nth_row_highlight = 8;
 
 int key_repeat_delay = 20;
 int key_repeat_counter = key_repeat_delay;
+bool key_pressed = false;
 
 bool selection_begin = false;
 bool selection_exists = false;
@@ -181,3 +182,6 @@ std::vector<PATTERN_> patterns_list;
 std::vector<INSTRUMENT> instruments_list;
 std::vector<TRACK> tracks_list;
 std::vector<std::vector<NOTE_DATA>> module;
+
+
+ImGui::FileBrowser filedialog;
