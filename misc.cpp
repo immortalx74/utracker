@@ -46,6 +46,12 @@ struct UI_SIZING
 	float INSTRUMENTS_LIST_Y = 0;
 	float INSTRUMENTS_LIST_WIDTH = 200;
 	float INSTRUMENTS_LIST_HEIGHT = 187;
+
+	float SAMPLES_LIST_X = 0;
+	float SAMPLES_LIST_Y = 0;
+	float SAMPLES_LIST_WIDTH = 200;
+	float SAMPLES_LIST_HEIGHT = 187;
+
  
 	float LEFT_SLIDERS_WIDTH = 100;
 
@@ -73,7 +79,7 @@ struct PATTERN_
 struct INSTRUMENT
 {
     std::string NAME;
-    int SAMPLE_MAP; // temp, array? vector?
+	std::vector<std::vector<std::string>> SAMPLE_MAP;
 };
 
 struct TRACK
@@ -81,14 +87,13 @@ struct TRACK
     int VOLUME;
     float PAN;
     bool MUTE;
-    bool SOLO;
+	bool SOLO;
 };
 
 struct SAMPLE
 {
-    std::string FILENAME;
-    std::string NAME;
-    int LOOP_TYPE; // temp, array? vector?
+	std::string FILENAME;
+	int LOOP_TYPE; // temp, array? vector?
 };
 
 struct NOTE_DATA
@@ -156,6 +161,7 @@ int col_volume = IM_COL32(20,170,20,255);
 int tracks = 8;
 int active_pattern = 0;
 int active_instrument = 0;
+int active_sample = 0;
 int octave = 5;
 int bpm = 125;
 int ticks_per_row = 6;
@@ -180,8 +186,6 @@ std::vector<sf::Texture> toolbar_buttons;
 // create containers
 std::vector<PATTERN_> patterns_list;
 std::vector<INSTRUMENT> instruments_list;
+std::vector<SAMPLE> samples_list;
 std::vector<TRACK> tracks_list;
 std::vector<std::vector<NOTE_DATA>> module;
-
-
-ImGui::FileBrowser filedialog;

@@ -58,7 +58,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
         if (ImGui::IsKeyPressed(i) && !key_pressed)
 		{
 			key_pressed = true;
-			print("ssss");
+
 			if (active_cell.COL % 4 == 0) // note cell
 			{
 				std::string keychar = KeyToNote(i, octave);
@@ -95,7 +95,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 					CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
 
 					// apply step to cursor
-					if (active_cell.ROW + step < pattern_end)
+					if (pattern_start + active_cell.ROW + step < pattern_end)
 					{
 						active_cell.LAST_CURSOR_ACTION = DOWN;
 						active_cell.ROW += step;

@@ -1,4 +1,7 @@
-void DrawListButtons(std::vector<PATTERN_> &patterns_list, std::vector<INSTRUMENT> &instruments_list, std::vector<std::vector<NOTE_DATA>> &module)
+void DrawListButtons(std::vector<PATTERN_> &patterns_list,
+					std::vector<INSTRUMENT> &instruments_list,
+					std::vector<SAMPLE> &samples_list,
+					std::vector<std::vector<NOTE_DATA>> &module)
 {
 	// Draw PATTERN_ buttons
 	ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
@@ -212,6 +215,41 @@ void DrawListButtons(std::vector<PATTERN_> &patterns_list, std::vector<INSTRUMEN
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
+	}
+
+	// Draw Sample buttons
+	ImGui::SetCursorPos(ImVec2(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + UI.MARGIN, UI.SAMPLES_LIST_Y));
+
+	if (ImGui::Button("+##sample_add"))
+	{
+		auto f = pfd::open_file("Load sample(s)", "/tmp/",{ "Wave Files (.wav)", "*.wav"},true);
+		
+		int filecount = 0;
+		for (auto const &fname : f.result())
+		{
+			filecount++;
+
+			if (samples_list.size() + filecount <= MAX_SAMPLES_PER_MODULE)
+			{
+				LoadSample(samples_list, fname);
+			}
+		}
+	}
+
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::SetTooltip("Add Sample");
+	}
+
+	ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + UI.MARGIN);
+	if (ImGui::Button("-##sample_del"))
+	{
+		//
+	}
+
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::SetTooltip("Delete Sample");
 	}
 
 	ImGui::End();

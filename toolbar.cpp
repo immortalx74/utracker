@@ -23,7 +23,14 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 		{
 			if (i == 1)
 			{
-				// filedialog.Open();
+				auto f = pfd::open_file("Choose files to read", "/tmp/",
+				{ "Sound Files (.wav .sound)", "*.wav *.sound",
+					"All Files", "*" },	true);
+				
+				std::cout << "Selected files:";
+				for (auto const &name : f.result())
+				std::cout << " " + name;
+				std::cout << "\n";
 			}
 
 			if (i == 8) // repeat

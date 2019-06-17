@@ -13,7 +13,7 @@ system->setOutput(FMOD_OUTPUTTYPE_WASAPI);
 result = system->init(500, FMOD_INIT_NORMAL, 0);
 ERRCHECK(result);
 
-result = system->createSound("res/pianoc5.wav", FMOD_SOFTWARE, 0, &sound);
+result = system->createSound("res/pianoc5.wav", FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &sound);
 ERRCHECK(result);
 
 result = sound->setMode(FMOD_LOOP_OFF);

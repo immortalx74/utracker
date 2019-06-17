@@ -102,7 +102,7 @@ bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 		}
 	}
 	
-	new_instrument.SAMPLE_MAP = 0; // TEMP!
+	// TODO: Add default sampl map here
 	
 	instruments_list.push_back(new_instrument);
 	
@@ -261,4 +261,22 @@ float ConvertRange (float from_min, float from_max, float to_min, float to_max, 
 {
 	float result = (((value - from_min) / (from_max - from_min)) * (to_max - to_min)) + to_min;
 	return result;
+}
+
+
+bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename)
+{
+	int last_sample_index = samples_list.size() - 1;
+	
+	if (samples_list.size() == MAX_SAMPLES_PER_MODULE)
+	{
+		return false;
+	}
+	
+	SAMPLE new_sample;
+	new_sample.FILENAME = filename;
+	
+	samples_list.push_back(new_sample);
+	
+	return true;
 }

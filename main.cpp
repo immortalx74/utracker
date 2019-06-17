@@ -1,6 +1,6 @@
 //=============================================================================================
 // -replace active_cell.ROW++. Set current play-row from loop iterator in playpattern/playmodule
-//
+// apply step doesn't repeat
 //=============================================================================================
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -17,7 +17,7 @@
 #include "imgui-SFML.h"
 
 #include "imgui_internal.h"
-#include "imfilebrowser.h"
+#include "portable-file-dialogs.h"
 
 #include <string>
 #include <iostream>
@@ -31,10 +31,14 @@
 #include "toolbar.cpp"
 #include "listbuttons.cpp"
 
+#pragma comment (lib, "Comdlg32")
+#pragma comment (lib, "OLE32")
+#pragma comment (lib, "shell32")
+
 int main()
 {
 	LoadTextures();
-	sf::RenderWindow window(sf::VideoMode(1024, 768), "Tracker alpha", sf::Style::Default);
+	sf::RenderWindow window(sf::VideoMode(1024, 880), "Tracker alpha", sf::Style::Default);
 	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -66,6 +70,9 @@ int main()
 
 		ImGui::PushStyleColor(ImGuiCol_Button, col_button);
 
+		int pattern_start = patterns_list[active_pattern].OFFSET;
+		int pattern_rows = patterns_list[active_pattern].ROWS;
+		int pattern_end = pattern_start + pattern_rows;
 		// Left pane======================================
 		#include "leftpane.cpp"
 		
@@ -75,9 +82,9 @@ int main()
 		DrawToolbar(toolbar_buttons, toolbar_tooltips);
 
 		// Main==========================================
-		int pattern_start = patterns_list[active_pattern].OFFSET;
-		int pattern_rows = patterns_list[active_pattern].ROWS;
-		int pattern_end = pattern_start + pattern_rows;
+		// int pattern_start = patterns_list[active_pattern].OFFSET;
+		// int pattern_rows = patterns_list[active_pattern].ROWS;
+		// int pattern_end = pattern_start + pattern_rows;
 
 		UI.MAIN_X = ImGui::GetCursorPosX();
 		UI.MAIN_Y = ImGui::GetCursorPosY();
@@ -125,13 +132,6 @@ int main()
 
 		ImGui::EndChild();
 		ImGui::End();
-		
-		filedialog.Display();
-        if(filedialog.HasSelected())
-        {
-            std::cout << "Selected filename" << filedialog.GetSelected().string() << std::endl;
-            filedialog.ClearSelected();
-        }
 
 		// demo window
 		if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_PageDown)))

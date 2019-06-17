@@ -43,6 +43,28 @@ if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTR
 }
 ImGui::ListBoxFooter();
 
+// Samples list 
+ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+ImGui::Text("Samples");
+ImGui::PopStyleColor();
+
+UI.SAMPLES_LIST_X = ImGui::GetCursorPosX();
+UI.SAMPLES_LIST_Y = ImGui::GetCursorPosY();
+
+if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_LIST_HEIGHT)))
+{   
+	for (int i = 0; i < samples_list.size(); ++i)
+	{
+		if (ImGui::Selectable(samples_list[i].FILENAME.c_str(), active_sample == i))
+		{
+			active_sample = i;
+		}
+	}
+}
+ImGui::ListBoxFooter();
+
+
+
 // Draw sliders
 ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
@@ -71,6 +93,11 @@ if (application_state == 1) as ="PLAY_PATTERN";
 if (application_state == 2) as ="PLAYING";
 if (application_state == 3) as ="EDITOR";
 
-ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());		
+ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
+
+ImGui::Text("pat_start:"); ImGui::SameLine();
+ImGui::Text(std::to_string(pattern_start).c_str());
+ImGui::Text("pat_end:"); ImGui::SameLine();
+ImGui::Text(std::to_string(pattern_end).c_str());
 // Draw patterns and instruments list's buttons
-DrawListButtons(patterns_list, instruments_list, module);
+DrawListButtons(patterns_list, instruments_list, samples_list, module);
