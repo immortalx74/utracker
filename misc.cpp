@@ -15,55 +15,55 @@ LARGE_INTEGER tick_freq;
 struct UI_SIZING
 {
 	float MARGIN = 4;
-
+    
 	float LEFT_PANE_X = 0;
 	float LEFT_PANE_Y = 0;
 	float LEFT_PANE_WIDTH = 260;
 	float LEFT_PANE_HEIGHT = 0;
- 
+    
 	float TOOLBAR_X = 0;
 	float TOOLBAR_Y = 0;
 	float TOOLBAR_WIDTH = 0;
 	float TOOLBAR_HEIGHT = 48;
- 
+    
 	float MAIN_X = 0;
 	float MAIN_Y = 0;
 	float MAIN_WIDTH = 0;
 	float MAIN_HEIGHT = 0;
 	float MAIN_PADDING = 70;
- 
+    
 	float GRID_X = 0;
 	float GRID_Y = 0;
 	float GRID_WIDTH = 0;
 	float GRID_HEIGHT = 0;
-
+    
 	float PATTERNS_LIST_X = 0;
 	float PATTERNS_LIST_Y = 0;
 	float PATTERNS_LIST_WIDTH = 200;
 	float PATTERNS_LIST_HEIGHT = 187;
-
+    
 	float INSTRUMENTS_LIST_X = 0;
 	float INSTRUMENTS_LIST_Y = 0;
 	float INSTRUMENTS_LIST_WIDTH = 200;
 	float INSTRUMENTS_LIST_HEIGHT = 187;
-
+    
 	float SAMPLES_LIST_X = 0;
 	float SAMPLES_LIST_Y = 0;
 	float SAMPLES_LIST_WIDTH = 200;
 	float SAMPLES_LIST_HEIGHT = 187;
-
- 
+    
+    
 	float LEFT_SLIDERS_WIDTH = 100;
-
+    
 	float PATTERN_OPTIONS_MODAL_WIDTH = 400;
 	float PATTERN_OPTIONS_MODAL_HEIGHT = 200;
 	float INSTRUMENT_OPTIONS_MODAL_WIDTH = 400;
 	float INSTRUMENT_OPTIONS_MODAL_HEIGHT = 200;
-
+    
 	float TRACK_WIDTH = 120;
 	float CELL_WIDTH = 30;
 	float CELL_HEIGHT = 17;
-
+    
 	float TRACK_HEADERS_START = 46;
 	float TRACK_HEADERS_HEIGHT = 60;
 	float TRACK_SLIDERS_WIDTH = 104;
@@ -92,7 +92,8 @@ struct TRACK
 
 struct SAMPLE
 {
-	std::string FILENAME;
+	std::string NAME;
+    std::string FILENAME;
 	int LOOP_TYPE; // temp, array? vector?
 };
 

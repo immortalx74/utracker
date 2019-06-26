@@ -162,7 +162,7 @@ std::string KeyToNote(int key, int cur_octave)
 		case 15: 	note = "A-"; cur_octave--; break; //P key
 		case 46: 	note = "A#"; cur_octave--; break; //[ key
 		case 47: 	note = "B-"; cur_octave--; break; //] key
-
+        
 		case 0: 	note = "C-"; break; //A key
 		case 18: 	note = "C#"; break; //S key
 		case 3: 	note = "D-"; break; //D key
@@ -174,7 +174,7 @@ std::string KeyToNote(int key, int cur_octave)
 		case 11: 	note = "G#"; break; //L key
 		case 48: 	note = "A-"; break; //; key
 		case 51: 	note = "A#"; break; //' key
-
+        
 		case 25: 	note = "C-"; cur_octave++; break; //Z key
 		case 23: 	note = "C#"; cur_octave++; break; //X key
 		case 2: 	note = "D-"; cur_octave++; break; //C key
@@ -185,17 +185,17 @@ std::string KeyToNote(int key, int cur_octave)
 		case 49: 	note = "G-"; cur_octave++; break; //, key
 		case 50: 	note = "G#"; cur_octave++; break; //. key
 		case 52: 	note = "A-"; cur_octave++; break; /// key
-
+        
 		default:	return "invalid";
 	}
-
+    
 	return note + std::to_string(cur_octave);
 }
 
 int KeyToInstrument(int key)
 {
 	int instr;
-
+    
 	switch (key)
 	{
 		case 26:case 75:	instr = 0; break; // 0
@@ -208,7 +208,7 @@ int KeyToInstrument(int key)
 		case 33:case 82:	instr = 7; break; // 0
 		case 34:case 83:	instr = 8; break; // 0
 		case 35:case 84:	instr = 9; break; // 0
-
+        
 		default:	return -1;
 	}
 	return instr;
@@ -217,7 +217,7 @@ int KeyToInstrument(int key)
 int KeyToVolume(int key)
 {
 	int vol;
-
+    
 	switch (key)
 	{
 		case 26:case 75:	vol = 0; break; // 0
@@ -230,7 +230,7 @@ int KeyToVolume(int key)
 		case 33:case 82:	vol = 7; break; // 0
 		case 34:case 83:	vol = 8; break; // 0
 		case 35:case 84:	vol = 9; break; // 0
-
+        
 		default:	return -1;
 	}
 	return vol;
@@ -241,9 +241,9 @@ double NoteToFrequency(std::string note)
 	int position = 0;
 	std::string base = note.substr(0,2);
 	int octave = (int)note.at(2)-'0'; // mike's hack
-
+    
 	std::array<std::string, 12> note_sequence {"C-","C#","D-","D#","E-","F-","F#","G-","G#","A-","A#","B-"};
-
+    
 	for (int i = 0; i < note_sequence.size(); ++i)
 	{
 		if (base == note_sequence[i])
@@ -252,7 +252,7 @@ double NoteToFrequency(std::string note)
 			break;
 		}
 	}
-
+    
 	double n = (1378.125 * pow(2, octave)) * pow(1.059463, position); // 1378.125 = C-0 frequency
 	return n;
 }
@@ -273,9 +273,20 @@ bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename)
 		return false;
 	}
 	
+    // Extract filename from full path. NOTE: Multiple selection has backslash, single selection a forward slash.
+    int n = filename.rfind("/");
+    if (n == -1)
+    {
+        n = filename.rfind("\\");
+    }
+    std::string name = filename.substr(n+1);
+    
 	SAMPLE new_sample;
 	new_sample.FILENAME = filename;
-	
+	new_sample.NAME = name;
+    
+    //TODO: Check if a sample with the same name is loaded already. If it has been loaded DON'T add it!!!
+    
 	samples_list.push_back(new_sample);
 	
 	return true;

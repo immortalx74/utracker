@@ -55,12 +55,18 @@ if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_L
 {   
 	for (int i = 0; i < samples_list.size(); ++i)
 	{
-		if (ImGui::Selectable(samples_list[i].FILENAME.c_str(), active_sample == i))
-		{
+		if (ImGui::Selectable(samples_list[i].NAME.c_str(), active_sample == i))
+        {
 			active_sample = i;
+		}
+        
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip(samples_list[i].FILENAME.c_str());
 		}
 	}
 }
+
 ImGui::ListBoxFooter();
 
 
