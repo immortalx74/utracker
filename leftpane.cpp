@@ -297,26 +297,42 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     ImGui::Spacing();
     
     //======================================================
-    ImGui::Text("Sample map"); ImGui::SameLine();
+    ImGui::Text("Samples list"); ImGui::SameLine();
     
-    ImGui::Text("C-5 C#5 D-5 D#5 E-5 F-5 F#5");
+    ImGui::SetCursorPosX(188);
+    ImGui::Text("C-5 C#5 D-5 D#5 E-5 F-5 F#5 G-5 G#5 A-5 A#5 B-5");
     ImGui::PopStyleColor();
     
-    ImGui::BeginChild("##samplemap", ImVec2(400,200), true);
+    ImGui::BeginChild("##samplemap", ImVec2(540,200), true);
     
     ImVec2 csp = ImGui::GetCursorScreenPos();
     float cpx = csp.x;
-    float cpy = csp.y;
+    float cpy = csp.y-8;
     ImDrawList* dl = ImGui::GetWindowDrawList();
     
-    dl->AddLine(ImVec2(cpx ,cpy), ImVec2(cpx+200, cpy), col_title_text);
-    //dl->AddLine(ImVec2(380,cpy+40), ImVec2(600, cpy+40), col_title_text);
+    int xoff = 168;
+    float so = ImGui::GetScrollY();
+    
+    for (int j = 0; j < 13; ++j)
+    {
+        dl->AddLine(ImVec2(cpx+xoff,cpy+so), ImVec2(cpx+xoff,cpy+200+so),col_title_text);
+        xoff += 28;
+    }
+    
+    int yoff = cpy;
     
     for (int i = 0; i < samples_list.size(); ++i)
     {
         std::string full_name = samples_list[i].NAME;
         std::string trunc_name = full_name.substr(0, 24);
         ImGui::Text(trunc_name.c_str());
+        
+        
+        csp = ImGui::GetCursorPos();
+        cpx = csp.x;
+        cpy = csp.y-8;
+        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+cpx,ImGui::GetWindowPos().y+cpy+yoff+so), ImVec2(ImGui::GetWindowPos().x+cpx+400,ImGui::GetWindowPos().y+cpy+yoff+so), col_title_text);
+        yoff += 4;
     }
     
     ImGui::EndChild();

@@ -286,7 +286,7 @@ FMOD::System *fsystem)
     
     FMOD::Sound *snd;
     FMOD_RESULT result;
-    result = fsystem->createSound(filename.c_str(), FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &snd);
+    //result = fsystem->createSound(filename.c_str(), FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &snd);
     
 	SAMPLE new_sample;
 	new_sample.FILENAME = filename;
