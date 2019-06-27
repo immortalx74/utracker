@@ -1,25 +1,26 @@
-FMOD::System     *system;
+FMOD::System     *fsystem;
 FMOD::Sound      *sound;
 FMOD::Channel    *channel = 0;
 FMOD::ChannelGroup *channelgroup;
 FMOD_RESULT       result;
 
-result = FMOD::System_Create(&system);
+
+result = FMOD::System_Create(&fsystem);
 ERRCHECK(result);
 
-// system->setOutput(FMOD_OUTPUTTYPE_ASIO);
-system->setOutput(FMOD_OUTPUTTYPE_WASAPI);
+// fsystem->setOutput(FMOD_OUTPUTTYPE_ASIO);
+fsystem->setOutput(FMOD_OUTPUTTYPE_WASAPI);
 
-result = system->init(500, FMOD_INIT_NORMAL, 0);
+result = fsystem->init(500, FMOD_INIT_NORMAL, 0);
 ERRCHECK(result);
 
-result = system->createSound("res/pianoc5.wav", FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &sound);
+result = fsystem->createSound("res/pianoc5.wav", FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &sound);
 ERRCHECK(result);
 
 result = sound->setMode(FMOD_LOOP_OFF);
 ERRCHECK(result);
 
-result = system->createChannelGroup("mychannels", &channelgroup);
+result = fsystem->createChannelGroup("mychannels", &channelgroup);
 ERRCHECK(result);
 
 // create default tracks

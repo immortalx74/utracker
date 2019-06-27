@@ -231,7 +231,7 @@ void DrawListButtons(std::vector<PATTERN_> &patterns_list,
             
 			if (samples_list.size() + filecount <= MAX_SAMPLES_PER_MODULE)
 			{
-				LoadSample(samples_list, fname);
+                LoadSample(samples_list, fname, fsystem);
 			}
         }
 	}

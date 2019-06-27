@@ -264,7 +264,10 @@ float ConvertRange (float from_min, float from_max, float to_min, float to_max, 
 }
 
 
-bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename)
+bool LoadSample(
+std::vector<SAMPLE> &samples_list,
+std::string filename,
+FMOD::System *fsystem)
 {
 	int last_sample_index = samples_list.size() - 1;
 	
@@ -281,13 +284,16 @@ bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename)
     }
     std::string name = filename.substr(n+1);
     
+    FMOD::Sound *snd;
+    FMOD_RESULT result;
+    result = fsystem->createSound(filename.c_str(), FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &snd);
+    
 	SAMPLE new_sample;
 	new_sample.FILENAME = filename;
 	new_sample.NAME = name;
-    
+    new_sample.SOUND = snd;
     //TODO: Check if a sample with the same name is loaded already. If it has been loaded DON'T add it!!!
     
 	samples_list.push_back(new_sample);
-	
-	return true;
+    return true;
 }

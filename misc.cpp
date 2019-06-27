@@ -94,7 +94,8 @@ struct SAMPLE
 {
 	std::string NAME;
     std::string FILENAME;
-	int LOOP_TYPE; // temp, array? vector?
+	FMOD::Sound *SOUND;
+    int LOOP_TYPE; // temp, array? vector?
 };
 
 struct NOTE_DATA

@@ -1,7 +1,7 @@
-//=============================================================================================
+//=================================================
 // -replace active_cell.ROW++. Set current play-row from loop iterator in playpattern/playmodule
 // apply step doesn't repeat
-//=============================================================================================
+//=================================================
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -29,7 +29,7 @@
 #include "helpers.cpp"
 #include "playback.cpp"
 #include "toolbar.cpp"
-#include "listbuttons.cpp"
+//#include "listbuttons.cpp"
 
 #pragma comment (lib, "Comdlg32")
 #pragma comment (lib, "OLE32")
@@ -59,7 +59,7 @@ int main()
             // if (event.type == sf::Event::KeyReleased) key_pressed = false;
 		}
 		ImGui::SFML::Update(window, deltaClock.restart());
-		system->update();
+		fsystem->update();
 		io.KeyRepeatRate = 0.035f;
         
 		// TEMP!!! separator colors
@@ -75,7 +75,7 @@ int main()
 		int pattern_end = pattern_start + pattern_rows;
 		// Left pane======================================
 #include "leftpane.cpp"
-		
+        
 		// Draw toolbar==================================
 		UI.TOOLBAR_X = UI.LEFT_PANE_X + UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN);
 		UI.TOOLBAR_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_X - UI.LEFT_PANE_WIDTH - (3 * UI.MARGIN);
@@ -149,6 +149,14 @@ int main()
 		ImGui::SFML::Render(window);
 		window.display();
 	}
+    
+    // shut down
+    result = sound->release();
+    ERRCHECK(result);
+    result = fsystem->close();
+    ERRCHECK(result);
+    result = fsystem->release();
+    ERRCHECK(result);
     
 	ImGui::SFML::Shutdown();
 }
