@@ -88,6 +88,7 @@ struct TRACK
     float PAN;
     bool MUTE;
 	bool SOLO;
+    FMOD::Channel *CHANNEL;
 };
 
 struct SAMPLE

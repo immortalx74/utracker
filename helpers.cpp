@@ -121,9 +121,9 @@ bool CreateTrack(std::vector<TRACK> &tracks_list)
 	new_track.PAN = 0.0f;
 	new_track.MUTE = false;
 	new_track.SOLO = false;
+    new_track.CHANNEL = (FMOD::Channel *)tracks_list.size(); // NOTE: Test!!!!!!
 	
 	tracks_list.push_back(new_track);
-	
 	return true;
 }
 
