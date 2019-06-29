@@ -3,7 +3,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 	ImGui::SetNextWindowSize(ImVec2(UI.TOOLBAR_WIDTH, UI.TOOLBAR_HEIGHT));
 	ImGui::SetNextWindowPos(ImVec2(UI.TOOLBAR_X, UI.TOOLBAR_Y));
 	ImGui::Begin("toolbar", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-
+    
 	for (int i = 0; i < 13; ++i)
 	{
 		if (btn_repeat && i == 8)
@@ -24,20 +24,20 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 			if (i == 1)
 			{
 				auto f = pfd::open_file("Choose files to read", "/tmp/",
-				{ "Sound Files (.wav .sound)", "*.wav *.sound",
-					"All Files", "*" },	true);
+                                        { "Sound Files (.wav .sound)", "*.wav *.sound",
+                                        "All Files", "*" },	true);
 				
 				std::cout << "Selected files:";
 				for (auto const &name : f.result())
-				std::cout << " " + name;
+                    std::cout << " " + name;
 				std::cout << "\n";
 			}
-
+            
 			if (i == 8) // repeat
 			{
 				btn_repeat = !btn_repeat;
 			}
-
+            
 			if (i == 4) // play module
 			{
 				if (application_state != PLAYING)
@@ -45,7 +45,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 					application_state = PLAY_MODULE;
 				}
 			}
-
+            
 			if (i == 5) // play pattern
 			{
 				if (application_state != PLAYING)
@@ -53,13 +53,13 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 					application_state = PLAY_PATTERN;
 				}
 			}
-
+            
 			if (i == 7) // stop
 			{
 				application_state = EDITOR;
 			}
 		}
-
+        
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::SetTooltip(toolbar_tooltips[i].c_str());
@@ -72,7 +72,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 		}
 		ImGui::SameLine();
 	}
-
+    
 	ImGui::End();
 	
 	ImGui::PopStyleColor();

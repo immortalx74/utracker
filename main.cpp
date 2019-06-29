@@ -28,8 +28,10 @@
 #include "misc.cpp"
 #include "helpers.cpp"
 #include "playback.cpp"
+#include "imgui_bitfield.cpp"
 #include "toolbar.cpp"
 //#include "listbuttons.cpp"
+
 
 #pragma comment (lib, "Comdlg32")
 #pragma comment (lib, "OLE32")

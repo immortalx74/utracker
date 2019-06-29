@@ -102,8 +102,8 @@ bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 		}
 	}
 	
-	// TODO: Add default sampl map here
-	
+	// TODO: Add default sample map here
+    
 	instruments_list.push_back(new_instrument);
 	
 	return true;
@@ -139,6 +139,28 @@ void CellSet(int row, int col, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>>
 	if (col % 4 == 1) module[row][col / 4].INSTRUMENT = nd.INSTRUMENT;
 	if (col % 4 == 2) module[row][col / 4].VOLUME = nd.VOLUME;
 	if (col % 4 == 3) module[row][col / 4].FX = nd.FX;
+}
+
+int NoteToSample(std::string note, int instrument)
+{
+    int position = 0;
+	std::string base = note.substr(0,2);
+	int octave = (int)note.at(2)-'0'; // mike's hack
+    
+	std::array<std::string, 12> note_sequence {"C-","C#","D-","D#","E-","F-","F#","G-","G#","A-","A#","B-"};
+    
+	for (int i = 0; i < note_sequence.size(); ++i)
+	{
+		if (base == note_sequence[i])
+		{
+			position = i;
+			break;
+		}
+	}
+    
+    int sample_pos = (octave * 12) + position;
+    int sample = instruments_list[instrument].SAMPLE_MAP[sample_pos];
+    return sample;
 }
 
 std::string KeyToNote(int key, int cur_octave)
@@ -286,7 +308,7 @@ FMOD::System *fsystem)
     
     FMOD::Sound *snd;
     FMOD_RESULT result;
-    //result = fsystem->createSound(filename.c_str(), FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &snd);
+    result = fsystem->createSound(filename.c_str(), FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &snd);
     
 	SAMPLE new_sample;
 	new_sample.FILENAME = filename;

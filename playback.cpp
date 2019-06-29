@@ -83,7 +83,7 @@ bool PlayRow(
 std::vector<std::vector<NOTE_DATA>> &module,
 FMOD::System *fsystem,
 FMOD::Channel **channel,
-FMOD::Sound *sound,
+//FMOD::Sound *sound,
 FMOD::ChannelGroup *channelgroup,
 int row,
 int track_count)
@@ -93,11 +93,17 @@ int track_count)
 	(*channel)->setChannelGroup(channelgroup);
 	channelgroup->stop();
     
+    int sample_index;
+    FMOD::Sound *s;
+    
 	for (int i = 0; i < track_count; ++i)
 	{
 		if (module[row][i].NAME != "---")
 		{
-			result = fsystem->playSound(FMOD_CHANNEL_FREE, sound, false, channel);
+            sample_index = NoteToSample(module[row][i].NAME, module[row][i].INSTRUMENT);
+            s = samples_list[sample_index].SOUND;
+            
+            result = fsystem->playSound(FMOD_CHANNEL_FREE, s, false, channel);
 			ERRCHECK(result);
             
 			(*channel)->setChannelGroup(channelgroup);
@@ -114,7 +120,7 @@ bool PlayPattern(
 std::vector<std::vector<NOTE_DATA>> &module,
 FMOD::System *fsystem,
 FMOD::Channel *channel,
-FMOD::Sound *sound,
+//FMOD::Sound *sound,
 FMOD::ChannelGroup *channelgroup,
 int start,
 int end,
@@ -128,7 +134,7 @@ int track_count)
 	{
 		if (RowHasContent(module, i, track_count))
 		{
-			PlayRow(module, fsystem, &channel, sound, channelgroup, i, track_count);
+            PlayRow(module, fsystem, &channel, channelgroup, i, track_count);
 		}
         
 		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/ticks_per_row);
@@ -152,7 +158,7 @@ bool PlayModule(
 std::vector<std::vector<NOTE_DATA>> &module,
 FMOD::System *fsystem,
 FMOD::Channel *channel,
-FMOD::Sound *sound,
+//FMOD::Sound *sound,
 FMOD::ChannelGroup *channelgroup,
 int start,
 int end,
@@ -170,7 +176,7 @@ int track_count)
         pat_rows = patterns_list[active_pattern].ROWS;
         pat_end = pat_start + pat_rows;
         
-		PlayPattern(module, fsystem, channel, sound, channelgroup, pat_start, pat_end, track_count);
+		PlayPattern(module, fsystem, channel, channelgroup, pat_start, pat_end, track_count);
         
 		if (active_pattern < end - 1)
 		{

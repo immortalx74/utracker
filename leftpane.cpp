@@ -75,7 +75,7 @@ ImGui::ListBoxFooter();
 // Draw sliders
 ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
-ImGui::SliderInt("Octave", &octave, 1, 8);
+ImGui::SliderInt("Middle octave", &octave, 1, 8);
 ImGui::SliderInt("BPM", &bpm, 32, 512);
 ImGui::SliderInt("Ticks/Row", &ticks_per_row, 1, 32);
 ImGui::SliderInt("Step", &step, 0, 32);
@@ -295,44 +295,95 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
     ImGui::Spacing();
     ImGui::Spacing();
-    
     //======================================================
-    ImGui::Text("Samples list"); ImGui::SameLine();
+    ImGui::Text("Sample map");
+    
+    ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
+    ImGui::SliderInt("Octave", &samplemap_octave, 0, 9);ImGui::SameLine();
+    ImGui::PopItemWidth();
     
     ImGui::SetCursorPosX(188);
-    ImGui::Text("C-5 C#5 D-5 D#5 E-5 F-5 F#5 G-5 G#5 A-5 A#5 B-5");
+    
+    std::string oct_str = std::to_string(samplemap_octave);
+    std::string octave_notes = 
+        "C-" + oct_str +
+        " C#" + oct_str +
+        " D-" + oct_str +
+        " D#" + oct_str +
+        " E-" + oct_str +
+        " F-" + oct_str +
+        " F#" + oct_str +
+        " G-" + oct_str +
+        " G#" + oct_str +
+        " A-" + oct_str +
+        " A#" + oct_str +
+        " B-" + oct_str;
+    
+    ImGui::Text(octave_notes.c_str());
     ImGui::PopStyleColor();
+    
+    
+    int relative_cell_x;
+    int relative_cell_y;
     
     ImGui::BeginChild("##samplemap", ImVec2(540,200), true);
     
     ImVec2 csp = ImGui::GetCursorScreenPos();
-    float cpx = csp.x;
-    float cpy = csp.y-8;
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    
+    float cpx = csp.x;
+    float cpy = csp.y;
+    int list_size = samples_list.size();
     int xoff = 168;
     float so = ImGui::GetScrollY();
     
+    int mrelative_x = ImGui::GetMousePos().x - 176 - ImGui::GetWindowPos().x;
+    int mrelative_y = ImGui::GetMousePos().y - 8 - ImGui::GetWindowPos().y;
+    
+    dl->AddLine(ImVec2(cpx,cpy+so), ImVec2(cpx,cpy+(list_size * 17)+so),col_active_cell_border);
+    
+    // vertical separators
     for (int j = 0; j < 13; ++j)
     {
-        dl->AddLine(ImVec2(cpx+xoff,cpy+so), ImVec2(cpx+xoff,cpy+200+so),col_title_text);
+        dl->AddLine(ImVec2(cpx+xoff,cpy+so), ImVec2(cpx+xoff,cpy+(list_size * 17)+so),col_active_cell_border);
         xoff += 28;
     }
     
-    int yoff = cpy;
-    
+    // horizontal separators & sample names
     for (int i = 0; i < samples_list.size(); ++i)
     {
+        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+8,ImGui::GetWindowPos().y+8-so), ImVec2(ImGui::GetWindowPos().x+512,ImGui::GetWindowPos().y+8-so), col_active_cell_border);
+        
         std::string full_name = samples_list[i].NAME;
         std::string trunc_name = full_name.substr(0, 24);
         ImGui::Text(trunc_name.c_str());
         
-        
         csp = ImGui::GetCursorPos();
         cpx = csp.x;
-        cpy = csp.y-8;
-        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+cpx,ImGui::GetWindowPos().y+cpy+yoff+so), ImVec2(ImGui::GetWindowPos().x+cpx+400,ImGui::GetWindowPos().y+cpy+yoff+so), col_title_text);
-        yoff += 4;
+        cpy = csp.y;
+        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+cpx,ImGui::GetWindowPos().y+cpy-so), ImVec2(ImGui::GetWindowPos().x+cpx+504,ImGui::GetWindowPos().y+cpy-so), col_active_cell_border);
+        
+        int xxoff = 0;
+        for (int k = 0; k < 12; ++k)
+        {
+            if (instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + k] == i)
+            {
+                dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so), ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_title_text);
+            }
+            xxoff += 28;
+        }
+    }
+    
+    // get cell
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+    {
+        // xoff=176, xmax=335, yoff=8
+        relative_cell_x = mrelative_x / 28;
+        relative_cell_y = (mrelative_y + ImGui::GetScrollY()) / 17;
+        
+        if (ImGui::IsMouseClicked(0))
+        {
+            instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+        }
     }
     
     ImGui::EndChild();

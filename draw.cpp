@@ -40,26 +40,26 @@ if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_st
 	// int total_visible_rows = (ImGui::GetWindowHeight() - (2 * UI.CELL_HEIGHT)) / UI.CELL_HEIGHT;
 	// int first_visible_row = (int)ImGui::GetScrollY() / 17;
 	// int last_visible_row = total_visible_rows + first_visible_row;
-
+    
 	// if (active_cell.ROW > last_visible_row)
 	// {
 	// 	float sss = ceil(ConvertRange(total_visible_rows, pattern_rows - 1, 0, pattern_rows - total_visible_rows - 1, active_cell.ROW));
 	// 	ImGui::SetScrollY(sss * 17);
 	// 	print(sss);
 	// }
-
+    
 	// if (active_cell.ROW < first_visible_row)
 	// {
 	// 	float sss = ceil(ConvertRange(0, pattern_rows - first_visible_row - 1, 0, pattern_rows - total_visible_rows - 1, active_cell.ROW));
 	// 	ImGui::SetScrollY(sss * 17);
 	// 	print(sss);
 	// }
-
-
-
+    
+    
+    
 	float sx = ImGui::GetScrollX();
 	float sy = ImGui::GetScrollY();
-
+    
 	if (active_cell.LAST_CURSOR_ACTION == DOWN)
 	{
 		sy += UI.CELL_HEIGHT;
@@ -108,7 +108,7 @@ for (int i = pattern_start; i < pattern_end; ++i)
 		{
 			ImGui::Text(module[i][j].NAME.c_str());	
 		}
-
+        
 		ImGui::SameLine();
 		
 		if (module[i][j].INSTRUMENT != 0)

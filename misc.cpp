@@ -79,7 +79,7 @@ struct PATTERN_
 struct INSTRUMENT
 {
     std::string NAME;
-	std::vector<std::vector<std::string>> SAMPLE_MAP;
+    std::array<int,120> SAMPLE_MAP = {0}; // 120 = 10 octaves X 12 notes
 };
 
 struct TRACK
@@ -165,6 +165,7 @@ int active_pattern = 0;
 int active_instrument = 0;
 int active_sample = 0;
 int octave = 5;
+int samplemap_octave = 0;
 int bpm = 125;
 int ticks_per_row = 6;
 int step = 0;
@@ -180,7 +181,7 @@ bool selection_begin = false;
 bool selection_exists = false;
 
 std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","Play",
-	"Play PATTERN_","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
+	"Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
 
 bool show_demo = false;
 std::vector<sf::Texture> toolbar_buttons;
