@@ -89,6 +89,7 @@ struct TRACK
     bool MUTE;
 	bool SOLO;
     FMOD::Channel *CHANNEL;
+    FMOD::ChannelGroup *CHANNELGROUP;
 };
 
 struct SAMPLE

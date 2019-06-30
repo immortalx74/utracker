@@ -9,6 +9,7 @@
 #include <SFML/Graphics/Texture.hpp>
 
 #include "fmod/fmod.hpp"
+#include "fmod/fmod_common.h"
 #include "fmod/fmod_errors.h"
 
 #include <chrono>
@@ -41,6 +42,8 @@ int main()
 	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+    
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
     
     sf::Clock deltaClock;
     
@@ -81,10 +84,6 @@ int main()
 		DrawToolbar(toolbar_buttons, toolbar_tooltips);
         
 		// Main==========================================
-		// int pattern_start = patterns_list[active_pattern].OFFSET;
-		// int pattern_rows = patterns_list[active_pattern].ROWS;
-		// int pattern_end = pattern_start + pattern_rows;
-        
 		UI.MAIN_X = ImGui::GetCursorPosX();
 		UI.MAIN_Y = ImGui::GetCursorPosY();
         
@@ -150,12 +149,12 @@ int main()
 	}
     
     // shut down
-    result = sound->release();
-    ERRCHECK(result);
     result = fsystem->close();
     ERRCHECK(result);
     result = fsystem->release();
     ERRCHECK(result);
     
 	ImGui::SFML::Shutdown();
+    
+    //std::cin.get();
 }

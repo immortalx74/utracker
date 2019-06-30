@@ -51,7 +51,7 @@ bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int tra
 {
 	for (int i = 0; i < track_count; ++i)
 	{
-		if (module[row][i].NAME != "---")
+		if (module[row][i].NAME != "---" && module[row][i].INSTRUMENT != 0 && module[row][i].INSTRUMENT < instruments_list.size())
 		{
 			return true;
 		}
@@ -69,7 +69,7 @@ float frequency)
 {
 	FMOD_RESULT result;
     
-	result = fsystem->playSound(FMOD_CHANNEL_REUSE, sound, false, &channel);
+	result = fsystem->playSound(sound, 0, false, &channel);
 	ERRCHECK(result);
     
 	channel->setChannelGroup(channelgroup);
@@ -82,59 +82,61 @@ float frequency)
 bool PlayRow(
 std::vector<std::vector<NOTE_DATA>> &module,
 FMOD::System *fsystem,
-FMOD::Channel **channel,
-//FMOD::Sound *sound,
-FMOD::ChannelGroup *channelgroup,
 int row,
 int track_count)
 {
 	FMOD_RESULT result;
+    FMOD::Sound *s;
+    FMOD::Channel *ch;
+    FMOD::ChannelGroup *chgroup;
 	float freq;
-	(*channel)->setChannelGroup(channelgroup);
-	channelgroup->stop();
     
     int sample_index;
-    FMOD::Sound *s;
+    
     
 	for (int i = 0; i < track_count; ++i)
 	{
-		if (module[row][i].NAME != "---")
+		ch = tracks_list[i].CHANNEL;
+        chgroup = tracks_list[i].CHANNELGROUP;
+        ch->setChannelGroup(chgroup);
+        
+        if (module[row][i].NAME != "---")
 		{
+            chgroup->stop();
+            //std::cerr << FMOD_ErrorString(result);
+            
             sample_index = NoteToSample(module[row][i].NAME, module[row][i].INSTRUMENT);
             s = samples_list[sample_index].SOUND;
             
-            result = fsystem->playSound(FMOD_CHANNEL_FREE, s, false, channel);
+            result= fsystem->playSound(s, 0, false, &ch);
 			ERRCHECK(result);
             
-			(*channel)->setChannelGroup(channelgroup);
+            ch->setChannelGroup(chgroup);
             
 			freq = module[row][i].FREQUENCY;
-			result = (*channel)->setFrequency(freq);
+            result = ch->setFrequency(freq);
 			ERRCHECK(result);
 		}
 	}
+    
 	return true;
 }
 
 bool PlayPattern(
 std::vector<std::vector<NOTE_DATA>> &module,
 FMOD::System *fsystem,
-FMOD::Channel *channel,
-//FMOD::Sound *sound,
-FMOD::ChannelGroup *channelgroup,
 int start,
 int end,
 int track_count)
 {
 	FMOD_RESULT result;
-	float freq;
-	int chans_playing = 0;
     
 	for (int i = start; i < end; ++i)
 	{
 		if (RowHasContent(module, i, track_count))
 		{
-            PlayRow(module, fsystem, &channel, channelgroup, i, track_count);
+            
+            PlayRow(module, fsystem, i, track_count);
 		}
         
 		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/ticks_per_row);
@@ -145,7 +147,10 @@ int track_count)
         
 		if (application_state == EDITOR)
 		{
-			channelgroup->stop();
+			for (int j = 0; j < tracks_list.size(); ++j)
+            {
+                tracks_list[j].CHANNELGROUP->stop();
+            }
 			return true;
 		}
 	}
@@ -157,9 +162,6 @@ int track_count)
 bool PlayModule(
 std::vector<std::vector<NOTE_DATA>> &module,
 FMOD::System *fsystem,
-FMOD::Channel *channel,
-//FMOD::Sound *sound,
-FMOD::ChannelGroup *channelgroup,
 int start,
 int end,
 int track_count)
@@ -176,7 +178,7 @@ int track_count)
         pat_rows = patterns_list[active_pattern].ROWS;
         pat_end = pat_start + pat_rows;
         
-		PlayPattern(module, fsystem, channel, channelgroup, pat_start, pat_end, track_count);
+		PlayPattern(module, fsystem, pat_start, pat_end, track_count);
         
 		if (active_pattern < end - 1)
 		{
@@ -185,7 +187,7 @@ int track_count)
         
 		if (application_state == EDITOR)
 		{
-			channelgroup->stop();
+			// NOTE: add channelgroup stop
 			return true;
 		}
 	}

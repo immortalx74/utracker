@@ -71,10 +71,12 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 					float freq = NoteToFrequency(keychar);
 					nd.FREQUENCY = freq;
                     
-                    int sample_index = NoteToSample(keychar, active_instrument);
-                    FMOD::Sound *s = samples_list[sample_index].SOUND;
-                    
-					PlayNote(fsystem, channel, s, channelgroup, freq);
+                    if (active_instrument >0)
+                    {
+                        int sample_index = NoteToSample(keychar, active_instrument);
+                        FMOD::Sound *s = samples_list[sample_index].SOUND;
+                        PlayNote(fsystem, channel, s, channelgroup, freq);
+                    }
                     
                     int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
 					int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;

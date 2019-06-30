@@ -382,7 +382,12 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         
         if (ImGui::IsMouseClicked(0))
         {
-            instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+            if (relative_cell_x >=0 && relative_cell_x <= 11 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x >= 0 && mrelative_y >= 0)
+            {
+                print("x:",relative_cell_x,"y:",relative_cell_y);
+                print(mrelative_x,mrelative_y);
+                instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+            }
         }
     }
     

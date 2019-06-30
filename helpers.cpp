@@ -109,7 +109,7 @@ bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 	return true;
 }
 
-bool CreateTrack(std::vector<TRACK> &tracks_list)
+bool CreateTrack(std::vector<TRACK> &tracks_list, FMOD::System *fsys)
 {
 	if (tracks_list.size() == MAX_TRACKS_PER_MODULE)
 	{
@@ -117,12 +117,15 @@ bool CreateTrack(std::vector<TRACK> &tracks_list)
 	}
 	
 	TRACK new_track;
-	new_track.VOLUME = 64;
+	FMOD::ChannelGroup *new_channel_group;
+    fsys->createChannelGroup(0, &new_channel_group);
+    
+    new_track.VOLUME = 64;
 	new_track.PAN = 0.0f;
 	new_track.MUTE = false;
 	new_track.SOLO = false;
-    new_track.CHANNEL = (FMOD::Channel *)tracks_list.size(); // NOTE: Test!!!!!!
-	
+	new_track.CHANNELGROUP = new_channel_group;
+    
 	tracks_list.push_back(new_track);
 	return true;
 }
@@ -308,7 +311,7 @@ FMOD::System *fsystem)
     
     FMOD::Sound *snd;
     FMOD_RESULT result;
-    result = fsystem->createSound(filename.c_str(), FMOD_SOFTWARE | FMOD_CREATESAMPLE, 0, &snd);
+    result = fsystem->createSound(filename.c_str(), FMOD_CREATESAMPLE, 0, &snd);
     
 	SAMPLE new_sample;
 	new_sample.FILENAME = filename;
