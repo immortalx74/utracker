@@ -154,7 +154,7 @@ int track_count)
 			return true;
 		}
 	}
-    
+    application_state = END_PATTERN;
 	return true;
 }
 
@@ -185,9 +185,17 @@ int track_count)
 			active_pattern++;
 		}
         
+        if (application_state == END_PATTERN)
+        {
+            application_state = PLAYING;
+        }
+        
 		if (application_state == EDITOR)
 		{
-			// NOTE: add channelgroup stop
+			for (int j = 0; j < tracks_list.size(); ++j)
+            {
+                tracks_list[j].CHANNELGROUP->stop();
+            }
 			return true;
 		}
 	}

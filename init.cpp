@@ -1,9 +1,16 @@
+LoadTextures();
+
+io.ConfigWindowsMoveFromTitleBarOnly = true;
+ImVec4* colors = ImGui::GetStyle().Colors;
+colors[ImGuiCol_Separator] = col_column_separator;
+colors[ImGuiCol_SeparatorHovered] = col_column_separator;
+colors[ImGuiCol_SeparatorActive] = col_column_separator;
+
 FMOD::System     *fsystem;
 FMOD::Sound      *sound;
 FMOD::Channel    *channel = 0;
 FMOD::ChannelGroup *channelgroup;
 FMOD_RESULT       result;
-
 
 result = FMOD::System_Create(&fsystem);
 ERRCHECK(result);

@@ -139,6 +139,7 @@ enum APP_STATE
 {
 	PLAY_MODULE,
 	PLAY_PATTERN,
+    END_PATTERN,
 	PLAYING,
 	EDITOR
 };
@@ -155,8 +156,8 @@ int col_active_row = IM_COL32(77,77,135,255);
 int col_nth_row_highlight = IM_COL32(60,60,60,255);
 int col_selection = IM_COL32(90,90,90,255);
 int col_button = IM_COL32(0,0,0,255);
-int col_column_separator = IM_COL32(255,0,0,255);
 int col_row_headers = IM_COL32(80,80,80,255);
+ImVec4 col_column_separator = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 int col_note = IM_COL32(100,130,200,255);
 int col_instrument = IM_COL32(200,200,60,255);

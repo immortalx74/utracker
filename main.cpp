@@ -37,14 +37,10 @@
 
 int main()
 {
-	LoadTextures();
 	sf::RenderWindow window(sf::VideoMode(1024, 880), "Tracker alpha", sf::Style::Default);
 	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-    
-    io.ConfigWindowsMoveFromTitleBarOnly = true;
-    
     sf::Clock deltaClock;
     
     //Init=================================================
@@ -57,18 +53,11 @@ int main()
         {
             ImGui::SFML::ProcessEvent(event);
             if (event.type == sf::Event::Closed) window.close();
-            // if (event.type == sf::Event::KeyPressed) key_pressed = true;
-            // if (event.type == sf::Event::KeyReleased) key_pressed = false;
 		}
+        
 		ImGui::SFML::Update(window, deltaClock.restart());
 		fsystem->update();
 		io.KeyRepeatRate = 0.035f;
-        
-		// TEMP!!! separator colors
-		ImVec4* colors = ImGui::GetStyle().Colors;
-		colors[ImGuiCol_Separator]              = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-		colors[ImGuiCol_SeparatorHovered]       = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-		colors[ImGuiCol_SeparatorActive]        = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
         
 		ImGui::PushStyleColor(ImGuiCol_Button, col_button);
         

@@ -97,8 +97,9 @@ ImGui::Spacing();
 std::string as;
 if (application_state == 0) as ="PLAY_MODULE";
 if (application_state == 1) as ="PLAY_PATTERN";
-if (application_state == 2) as ="PLAYING";
-if (application_state == 3) as ="EDITOR";
+if (application_state == 2) as ="END_PATTERN";
+if (application_state == 3) as ="PLAYING";
+if (application_state == 4) as ="EDITOR";
 
 ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
 
