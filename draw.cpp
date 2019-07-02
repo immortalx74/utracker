@@ -37,26 +37,6 @@ rect_end.x = active_cell.X+15 - ImGui::GetScrollX(); rect_end.y = active_cell.Y+
 
 if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
 {
-	// int total_visible_rows = (ImGui::GetWindowHeight() - (2 * UI.CELL_HEIGHT)) / UI.CELL_HEIGHT;
-	// int first_visible_row = (int)ImGui::GetScrollY() / 17;
-	// int last_visible_row = total_visible_rows + first_visible_row;
-    
-	// if (active_cell.ROW > last_visible_row)
-	// {
-	// 	float sss = ceil(ConvertRange(total_visible_rows, pattern_rows - 1, 0, pattern_rows - total_visible_rows - 1, active_cell.ROW));
-	// 	ImGui::SetScrollY(sss * 17);
-	// 	print(sss);
-	// }
-    
-	// if (active_cell.ROW < first_visible_row)
-	// {
-	// 	float sss = ceil(ConvertRange(0, pattern_rows - first_visible_row - 1, 0, pattern_rows - total_visible_rows - 1, active_cell.ROW));
-	// 	ImGui::SetScrollY(sss * 17);
-	// 	print(sss);
-	// }
-    
-    
-    
 	float sx = ImGui::GetScrollX();
 	float sy = ImGui::GetScrollY();
     
@@ -84,10 +64,33 @@ if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_st
 }
 
 // draw selection
+//if (selection_exists)
+//{
+//ImVec2 selection_tl = ImVec2(selection.START_X - ImGui::GetScrollX(), selection.START_Y - ImGui::GetScrollY());
+//ImVec2 selection_br = ImVec2(selection.END_X - ImGui::GetScrollX(), selection.END_Y - ImGui::GetScrollY());
+//draw_list->AddRectFilled(selection_tl, selection_br, col_selection);
+//}
+
 if (selection_exists)
 {
-	ImVec2 selection_tl = ImVec2(selection.START_X - ImGui::GetScrollX(), selection.START_Y - ImGui::GetScrollY());
-	ImVec2 selection_br = ImVec2(selection.END_X - ImGui::GetScrollX(), selection.END_Y - ImGui::GetScrollY());
+	int srow,scol,erow,ecol;
+    if(selection.END_ROW < selection.START_ROW || selection.END_COL < selection.START_COL)
+    {
+        erow = selection.END_ROW;
+        ecol = selection.END_COL + 1;
+        srow = selection.START_ROW + 1;
+        scol = selection.START_COL;
+    }
+    else
+    {
+        srow = selection.START_ROW;
+        scol = selection.START_COL;
+        erow = selection.END_ROW + 1;
+        ecol = selection.END_COL + 1;
+    }
+    
+    ImVec2 selection_tl = ImVec2((scol * UI.CELL_WIDTH) + winx - ImGui::GetScrollX(), (srow * UI.CELL_HEIGHT) + winy - ImGui::GetScrollY());
+	ImVec2 selection_br = ImVec2((ecol * UI.CELL_WIDTH) + winx - ImGui::GetScrollX(), (erow * UI.CELL_HEIGHT) + winy - ImGui::GetScrollY());
 	draw_list->AddRectFilled(selection_tl, selection_br, col_selection);
 }
 

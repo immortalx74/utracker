@@ -1,5 +1,4 @@
 //============================================================================
-// - Selection goes out of bounds on up and right.
 // - Prevent loading the same sample again (Or not? Does it matter?).
 // - Check if a sample was removed from disk (popup warning? something else?).
 // - Fix changing the name of patterns/instruments. When entering options,
@@ -24,12 +23,14 @@
 //   min/max.NOTE:This is an imgui issue.
 // - Implement saving/loading application settings. Suggested fields:
 //   Default new pattern rows/track count/BPM/Ticks/Middle octave.
-//   Window state (pos/size/maximized). Color scheme
+//   Window state (pos/size/maximized). Color scheme. Keyb shortcuts.
 // - Read/Write file format.
 // - WAV export.
 // - Right click context menu: Shift note(s) up/down by 1 or by octave,
 //   [selection,current track, current pattern, whole module?]
 //   Set volume [same as above], Set instrument[same as above]
+// - BUG: On module playback mode, stop goes to next pattern. Should stay
+//   on same pattern and cursor should be set to row zero.
 //============================================================================
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -66,8 +67,9 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1024, 880), "Tracker alpha", sf::Style::Default);
-	window.setFramerateLimit(60);
+	sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
+	window.setPosition(ImVec2(300,0));
+    window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
     sf::Clock deltaClock;

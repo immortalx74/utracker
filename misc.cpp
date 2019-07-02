@@ -129,6 +129,11 @@ struct SELECTION
 	int START_Y;
 	int END_X;
 	int END_Y;
+    
+    int START_COL;
+    int START_ROW;
+    int END_COL;
+    int END_ROW;
 };
 
 enum APP_STATE

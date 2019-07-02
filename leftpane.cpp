@@ -141,9 +141,11 @@ ImGui::Text("pat_start:"); ImGui::SameLine();
 ImGui::Text(std::to_string(pattern_start).c_str());
 ImGui::Text("pat_end:"); ImGui::SameLine();
 ImGui::Text(std::to_string(pattern_end).c_str());
-// Draw patterns and instruments list's buttons
-//DrawListButtons(patterns_list, instruments_list, samples_list, module);
 
+ImGui::Text(std::to_string(selection.START_ROW).c_str());
+ImGui::Text(std::to_string(selection.START_COL).c_str());
+ImGui::Text(std::to_string(selection.END_ROW).c_str());
+ImGui::Text(std::to_string(selection.END_COL).c_str());
 
 //=======================
 // Draw PATTERN_ buttons
