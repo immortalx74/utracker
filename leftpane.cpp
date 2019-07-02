@@ -14,9 +14,20 @@ UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
 
 if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 {   
-	for (int i = 0; i < patterns_list.size(); ++i)
+	std::string name;
+    
+    for (int i = 0; i < patterns_list.size(); ++i)
 	{
-		if (ImGui::Selectable(patterns_list[i].NAME.c_str(), active_pattern == i))
+		if (i <= 9) 
+        {
+            name = "0" + std::to_string(i) + ":" + patterns_list[i].NAME;
+        }
+        else
+        {
+            name = std::to_string(i) + ":" + patterns_list[i].NAME;
+        }
+        
+        if (ImGui::Selectable(name.c_str(), active_pattern == i))
 		{
 			active_pattern = i;
 		}
@@ -34,9 +45,20 @@ UI.INSTRUMENTS_LIST_Y = ImGui::GetCursorPosY();
 
 if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTRUMENTS_LIST_HEIGHT)))
 {   
-	for (int i = 0; i < instruments_list.size(); ++i)
+	std::string name;
+    
+    for (int i = 0; i < instruments_list.size(); ++i)
 	{
-		if (ImGui::Selectable(instruments_list[i].NAME.c_str(), active_instrument == i))
+		if (i <= 9) 
+        {
+            name = "0" + std::to_string(i) + ":" + instruments_list[i].NAME;
+        }
+        else
+        {
+            name = std::to_string(i) + ":" + instruments_list[i].NAME;
+        }
+        
+        if (ImGui::Selectable(name.c_str(), active_instrument == i))
 		{
 			active_instrument = i;
 		}
@@ -54,9 +76,20 @@ UI.SAMPLES_LIST_Y = ImGui::GetCursorPosY();
 
 if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_LIST_HEIGHT)))
 {   
-	for (int i = 0; i < samples_list.size(); ++i)
+	std::string name;
+    
+    for (int i = 0; i < samples_list.size(); ++i)
 	{
-		if (ImGui::Selectable(samples_list[i].NAME.c_str(), active_sample == i))
+		if (i <= 9) 
+        {
+            name = "0" + std::to_string(i) + ":" + samples_list[i].NAME;
+        }
+        else
+        {
+            name = std::to_string(i) + ":" + samples_list[i].NAME;
+        }
+        
+        if (ImGui::Selectable(name.c_str(), active_sample == i))
         {
 			active_sample = i;
 		}
@@ -172,7 +205,7 @@ if (ImGui::IsItemHovered())
 ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
 
 bool p_opened = true;
-static int r = 64;	
+static int r = patterns_list[active_pattern].ROWS;	
 
 if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
 {
@@ -185,10 +218,16 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
     ImGui::Text("Pattern name");
     
-    static char current_pattern_name[24] = "";
-    // strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+    char current_pattern_name[24] = "";
+    char new_pattern_name[24] = "";
+    strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+    strcpy(new_pattern_name, patterns_list[active_pattern].NAME.c_str());
     
-    ImGui::InputText("##patternname", current_pattern_name, 24, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank);
+    if (ImGui::InputText("##patternname", new_pattern_name, 24, ImGuiInputTextFlags_CharsNoBlank))
+    {
+        //strcpy(new_pattern_name, current_pattern_name);
+        //patterns_list[active_pattern].NAME = new_pattern_name;
+    }
     
     ImGui::PopStyleColor();
     ImGui::PopItemWidth();
@@ -199,15 +238,15 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     
     if (ImGui::Button("OK", ImVec2(80,0)))
     {
-        if (strlen(current_pattern_name) == 0)
+        if (strlen(current_pattern_name) != 0)
         {
-            strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+            print("ddddd");
         }
         
-        patterns_list[active_pattern].NAME = current_pattern_name;
         patterns_list[active_pattern].ROWS = r;
         ImGui::CloseCurrentPopup();
     }
+    
     ImGui::SameLine();
     if (ImGui::Button("Cancel", ImVec2(80,0)))
     {
@@ -368,7 +407,8 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             if (instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + k] == i)
             {
-                dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so), ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_title_text);
+                dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
+                                  ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_active_cell);
             }
             xxoff += 28;
         }
@@ -385,8 +425,8 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             if (relative_cell_x >=0 && relative_cell_x <= 11 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x >= 0 && mrelative_y >= 0)
             {
-                print("x:",relative_cell_x,"y:",relative_cell_y);
-                print(mrelative_x,mrelative_y);
+                //print("x:",relative_cell_x,"y:",relative_cell_y);
+                //print(mrelative_x,mrelative_y);
                 instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
             }
         }

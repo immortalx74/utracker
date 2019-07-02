@@ -12,7 +12,8 @@ if (application_state == PLAY_PATTERN)
 
 if (application_state == PLAY_MODULE)
 {
-	active_cell.ROW = 0;
+	active_pattern = 0;
+    active_cell.ROW = 0;
 	ImGui::SetScrollY(0);
 	application_state = PLAYING;
 	int end = patterns_list.size();
