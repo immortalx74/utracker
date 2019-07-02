@@ -1,29 +1,6 @@
 typedef std::chrono::milliseconds ms;
 typedef std::chrono::duration<float> fsec;
 
-// bool RowTick(int ms)
-// {
-// 	LARGE_INTEGER start, stop, freq;
-// 	QueryPerformanceCounter(&freq);
-// 	QueryPerformanceCounter(&start);
-// 	bool looping = true;
-// 	std::cout << freq.QuadPart << std::endl;
-
-// 	do
-// 	{
-// 		QueryPerformanceCounter(&stop);
-
-// 		if (1000000 * (stop.QuadPart - start.QuadPart) / freq.QuadPart >= ms)
-// 		{
-// 			looping = false;
-// 			return true;
-// 		}
-// 	}
-
-// 	while (looping);
-// 	return true;
-// }
-
 bool RowTick(int mils)
 {
 	bool looping = true;

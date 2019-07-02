@@ -5,13 +5,77 @@ ImGui::BeginChild("##trackheaders", ImVec2(0, UI.TRACK_HEADERS_HEIGHT), false);
 ImGui::SetScrollX(grid_scroll_x);
 ImGui::Columns(tracks);
 
-for (int t = 0; t < tracks; ++t)
+for (int t = 0; t < tracks_list.size(); ++t)
 {
-	std::string track_text = "    Track:";
+	//std::string track_text = "    Track:";
+    std::string track_text = " Track:";
 	track_text += std::to_string(t + 1);
-	ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+	ImGui::PushStyleColor(ImGuiCol_Button, col_title_text);
 	ImGui::Text(track_text.c_str());
 	ImGui::PopStyleColor();
+    
+    ImGui::SameLine();
+    ImGui::PushID(std::to_string(t).c_str());
+    if (!tracks_list[t].SOLO)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, col_button);
+    }
+    else
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, col_toggle_button);
+    }
+    if(ImGui::SmallButton("S"))
+    {
+        bool cur_state = tracks_list[t].SOLO;
+        
+        for(int s = 0; s < tracks_list.size(); ++s)
+        {
+            tracks_list[s].SOLO = false;
+            tracks_list[s].MUTE = !cur_state;
+        }
+        
+        tracks_list[t].SOLO = !cur_state;
+        tracks_list[t].MUTE = false;
+    }
+    ImGui::PopStyleColor();
+    
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::SetTooltip("Toggle track solo");
+    }
+    
+    
+    ImGui::SameLine();
+    if (!tracks_list[t].MUTE)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, col_button);
+    }
+    else
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, col_mute);
+    }
+    
+    if(ImGui::SmallButton("M"))
+    {
+        tracks_list[t].MUTE = !tracks_list[t].MUTE;
+        
+        for(int m = 0; m < tracks_list.size(); ++m)
+        {
+            if (tracks_list[m].SOLO)
+            {
+                tracks_list[m].SOLO = !tracks_list[m].SOLO;
+            }
+        }
+    }
+    ImGui::PopStyleColor();
+    
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::SetTooltip("Toggle track mute");
+    }
+    
+    ImGui::PopID();
+    
 	ImGui::PushItemWidth(UI.TRACK_SLIDERS_WIDTH);
 	ImGui::PushID(std::to_string(t).c_str());
 	ImGui::SliderInt("##trackvolume", &tracks_list[t].VOLUME, 0, 64, "v:%02d");

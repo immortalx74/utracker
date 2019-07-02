@@ -112,6 +112,7 @@ ImGui::SliderInt("Middle octave", &octave, 1, 8);
 ImGui::SliderInt("BPM", &bpm, 32, 512);
 ImGui::SliderInt("Ticks/Row", &ticks_per_row, 1, 32);
 ImGui::SliderInt("Step", &step, 0, 32);
+ImGui::SliderInt("Master volume", &master_volume, 0, 64);
 
 ImGui::PopItemWidth();
 

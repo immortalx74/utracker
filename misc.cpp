@@ -7,10 +7,6 @@
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
-// int playrow = 0;
-LARGE_INTEGER tick_start;
-LARGE_INTEGER tick_end;
-LARGE_INTEGER tick_freq;
 
 struct UI_SIZING
 {
@@ -148,7 +144,7 @@ APP_STATE application_state = EDITOR;
 UI_SIZING UI;
 ACTIVE_CELL active_cell;
 
-int col_btn_repeat = IM_COL32(255,130,0,255);
+int col_toggle_button = IM_COL32(255,130,0,255);
 int col_title_text = IM_COL32(255,130,0,255);
 int col_active_cell = IM_COL32(255,130,0,255);
 int col_active_cell_border = IM_COL32(255,255,255,255);
@@ -157,6 +153,7 @@ int col_nth_row_highlight = IM_COL32(60,60,60,255);
 int col_selection = IM_COL32(90,90,90,255);
 int col_button = IM_COL32(0,0,0,255);
 int col_row_headers = IM_COL32(80,80,80,255);
+int col_mute = IM_COL32(40,40,240,255);
 ImVec4 col_column_separator = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 int col_note = IM_COL32(100,130,200,255);
@@ -172,6 +169,7 @@ int samplemap_octave = 0;
 int bpm = 125;
 int ticks_per_row = 6;
 int step = 0;
+int master_volume = 64;
 bool btn_repeat = false;
 bool btn_repeat_changed = false;
 int nth_row_highlight = 8;

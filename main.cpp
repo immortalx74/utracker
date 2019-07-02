@@ -1,7 +1,36 @@
-//=================================================
-// -replace active_cell.ROW++. Set current play-row from loop iterator in playpattern/playmodule
-// apply step doesn't repeat
-//=================================================
+//============================================================================
+// - Selection goes out of bounds on up and right.
+// - Prevent loading the same sample again (Or not? Does it matter?).
+// - Check if a sample was removed from disk (popup warning? something else?).
+// - Fix changing the name of patterns/instruments. When entering options,
+//   it should get the current name of the current pattern/instrument and
+//   allow changing.
+// - Calculate the volume chain (global->track->note)
+// - Calculate correct speed (BPM relationship with ticks_per_row).
+// - Possible bug when changing BPM/ticks while on playback. (slows down?)
+// - Implement delete/move up/move down for patterns/instruments.
+//   What should happen when moving/deleting patterns/instruments?
+//   For instruments, should the notes switch to next instrument?
+//   What if the instrument with higher index gets removed? 
+//   For patterns, there's a lot of data to be moved around.
+// - Implement cut/copy/paste. Cursor is always top-left of selection,
+//   handle both toolbar and context menu.
+// - Bug when playing module. Notes should stop just like when playing
+//   a single pattern.
+// - Set track sliders (vol + pan)to actually do something.
+// - Add a "pan" field to NOTE_DATA struct. Also add a global pan and set
+//   notes to play with pan chain:global pan->note pan.
+// - Prevent sliders (and possibly other ui elements) of having values <>
+//   min/max.NOTE:This is an imgui issue.
+// - Implement saving/loading application settings. Suggested fields:
+//   Default new pattern rows/track count/BPM/Ticks/Middle octave.
+//   Window state (pos/size/maximized). Color scheme
+// - Read/Write file format.
+// - WAV export.
+// - Right click context menu: Shift note(s) up/down by 1 or by octave,
+//   [selection,current track, current pattern, whole module?]
+//   Set volume [same as above], Set instrument[same as above]
+//============================================================================
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -17,7 +46,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-#include "imgui_internal.h"
+//#include "imgui_internal.h"
 #include "portable-file-dialogs.h"
 
 #include <string>
