@@ -33,7 +33,10 @@ bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int tra
             return true;
         }
         
-        if (module[row][i].NAME != "---" && module[row][i].INSTRUMENT != 0 && module[row][i].INSTRUMENT < instruments_list.size())
+        if (module[row][i].NAME != "---" &&
+            module[row][i].INSTRUMENT != 0 &&
+            module[row][i].INSTRUMENT < instruments_list.size()
+            && samples_list.size() > 0)
 		{
             return true;
 		}

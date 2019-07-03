@@ -164,7 +164,7 @@ if (ImGui::IsItemHovered())
 ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
 if (ImGui::Button("-##patterndel"))
 {
-    //
+    DeletePattern(patterns_list, module);
 }
 
 if (ImGui::IsItemHovered())

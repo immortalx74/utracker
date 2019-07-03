@@ -74,7 +74,21 @@ bool CreatePattern(std::vector<PATTERN_> &patterns_list, int rows, std::vector<s
 	
 	return true;
 }
-
+bool DeletePattern(std::vector<PATTERN_> &patterns_list, std::vector<std::vector<NOTE_DATA>> &module)
+{
+    if (patterns_list.size() == 1)
+    {
+        return false;
+    }
+    
+    int start = patterns_list[active_pattern].OFFSET;
+    int end  = start + patterns_list[active_pattern].ROWS;
+    
+    module.erase(module.begin() + start, module.begin() + end);
+    patterns_list.erase(patterns_list.begin() + active_pattern);
+    
+    return true;
+}
 bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 {
 	int last_instrument_index = instruments_list.size() - 1;

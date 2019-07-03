@@ -89,7 +89,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 					float freq = NoteToFrequency(keychar);
 					nd.FREQUENCY = freq;
                     
-                    if (active_instrument >0)
+                    if (active_instrument >0 && samples_list.size() > 0)
                     {
                         int sample_index = NoteToSample(keychar, active_instrument);
                         FMOD::Sound *s = samples_list[sample_index].SOUND;
