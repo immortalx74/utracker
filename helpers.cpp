@@ -205,6 +205,9 @@ std::string KeyToNote(int key, int cur_octave)
         case 50: 	note = "G#"; cur_octave++; break; //. key
         case 52: 	note = "A-"; cur_octave++; break; /// key
         
+        case 55: return "= ="; // = key
+        case 66: return "del"; // del key
+        
         default:	return "invalid";
     }
     

@@ -28,9 +28,14 @@ bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int tra
 {
 	for (int i = 0; i < track_count; ++i)
 	{
-		if (module[row][i].NAME != "---" && module[row][i].INSTRUMENT != 0 && module[row][i].INSTRUMENT < instruments_list.size())
+		if (module[row][i].NAME == "= =")
+        {
+            return true;
+        }
+        
+        if (module[row][i].NAME != "---" && module[row][i].INSTRUMENT != 0 && module[row][i].INSTRUMENT < instruments_list.size())
 		{
-			return true;
+            return true;
 		}
 	}
     
@@ -70,17 +75,15 @@ int track_count)
     
     int sample_index;
     
-    
 	for (int i = 0; i < track_count; ++i)
 	{
 		ch = tracks_list[i].CHANNEL;
         chgroup = tracks_list[i].CHANNELGROUP;
         ch->setChannelGroup(chgroup);
         
-        if (module[row][i].NAME != "---")
+        if (module[row][i].NAME != "---" && module[row][i].NAME != "= =")
 		{
             chgroup->stop();
-            //std::cerr << FMOD_ErrorString(result);
             
             sample_index = NoteToSample(module[row][i].NAME, module[row][i].INSTRUMENT);
             s = samples_list[sample_index].SOUND;
@@ -94,6 +97,11 @@ int track_count)
             result = ch->setFrequency(freq);
 			ERRCHECK(result);
 		}
+        
+        else if (module[row][i].NAME == "= =")
+        {
+            chgroup->stop();
+        }
 	}
     
 	return true;
@@ -112,7 +120,6 @@ int track_count)
 	{
 		if (RowHasContent(module, i, track_count))
 		{
-            
             PlayRow(module, fsystem, i, track_count);
 		}
         

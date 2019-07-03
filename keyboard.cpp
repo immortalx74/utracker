@@ -61,13 +61,31 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
             
 			if (active_cell.COL % 4 == 0) // note cell
 			{
-				std::string keychar = KeyToNote(i, octave);
+                std::string keychar = KeyToNote(i, octave);
+                NOTE_DATA nd;
+                nd.NAME = keychar;
                 
-				if (keychar != "invalid")
-				{
-					NOTE_DATA nd;
-					nd.NAME = keychar;
+                if (keychar == "= =" || keychar == "del")
+                {
+                    if (keychar == "= =")
+                    {
+                        nd.NAME = "= =";
+                    }
+                    else
+                    {
+                        nd.NAME = "---";
+                    }
                     
+                    nd.FREQUENCY = 0;
+                    nd.INSTRUMENT = 0;
+                    nd.VOLUME = 0;
+                    nd.FX = 0;
+                    nd.FX_PARAM = 0;
+                    
+                    CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+                }
+				else if (keychar != "invalid" && keychar !="= =" && keychar != "del")
+				{
 					float freq = NoteToFrequency(keychar);
 					nd.FREQUENCY = freq;
                     
@@ -98,15 +116,18 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 						nd.VOLUME = cur_vol;
 					}
 					CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
-                    
-					// apply step to cursor
-					if (pattern_start + active_cell.ROW + step < pattern_end)
-					{
-						active_cell.LAST_CURSOR_ACTION = DOWN;
-						active_cell.ROW += step;
-						active_cell.Y += step * UI.CELL_HEIGHT;
-					}
 				}
+                
+                // apply step to cursor
+                if (keychar != "invalid" && keychar != "del")
+                {
+                    if (pattern_start + active_cell.ROW + step < pattern_end)
+                    {
+                        active_cell.LAST_CURSOR_ACTION = DOWN;
+                        active_cell.ROW += step;
+                        active_cell.Y += step * UI.CELL_HEIGHT;
+                    }
+                }
 			}
 			else if (active_cell.COL % 4 == 1) // instrument cell
 			{
