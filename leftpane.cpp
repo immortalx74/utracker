@@ -118,6 +118,7 @@ ImGui::PopItemWidth();
 
 // show mouse coords
 ImGui::Spacing();
+ImGui::Text(std::to_string(active_pattern).c_str());
 ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 
@@ -136,16 +137,6 @@ if (application_state == 3) as ="PLAYING";
 if (application_state == 4) as ="EDITOR";
 
 ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
-
-ImGui::Text("pat_start:"); ImGui::SameLine();
-ImGui::Text(std::to_string(pattern_start).c_str());
-ImGui::Text("pat_end:"); ImGui::SameLine();
-ImGui::Text(std::to_string(pattern_end).c_str());
-
-ImGui::Text(std::to_string(selection.START_ROW).c_str());
-ImGui::Text(std::to_string(selection.START_COL).c_str());
-ImGui::Text(std::to_string(selection.END_ROW).c_str());
-ImGui::Text(std::to_string(selection.END_COL).c_str());
 
 //=======================
 // Draw PATTERN_ buttons

@@ -81,11 +81,27 @@ bool DeletePattern(std::vector<PATTERN_> &patterns_list, std::vector<std::vector
         return false;
     }
     
+    int old_pat_rows = patterns_list[active_pattern].ROWS;
     int start = patterns_list[active_pattern].OFFSET;
-    int end  = start + patterns_list[active_pattern].ROWS;
+    int end = start + old_pat_rows;
     
-    module.erase(module.begin() + start, module.begin() + end);
     patterns_list.erase(patterns_list.begin() + active_pattern);
+    
+    if (active_pattern > patterns_list.size() - 1)
+    {
+        active_pattern = patterns_list.size() - 1;
+        
+        int new_size = module.size() - old_pat_rows;
+        module.resize(new_size);
+    }
+    else
+    {
+        for (int i = active_pattern; i < patterns_list.size(); ++i)
+        {
+            patterns_list[i].OFFSET -= old_pat_rows;
+        }
+        module.erase(module.begin() + start, module.begin() + end);
+    }
     
     return true;
 }

@@ -1,3 +1,7 @@
+int pattern_start = patterns_list[active_pattern].OFFSET;
+int pattern_rows = patterns_list[active_pattern].ROWS;
+int pattern_end = pattern_start + pattern_rows;
+
 // draw nth row highlights
 ImVec2 c = ImGui::GetCursorScreenPos();
 ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -101,9 +105,9 @@ for (int i = pattern_start; i < pattern_end; ++i)
 {
 	for (int j = 0; j < tracks; ++j)
 	{
-		if (module[i][j].NAME != "---")
+        if (module[i][j].NAME != "---")
 		{
-			ImGui::PushStyleColor(ImGuiCol_Text, col_note);
+            ImGui::PushStyleColor(ImGuiCol_Text, col_note);
 			ImGui::Text(module[i][j].NAME.c_str());
 			ImGui::PopStyleColor();		
 		}

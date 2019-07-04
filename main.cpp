@@ -47,7 +47,6 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-//#include "imgui_internal.h"
 #include "portable-file-dialogs.h"
 
 #include <string>
@@ -74,7 +73,6 @@ int main()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
     sf::Clock deltaClock;
     
-    //Init=================================================
 #include "init.cpp"
 	
     while (window.isOpen())
@@ -92,10 +90,6 @@ int main()
         
 		ImGui::PushStyleColor(ImGuiCol_Button, col_button);
         
-		int pattern_start = patterns_list[active_pattern].OFFSET;
-		int pattern_rows = patterns_list[active_pattern].ROWS;
-		int pattern_end = pattern_start + pattern_rows;
-		// Left pane======================================
 #include "leftpane.cpp"
         
 		// Draw toolbar==================================
@@ -116,36 +110,25 @@ int main()
 			UI.MAIN_WIDTH = (tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING;
 		}
         
-		if (UI.TOOLBAR_HEIGHT + (pattern_rows * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN > io.DisplaySize.y)
+		if (UI.TOOLBAR_HEIGHT + (patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN > io.DisplaySize.y)
 		{
 			UI.MAIN_HEIGHT = io.DisplaySize.y - UI.TOOLBAR_HEIGHT - UI.MARGIN;
             
 		}
 		else
 		{
-			UI.MAIN_HEIGHT = (pattern_rows * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN;
+			UI.MAIN_HEIGHT = (patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN;
 		}
         
 		ImGui::SetNextWindowSize(ImVec2(UI.MAIN_WIDTH, UI.MAIN_HEIGHT));
         
 		ImGui::Begin("main", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
         
-		//draw headers=======================================
 #include "drawheaders.cpp"
-        
-		//get mouse=========================================
 #include "mouse.cpp"
-		
-		//selection=========================================
 #include "selection.cpp"	
-		
-		//all custom drawing================================
 #include "draw.cpp"
-		
-		// get keyboard=====================================
 #include "keyboard.cpp"
-        
-		// application state================================
 #include "appstate.cpp"
         
 		ImGui::EndChild();
