@@ -214,6 +214,7 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     
     char current_pattern_name[24] = "";
     char new_pattern_name[24] = "";
+    
     strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
     strcpy(new_pattern_name, patterns_list[active_pattern].NAME.c_str());
     

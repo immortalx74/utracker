@@ -61,6 +61,7 @@ float frequency)
 	
 	result = channel->setFrequency(frequency);
 	ERRCHECK(result);
+    
 	return true;
 }
 
@@ -75,6 +76,7 @@ int track_count)
     FMOD::Channel *ch;
     FMOD::ChannelGroup *chgroup;
 	float freq;
+    float vol_note, vol_track, vol_master,vol_final;
     
     int sample_index;
     
@@ -91,14 +93,24 @@ int track_count)
             sample_index = NoteToSample(module[row][i].NAME, module[row][i].INSTRUMENT);
             s = samples_list[sample_index].SOUND;
             
-            result= fsystem->playSound(s, 0, false, &ch);
+            result= fsystem->playSound(s, 0, true, &ch);
 			ERRCHECK(result);
             
             ch->setChannelGroup(chgroup);
             
 			freq = module[row][i].FREQUENCY;
+            vol_note = ((float)module[row][i].VOLUME / 64.0f);
+            vol_track = ((float)tracks_list[i].VOLUME / 64.0f);
+            vol_master = ((float)master_volume / 64.0f);
+            vol_final = vol_note * vol_track * vol_master;
+            
+            ch->setVolume(vol_final);
+            
             result = ch->setFrequency(freq);
 			ERRCHECK(result);
+            
+            ch->setPaused(false);
+            //print(vol_final);
 		}
         
         else if (module[row][i].NAME == "= =")
