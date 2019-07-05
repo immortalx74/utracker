@@ -28,6 +28,9 @@
 //   Set volume [same as above], Set instrument[same as above]
 // - BUG: On module playback mode, stop goes to next pattern. Should stay
 //   on same pattern and cursor should be set to row zero.
+// - Find a way to make temp_map work. Maybe put it as an additional field in
+//   the INSTRUMENT struct, and have each instrument store its internal
+//   instance of it.
 //============================================================================
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -60,7 +63,6 @@
 #pragma comment (lib, "Comdlg32")
 #pragma comment (lib, "OLE32")
 #pragma comment (lib, "shell32")
-
 
 // imx family's program restructuring MODEL (I.F.P.R.M.)
 //struct {

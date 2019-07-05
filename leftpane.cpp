@@ -116,9 +116,8 @@ ImGui::SliderInt("Master volume", &master_volume, 0, 64);
 
 ImGui::PopItemWidth();
 
-// show mouse coords
+// show debug info
 ImGui::Spacing();
-ImGui::Text(std::to_string(active_pattern).c_str());
 ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 
@@ -326,6 +325,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
 {
     static char current_instrument_name[24] = "";
     static bool enable_write = false;
+    static std::array<int,120> temp_map = instruments_list[active_instrument].SAMPLE_MAP;;
     
     if (!enable_write)
     {
@@ -437,15 +437,22 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         int xxoff = 0;
         for (int k = 0; k < 12; ++k)
         {
-            if (instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + k] == i)
+            //if (instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + k] == i)
+            //{
+            //dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
+            //ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_active_cell);
+            //}
+            //
+            //xxoff += 28;
+            if (temp_map[(12 * samplemap_octave) + k] == i)
             {
                 dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
                                   ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_active_cell);
             }
+            
             xxoff += 28;
         }
     }
-    
     // get cell
     if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
     {
@@ -457,18 +464,50 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             if (relative_cell_x >=0 && relative_cell_x <= 11 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x >= 0 && mrelative_y >= 0)
             {
-                instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+                temp_map[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+                //instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
             }
             else if (relative_cell_x < 0 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x < 0 && mrelative_y >= 0)
             {
                 selected_sample = relative_cell_y;
-                //print(selected_sample);
             }
         }
     }
     
     ImGui::EndChild();
     //=====================================================
+    
+    // Assign sample to octave(s)
+    if (selected_sample >= 0 && selected_sample < samples_list.size())
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+        ImGui::Text("Assign selected sample to:");
+        ImGui::PopStyleColor();
+        
+        ImGui::PushStyleColor(ImGuiCol_Button, col_button);
+        
+        if (ImGui::Button("Current octave"))
+        {
+            for (int i = 0; i < 12; ++i)
+            {
+                temp_map[(12 * samplemap_octave) + i]= selected_sample;
+                //instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + i]= selected_sample;
+            }
+        }
+        
+        ImGui::SameLine();
+        
+        if (ImGui::Button("All octaves"))
+        {
+            for (int i = 0; i < 120; ++i)
+            {
+                temp_map[i]= selected_sample;
+                //instruments_list[active_instrument].SAMPLE_MAP[i]= selected_sample;
+            }
+        }
+        
+        ImGui::PopStyleColor();
+    }
     
     float modal_width = ImGui::GetWindowSize().x;
     float modal_height = ImGui::GetWindowSize().y;
@@ -483,14 +522,18 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             instruments_list[active_instrument].NAME = current_instrument_name;
         }
         
+        instruments_list[active_instrument].SAMPLE_MAP = temp_map;
         ImGui::CloseCurrentPopup();
     }
+    
     ImGui::SameLine();
+    
     if (ImGui::Button("Cancel", ImVec2(80,0)))
     {
         enable_write = false;
         ImGui::CloseCurrentPopup();
     }
+    
     ImGui::EndPopup();
 }
 
