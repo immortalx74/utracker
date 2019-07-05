@@ -1,10 +1,6 @@
 //============================================================================
 // - Prevent loading the same sample again (Or not? Does it matter?).
 // - Check if a sample was removed from disk (popup warning? something else?).
-// - Fix changing the name of patterns/instruments. When entering options,
-//   it should get the current name of the current pattern/instrument and
-//   allow changing.
-// - Calculate the volume chain (global->track->note)
 // - Calculate correct speed (BPM relationship with ticks_per_row).
 // - Possible bug when changing BPM/ticks while on playback. (slows down?)
 // - Implement delete/move up/move down for patterns/instruments.
@@ -16,14 +12,15 @@
 //   handle both toolbar and context menu.
 // - Bug when playing module. Notes should stop just like when playing
 //   a single pattern.
-// - Set track sliders (vol + pan)to actually do something.
-// - Add a "pan" field to NOTE_DATA struct. Also add a global pan and set
-//   notes to play with pan chain:global pan->note pan.
+// - Set pan to do something
+// - Add a "pan" field to notes and tracks.
 // - Prevent sliders (and possibly other ui elements) of having values <>
 //   min/max.NOTE:This is an imgui issue.
 // - Implement saving/loading application settings. Suggested fields:
 //   Default new pattern rows/track count/BPM/Ticks/Middle octave.
 //   Window state (pos/size/maximized). Color scheme. Keyb shortcuts.
+// - Instrument options: Sample map should NOT change when cancel
+//   is pushed. Store a temporary sample map and apply only on OK button.
 // - Read/Write file format.
 // - WAV export.
 // - Right click context menu: Shift note(s) up/down by 1 or by octave,
@@ -64,8 +61,22 @@
 #pragma comment (lib, "OLE32")
 #pragma comment (lib, "shell32")
 
+
+// imx family's program restructuring MODEL (I.F.P.R.M.)
+//struct {
+//public:
+//int get_myx()
+//{
+//std::cout << "get_myx\n";
+//return this->myx;
+//}
+//private:
+//int myx = 1500;
+//} MY_GLOBS;
+//
 int main()
 {
+    
 	sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
 	window.setPosition(ImVec2(300,0));
     window.setFramerateLimit(60);

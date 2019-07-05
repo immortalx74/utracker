@@ -199,10 +199,21 @@ if (ImGui::IsItemHovered())
 ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
 
 bool p_opened = true;
-static int r = patterns_list[active_pattern].ROWS;	
+
 
 if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
 {
+    static char current_pattern_name[24] = "";
+    static int r;
+    static bool enable_write = false;
+    
+    if (!enable_write)
+    {
+        r = patterns_list[active_pattern].ROWS;
+        strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
+        enable_write = true;
+    }
+    
     ImGui::PushItemWidth(200);
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
     ImGui::Text("Number of rows");
@@ -211,20 +222,13 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
     ImGui::Text("Pattern name");
+    ImGui::PopStyleColor();
     
-    char current_pattern_name[24] = "";
-    char new_pattern_name[24] = "";
-    
-    strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
-    strcpy(new_pattern_name, patterns_list[active_pattern].NAME.c_str());
-    
-    if (ImGui::InputText("##patternname", new_pattern_name, 24, ImGuiInputTextFlags_CharsNoBlank))
+    if (ImGui::InputText("##patternname", current_pattern_name, 24, ImGuiInputTextFlags_CharsNoBlank))
     {
-        //strcpy(new_pattern_name, current_pattern_name);
-        //patterns_list[active_pattern].NAME = new_pattern_name;
+        
     }
     
-    ImGui::PopStyleColor();
     ImGui::PopItemWidth();
     
     float modal_width = ImGui::GetWindowSize().x;
@@ -233,9 +237,11 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     
     if (ImGui::Button("OK", ImVec2(80,0)))
     {
+        enable_write = false;
+        
         if (strlen(current_pattern_name) != 0)
         {
-            print("ddddd");
+            patterns_list[active_pattern].NAME = current_pattern_name;
         }
         
         patterns_list[active_pattern].ROWS = r;
@@ -245,6 +251,7 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     ImGui::SameLine();
     if (ImGui::Button("Cancel", ImVec2(80,0)))
     {
+        enable_write = false;
         ImGui::CloseCurrentPopup();
     }
     ImGui::EndPopup();
@@ -317,12 +324,20 @@ ImGui::SetNextWindowSize(ImVec2(UI.INSTRUMENT_OPTIONS_MODAL_WIDTH+200, UI.INSTRU
 
 if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoResize))
 {
+    static char current_instrument_name[24] = "";
+    static bool enable_write = false;
+    
+    if (!enable_write)
+    {
+        strcpy(current_instrument_name, instruments_list[active_instrument].NAME.c_str());
+        enable_write = true;
+    }
+    
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
     ImGui::Text("Instrument name");
     ImGui::PopStyleColor();
     
     ImGui::PushItemWidth(200);
-    static char current_instrument_name[24] = "";
     
     ImGui::InputText("##instrumentnname", current_instrument_name, 24, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank);
     ImGui::PopItemWidth();
@@ -357,7 +372,6 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     ImGui::Text(octave_notes.c_str());
     ImGui::PopStyleColor();
     
-    
     int relative_cell_x;
     int relative_cell_y;
     
@@ -384,13 +398,36 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     }
     
     // horizontal separators & sample names
+    static int selected_sample = 0;
+    
     for (int i = 0; i < samples_list.size(); ++i)
     {
         dl->AddLine(ImVec2(ImGui::GetWindowPos().x+8,ImGui::GetWindowPos().y+8-so), ImVec2(ImGui::GetWindowPos().x+512,ImGui::GetWindowPos().y+8-so), col_active_cell_border);
         
         std::string full_name = samples_list[i].NAME;
-        std::string trunc_name = full_name.substr(0, 24);
+        std::string trunc_name = full_name.substr(0, 20);
+        if (i <= 9)
+        {
+            trunc_name = "0" + std::to_string(i) + ":" + trunc_name;
+        }
+        else
+        {
+            trunc_name = std::to_string(i) + ":" + trunc_name;
+        }
+        
+        int col;
+        if (selected_sample == i)
+        {
+            col = col_title_text;
+        }
+        else
+        {
+            col = col_row_headers;
+        }
+        
+        ImGui::PushStyleColor(ImGuiCol_Text, col);
         ImGui::Text(trunc_name.c_str());
+        ImGui::PopStyleColor();
         
         csp = ImGui::GetCursorPos();
         cpx = csp.x;
@@ -420,9 +457,12 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             if (relative_cell_x >=0 && relative_cell_x <= 11 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x >= 0 && mrelative_y >= 0)
             {
-                //print("x:",relative_cell_x,"y:",relative_cell_y);
-                //print(mrelative_x,mrelative_y);
                 instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+            }
+            else if (relative_cell_x < 0 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x < 0 && mrelative_y >= 0)
+            {
+                selected_sample = relative_cell_y;
+                //print(selected_sample);
             }
         }
     }
@@ -436,26 +476,19 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     
     if (ImGui::Button("OK", ImVec2(80,0)))
     {
-        if (strlen(current_instrument_name) == 0)
-        {
-            strcpy(current_instrument_name, instruments_list[active_instrument].NAME.c_str());
-        }
+        enable_write = false;
         
-        if (active_instrument <= 9)
+        if (strlen(current_instrument_name) != 0)
         {
-            instruments_list[active_instrument].NAME = "0" + std::to_string(active_instrument) + ":" + current_instrument_name;
+            instruments_list[active_instrument].NAME = current_instrument_name;
         }
-        else
-        {
-            instruments_list[active_instrument].NAME = std::to_string(active_instrument) + ":" + current_instrument_name;
-        }
-        
         
         ImGui::CloseCurrentPopup();
     }
     ImGui::SameLine();
     if (ImGui::Button("Cancel", ImVec2(80,0)))
     {
+        enable_write = false;
         ImGui::CloseCurrentPopup();
     }
     ImGui::EndPopup();
