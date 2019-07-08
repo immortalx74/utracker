@@ -76,7 +76,7 @@ int track_count)
     FMOD::Channel *ch;
     FMOD::ChannelGroup *chgroup;
 	float freq;
-    float vol_note, vol_track, vol_master,vol_final;
+    float vol_note, vol_track, vol_master,vol_final, pan_track;
     
     int sample_index;
     
@@ -86,7 +86,7 @@ int track_count)
         chgroup = tracks_list[i].CHANNELGROUP;
         ch->setChannelGroup(chgroup);
         
-        if (module[row][i].NAME != "---" && module[row][i].NAME != "= =")
+        if (module[row][i].NAME != "---" && module[row][i].NAME != "= =" && !tracks_list[i].MUTE)
 		{
             chgroup->stop();
             
@@ -99,18 +99,18 @@ int track_count)
             ch->setChannelGroup(chgroup);
             
 			freq = module[row][i].FREQUENCY;
+            pan_track = tracks_list[i].PAN;
             vol_note = ((float)module[row][i].VOLUME / 64.0f);
             vol_track = ((float)tracks_list[i].VOLUME / 64.0f);
             vol_master = ((float)master_volume / 64.0f);
             vol_final = vol_note * vol_track * vol_master;
             
             ch->setVolume(vol_final);
-            
+            ch->setPan(pan_track);
             result = ch->setFrequency(freq);
 			ERRCHECK(result);
             
             ch->setPaused(false);
-            //print(vol_final);
 		}
         
         else if (module[row][i].NAME == "= =")
@@ -138,7 +138,7 @@ int track_count)
             PlayRow(module, fsystem, i, track_count);
 		}
         
-		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/ticks_per_row);
+		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/rows_per_beat);
 		if (future_tick.get() && i < end - 1)
 		{
 			active_cell.ROW++;

@@ -76,6 +76,7 @@ struct INSTRUMENT
 {
     std::string NAME;
     std::array<int,120> SAMPLE_MAP = {0}; // 120 = 10 octaves X 12 notes
+    std::array<int,120> TEMP_MAP = {0};
 };
 
 struct TRACK
@@ -104,6 +105,24 @@ struct NOTE_DATA
 	int VOLUME;
 	int FX;
 	int FX_PARAM;
+};
+
+enum CELL_TYPE
+{
+    CELL_NOTE,
+    CELL_INSTR,
+    CELL_VOL,
+    CELL_FX
+};
+
+struct CLIPBOARD
+{
+    int START_ROW = 0;
+    int START_COL = 0;
+    int END_ROW = 0;
+    int END_COL = 0;
+    CELL_TYPE FIRST_CELL = CELL_NOTE;
+    std::vector<std::vector<NOTE_DATA>> CLIPBOARD_DATA;
 };
 
 enum LCA
@@ -172,7 +191,7 @@ int active_sample = 0;
 int octave = 5;
 int samplemap_octave = 0;
 int bpm = 125;
-int ticks_per_row = 6;
+int rows_per_beat = 4;
 int step = 0;
 int master_volume = 64;
 bool btn_repeat = false;
@@ -198,3 +217,7 @@ std::vector<INSTRUMENT> instruments_list;
 std::vector<SAMPLE> samples_list;
 std::vector<TRACK> tracks_list;
 std::vector<std::vector<NOTE_DATA>> module;
+
+SELECTION selection;
+
+CLIPBOARD clipboard;

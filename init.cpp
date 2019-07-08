@@ -37,7 +37,6 @@ active_cell.Y = 132;
 active_cell.ROW = 0;
 active_cell.COL = 0;
 
-SELECTION selection;
 selection.START_X = 0;
 selection.START_Y = 0;
 selection.END_X = 0;

@@ -1,7 +1,17 @@
 // get keyboard
 if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 {
-	if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)
+	if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_C]) && io.KeyCtrl)
+    {
+        CopyToClipboard(selection.START_ROW, selection.START_COL, selection.END_ROW, selection.END_COL);
+    }
+    if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_V]) && io.KeyCtrl)
+    {
+        PasteFromClipboard();
+    }
+    
+    
+    if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)
 	{
 		active_cell.LAST_CURSOR_ACTION = DOWN;
 		active_cell.Y += UI.CELL_HEIGHT;

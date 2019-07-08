@@ -1,7 +1,6 @@
 //============================================================================
-// - Prevent loading the same sample again (Or not? Does it matter?).
 // - Check if a sample was removed from disk (popup warning? something else?).
-// - Calculate correct speed (BPM relationship with ticks_per_row).
+// - Calculate correct speed (BPM relationship with rows_per_beat).
 // - Possible bug when changing BPM/ticks while on playback. (slows down?)
 // - Implement delete/move up/move down for patterns/instruments.
 //   What should happen when moving/deleting patterns/instruments?
@@ -12,15 +11,12 @@
 //   handle both toolbar and context menu.
 // - Bug when playing module. Notes should stop just like when playing
 //   a single pattern.
-// - Set pan to do something
-// - Add a "pan" field to notes and tracks.
+// - Add a "pan" field to notes and include it on PlayRow. It will be set by an FX
 // - Prevent sliders (and possibly other ui elements) of having values <>
 //   min/max.NOTE:This is an imgui issue.
 // - Implement saving/loading application settings. Suggested fields:
 //   Default new pattern rows/track count/BPM/Ticks/Middle octave.
 //   Window state (pos/size/maximized). Color scheme. Keyb shortcuts.
-// - Instrument options: Sample map should NOT change when cancel
-//   is pushed. Store a temporary sample map and apply only on OK button.
 // - Read/Write file format.
 // - WAV export.
 // - Right click context menu: Shift note(s) up/down by 1 or by octave,
@@ -28,10 +24,10 @@
 //   Set volume [same as above], Set instrument[same as above]
 // - BUG: On module playback mode, stop goes to next pattern. Should stay
 //   on same pattern and cursor should be set to row zero.
-// - Find a way to make temp_map work. Maybe put it as an additional field in
-//   the INSTRUMENT struct, and have each instrument store its internal
-//   instance of it.
+// - Write ResizePattern. Should be able to grow/shrink the provided pattern
+//   and calculate offsets for all other patterns
 //============================================================================
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -76,6 +72,7 @@
 //int myx = 1500;
 //} MY_GLOBS;
 //
+
 int main()
 {
     

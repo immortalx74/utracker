@@ -7,7 +7,6 @@ ImGui::Columns(tracks);
 
 for (int t = 0; t < tracks_list.size(); ++t)
 {
-	//std::string track_text = "    Track:";
     std::string track_text = " Track:";
 	track_text += std::to_string(t + 1);
 	ImGui::PushStyleColor(ImGuiCol_Button, col_title_text);

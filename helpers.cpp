@@ -24,6 +24,32 @@ void LoadTextures()
 	}
 }
 
+void ResizePattern(int pattern_index, int new_row_count)
+{
+    int old_row_count = patterns_list[pattern_index].ROWS;
+    int old_pattern_offset = patterns_list[pattern_index].OFFSET;
+    
+    if (new_row_count == old_row_count)
+    {
+        return;
+    }
+    else if (new_row_count < old_row_count)
+    {
+        module.erase(module.begin() + old_pattern_offset + new_row_count, module.begin() + old_pattern_offset + old_row_count);
+        patterns_list[pattern_index].ROWS = new_row_count;
+        
+        for (int i = pattern_index + 1; i < patterns_list.size(); ++i)
+        {
+            patterns_list[i].OFFSET -= old_row_count - new_row_count;
+        }
+    }
+    else
+    {
+        
+    }
+    
+}
+
 bool CreatePattern(std::vector<PATTERN_> &patterns_list, int rows, std::vector<std::vector<NOTE_DATA>> &module)
 {
 	int last_pattern_rows = 0;
@@ -349,4 +375,125 @@ FMOD::System *fsystem)
     
     samples_list.push_back(new_sample);
     return true;
+}
+
+void CopyToClipboard(int srow, int scol, int erow, int ecol)
+{
+    scol /= 4;
+    ecol /= 4;
+    
+    if (erow < srow)
+    {
+        clipboard.START_ROW = erow;
+        clipboard.END_ROW = srow;
+    }
+    else
+    {
+        clipboard.START_ROW = srow;
+        clipboard.END_ROW = erow;
+    }
+    
+    if (ecol < scol)
+    {
+        clipboard.START_COL = ecol;
+        clipboard.END_COL = scol;
+    }
+    else
+    {
+        clipboard.START_COL = scol;
+        clipboard.END_COL = ecol;
+    }
+    
+    int track_count = clipboard.END_COL - clipboard.START_COL + 1;
+    int row_count = clipboard.END_ROW - clipboard.START_ROW + 1;
+    int offset = patterns_list[active_pattern].OFFSET ;
+    
+    // single cell selection
+    if (!selection_exists)
+    {
+        clipboard.START_ROW = active_cell.ROW + offset;
+        clipboard.START_COL = active_cell.COL / 4;
+        clipboard.END_ROW = clipboard.START_ROW;
+        clipboard.END_COL = clipboard.START_COL;
+        row_count = 1;
+        track_count = 1;
+    }
+    
+    clipboard.CLIPBOARD_DATA.resize(0);
+    clipboard.CLIPBOARD_DATA.clear();
+    clipboard.CLIPBOARD_DATA.shrink_to_fit();
+    
+    switch (scol % 4)
+    {
+        case 0:
+        clipboard.FIRST_CELL = CELL_NOTE;
+        break;
+        
+        case 1:
+        clipboard.FIRST_CELL = CELL_INSTR;
+        break;
+        
+        case 2:
+        clipboard.FIRST_CELL = CELL_VOL;
+        break;
+        
+        case 3:
+        clipboard.FIRST_CELL = CELL_FX;
+        break;
+    }
+    
+    for (int i = 0; i < row_count; ++i)
+    {
+        std::vector<NOTE_DATA> row;
+        
+        for (int j = 0; j < track_count; ++j)
+        {
+            NOTE_DATA cur_track_row_data;
+            
+            cur_track_row_data.NAME = module[clipboard.START_ROW + offset + i][clipboard.START_COL + j].NAME;
+            cur_track_row_data.FREQUENCY = module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FREQUENCY;
+            cur_track_row_data.INSTRUMENT = module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].INSTRUMENT;
+            cur_track_row_data.VOLUME = module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].VOLUME;
+            cur_track_row_data.FX = module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FX;
+            cur_track_row_data.FX_PARAM = module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FX_PARAM;
+            
+            row.push_back(cur_track_row_data);
+        }
+        
+        clipboard.CLIPBOARD_DATA.push_back(row);
+    }
+}
+
+void PasteFromClipboard()
+{
+    int offset = patterns_list[active_pattern].OFFSET ;
+    int act_cell_track = active_cell.COL / 4;
+    int row_count = clipboard.END_ROW - clipboard.START_ROW + 1;
+    int track_count = clipboard.END_COL - clipboard.START_COL + 1;
+    
+    int row_limit = patterns_list[active_pattern].OFFSET + patterns_list[active_pattern].ROWS - active_cell.ROW - patterns_list[active_pattern].OFFSET;
+    int col_limit = tracks_list.size() - (active_cell.COL / 4);
+    
+    if (row_count > row_limit)
+    {
+        row_count = row_limit;
+    }
+    
+    if (track_count > col_limit)
+    {
+        track_count = col_limit;
+    }
+    
+    for (int i = 0; i < row_count; ++i)
+    {
+        for (int j = 0; j < track_count; ++j)
+        {
+            module[active_cell.ROW + offset + i][act_cell_track + j].NAME = clipboard.CLIPBOARD_DATA[i][j].NAME;
+            module[active_cell.ROW + offset + i][act_cell_track + j].FREQUENCY = clipboard.CLIPBOARD_DATA[i][j].FREQUENCY;
+            module[active_cell.ROW + offset + i][act_cell_track + j].INSTRUMENT = clipboard.CLIPBOARD_DATA[i][j].INSTRUMENT;
+            module[active_cell.ROW + offset + i][act_cell_track + j].VOLUME = clipboard.CLIPBOARD_DATA[i][j].VOLUME;
+            module[active_cell.ROW + offset + i][act_cell_track + j].FX = clipboard.CLIPBOARD_DATA[i][j].FX;
+            module[active_cell.ROW + offset + i][act_cell_track + j].FX_PARAM = clipboard.CLIPBOARD_DATA[i][j].FX_PARAM;
+        }
+    }
 }

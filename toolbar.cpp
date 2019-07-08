@@ -58,6 +58,16 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 			{
 				application_state = EDITOR;
 			}
+            
+            if (i == 10) // copy
+            {
+                CopyToClipboard(selection.START_ROW, selection.START_COL, selection.END_ROW, selection.END_COL);
+            }
+            
+            if (i == 11) // paste
+            {
+                PasteFromClipboard();
+            }
 		}
         
 		if (ImGui::IsItemHovered())

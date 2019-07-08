@@ -110,7 +110,7 @@ ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
 ImGui::SliderInt("Middle octave", &octave, 1, 8);
 ImGui::SliderInt("BPM", &bpm, 32, 512);
-ImGui::SliderInt("Ticks/Row", &ticks_per_row, 1, 32);
+ImGui::SliderInt("Rows/Beat", &rows_per_beat, 1, 32);
 ImGui::SliderInt("Step", &step, 0, 32);
 ImGui::SliderInt("Master volume", &master_volume, 0, 64);
 
@@ -121,10 +121,15 @@ ImGui::Spacing();
 ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 
-ImGui::Text("cell_x:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.X).c_str());
-ImGui::Text("cell_y:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.Y).c_str());
-ImGui::Text("cell_row:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.ROW).c_str());
-ImGui::Text("cell_col:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.COL).c_str());
+//ImGui::Text("cell_x:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.X).c_str());
+//ImGui::Text("cell_y:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.Y).c_str());
+//ImGui::Text("cell_row:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.ROW).c_str());
+//ImGui::Text("cell_col:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.COL).c_str());
+//
+//ImGui::Text("start row:");ImGui::SameLine();ImGui::Text(std::to_string(selection.START_ROW).c_str());
+//ImGui::Text("start col:");ImGui::SameLine();ImGui::Text(std::to_string(selection.START_COL).c_str());
+//ImGui::Text("end row:");ImGui::SameLine();ImGui::Text(std::to_string(selection.END_ROW).c_str());
+//ImGui::Text("end col:");ImGui::SameLine();ImGui::Text(std::to_string(selection.END_COL).c_str());
 
 // show app state
 ImGui::Spacing();
@@ -243,7 +248,10 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
             patterns_list[active_pattern].NAME = current_pattern_name;
         }
         
-        patterns_list[active_pattern].ROWS = r;
+        // NOTE: Set the "Rows" slider to MAX_ROWS_PER_PATTERN and DON'T change the row count
+        // directly as below ! Use ResizePattern()
+        //patterns_list[active_pattern].ROWS = r;
+        ResizePattern(active_pattern, r);
         ImGui::CloseCurrentPopup();
     }
     
@@ -325,10 +333,10 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
 {
     static char current_instrument_name[24] = "";
     static bool enable_write = false;
-    static std::array<int,120> temp_map = instruments_list[active_instrument].SAMPLE_MAP;;
     
     if (!enable_write)
     {
+        instruments_list[active_instrument].TEMP_MAP = instruments_list[active_instrument].SAMPLE_MAP;
         strcpy(current_instrument_name, instruments_list[active_instrument].NAME.c_str());
         enable_write = true;
     }
@@ -444,7 +452,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             //}
             //
             //xxoff += 28;
-            if (temp_map[(12 * samplemap_octave) + k] == i)
+            if (instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + k] == i)
             {
                 dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
                                   ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_active_cell);
@@ -464,7 +472,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             if (relative_cell_x >=0 && relative_cell_x <= 11 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x >= 0 && mrelative_y >= 0)
             {
-                temp_map[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
+                instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
                 //instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
             }
             else if (relative_cell_x < 0 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x < 0 && mrelative_y >= 0)
@@ -490,7 +498,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             for (int i = 0; i < 12; ++i)
             {
-                temp_map[(12 * samplemap_octave) + i]= selected_sample;
+                instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + i]= selected_sample;
                 //instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + i]= selected_sample;
             }
         }
@@ -501,7 +509,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         {
             for (int i = 0; i < 120; ++i)
             {
-                temp_map[i]= selected_sample;
+                instruments_list[active_instrument].TEMP_MAP[i]= selected_sample;
                 //instruments_list[active_instrument].SAMPLE_MAP[i]= selected_sample;
             }
         }
@@ -522,7 +530,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             instruments_list[active_instrument].NAME = current_instrument_name;
         }
         
-        instruments_list[active_instrument].SAMPLE_MAP = temp_map;
+        instruments_list[active_instrument].SAMPLE_MAP = instruments_list[active_instrument].TEMP_MAP;
         ImGui::CloseCurrentPopup();
     }
     
@@ -531,6 +539,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     if (ImGui::Button("Cancel", ImVec2(80,0)))
     {
         enable_write = false;
+        instruments_list[active_instrument].TEMP_MAP = instruments_list[active_instrument].SAMPLE_MAP;
         ImGui::CloseCurrentPopup();
     }
     
