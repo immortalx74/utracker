@@ -10,18 +10,30 @@ void ERRCHECK(FMOD_RESULT result)
 void LoadTextures()
 {
 	int x_offset = 0;
-	
+	sf::Texture tb, bt;
+    
 	for (int i = 0; i < 14; ++i)
 	{
-	    sf::Texture t;
-	    if (!t.loadFromFile("res/toolbar.png", sf::IntRect(x_offset, 0, 24, 24)))
+	    if (!tb.loadFromFile("res/toolbar.png", sf::IntRect(x_offset, 0, 24, 24)))
 	    {
 	        std::cout << "error";
 	    }
 		
-	    toolbar_buttons.push_back(t);
+	    toolbar_buttons.push_back(tb);
 	    x_offset += 24;
 	}
+    
+    x_offset = 0;
+    
+    for (int j = 0; j < 6; ++j)
+    {
+        if (!bt.loadFromFile("res/buttons.png", sf::IntRect(x_offset, 0, 16, 16)))
+	    {
+	        std::cout << "error";
+	    }
+        buttons.push_back(bt);
+        x_offset += 16;
+    }
 }
 
 void ResizePattern(int pattern_index, int new_row_count)

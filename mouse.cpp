@@ -1,4 +1,4 @@
-if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && application_state == EDITOR)
 {
 	mousex = ImGui::GetMousePos().x + ImGui::GetScrollX();
 	mousey = ImGui::GetMousePos().y + ImGui::GetScrollY();

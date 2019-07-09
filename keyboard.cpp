@@ -1,5 +1,5 @@
 // get keyboard
-if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state == EDITOR)
 {
     // cut/copy/paste
     if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_X]) && io.KeyCtrl)

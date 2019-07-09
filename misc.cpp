@@ -209,7 +209,9 @@ std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","P
 	"Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
 
 bool show_demo = false;
+
 std::vector<sf::Texture> toolbar_buttons;
+std::vector<sf::Texture> buttons;
 
 // create containers
 std::vector<PATTERN_> patterns_list;

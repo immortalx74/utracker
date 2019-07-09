@@ -1,5 +1,5 @@
 // begin selection
-if (ImGui::IsMouseDragging(0) && ImGui::IsWindowHovered())
+if (ImGui::IsMouseDragging(0) && ImGui::IsWindowHovered() && application_state == EDITOR)
 {
 	// determine direction: right-down, right-up, left-down, left-up
 	if (mousex > active_cell.X && mousey > active_cell.Y)
