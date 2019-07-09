@@ -377,7 +377,7 @@ FMOD::System *fsystem)
     return true;
 }
 
-void CopyToClipboard(int srow, int scol, int erow, int ecol)
+void CopyToClipboard(int srow, int scol, int erow, int ecol, bool cut)
 {
     scol /= 4;
     ecol /= 4;
@@ -458,6 +458,16 @@ void CopyToClipboard(int srow, int scol, int erow, int ecol)
             cur_track_row_data.FX_PARAM = module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FX_PARAM;
             
             row.push_back(cur_track_row_data);
+            
+            if (cut)
+            {
+                module[clipboard.START_ROW + offset + i][clipboard.START_COL + j].NAME = "---";
+                module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FREQUENCY = 0.0f;
+                module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].INSTRUMENT = 0;
+                module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].VOLUME = 0;
+                module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FX = -1;
+                module[clipboard.START_ROW + offset +  i][clipboard.START_COL + j].FX_PARAM = -1;
+            }
         }
         
         clipboard.CLIPBOARD_DATA.push_back(row);

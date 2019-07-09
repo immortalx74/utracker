@@ -21,18 +21,6 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 		// check button presses
 		if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24)))
 		{
-			if (i == 1)
-			{
-				auto f = pfd::open_file("Choose files to read", "/tmp/",
-                                        { "Sound Files (.wav .sound)", "*.wav *.sound",
-                                        "All Files", "*" },	true);
-				
-				std::cout << "Selected files:";
-				for (auto const &name : f.result())
-                    std::cout << " " + name;
-				std::cout << "\n";
-			}
-            
 			if (i == 8) // repeat
 			{
 				btn_repeat = !btn_repeat;
@@ -59,9 +47,16 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
 				application_state = EDITOR;
 			}
             
+            if (i == 9) // cut
+            {
+                CopyToClipboard(selection.START_ROW, selection.START_COL,
+                                selection.END_ROW, selection.END_COL, true);
+            }
+            
             if (i == 10) // copy
             {
-                CopyToClipboard(selection.START_ROW, selection.START_COL, selection.END_ROW, selection.END_COL);
+                CopyToClipboard(selection.START_ROW, selection.START_COL,
+                                selection.END_ROW, selection.END_COL, false);
             }
             
             if (i == 11) // paste

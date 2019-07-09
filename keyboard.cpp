@@ -1,9 +1,16 @@
 // get keyboard
 if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 {
-	if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_C]) && io.KeyCtrl)
+    // cut/copy/paste
+    if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_X]) && io.KeyCtrl)
     {
-        CopyToClipboard(selection.START_ROW, selection.START_COL, selection.END_ROW, selection.END_COL);
+        CopyToClipboard(selection.START_ROW, selection.START_COL, selection.END_ROW,
+                        selection.END_COL, true);
+    }
+    if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_C]) && io.KeyCtrl)
+    {
+        CopyToClipboard(selection.START_ROW, selection.START_COL, selection.END_ROW,
+                        selection.END_COL, false);
     }
     if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_V]) && io.KeyCtrl)
     {
@@ -11,6 +18,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
     }
     
     
+    // arrows navigation
     if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)
 	{
 		active_cell.LAST_CURSOR_ACTION = DOWN;

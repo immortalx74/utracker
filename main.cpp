@@ -26,6 +26,7 @@
 //   on same pattern and cursor should be set to row zero.
 // - Write ResizePattern. Should be able to grow/shrink the provided pattern
 //   and calculate offsets for all other patterns
+// - Only allow cursor movement/mouse clicking in EDITOR mode
 //============================================================================
 
 #include <SFML/Graphics/RenderWindow.hpp>
