@@ -144,10 +144,10 @@ ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
 
 //=======================
 // Draw PATTERN_ buttons
-ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN, UI.PATTERNS_LIST_Y));
+ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN), UI.PATTERNS_LIST_Y));
 
 ImGui::PushID("pattern_add");
-if (ImGui::ImageButton(buttons[1], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0))
 {
     CreatePattern(patterns_list, 64, module);
 }
@@ -158,10 +158,10 @@ if (ImGui::IsItemHovered())
 }
 ImGui::PopID();
 
-ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_del");
-if (ImGui::ImageButton(buttons[3], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0))
 {
     DeletePattern(patterns_list, module);
 }
@@ -173,10 +173,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_up");
-if (ImGui::ImageButton(buttons[4], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[4], ImVec2(16, 16), 0))
 {
     //
 }
@@ -188,10 +188,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_down");
-if (ImGui::ImageButton(buttons[0], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[0], ImVec2(16, 16), 0))
 {
     //
 }
@@ -203,10 +203,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_options");
-if (ImGui::ImageButton(buttons[5], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[5], ImVec2(16, 16), 0))
 {
     ImGui::OpenPopup("Pattern Options");
 }
@@ -216,77 +216,17 @@ if (ImGui::IsItemHovered())
     ImGui::SetTooltip("Open Pattern Options");
 }
 
-
-ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
-
 bool p_opened = true;
 
+#include "pattern_options.cpp"
 
-if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
-{
-    static char current_pattern_name[24] = "";
-    static int r;
-    static bool enable_write = false;
-    
-    if (!enable_write)
-    {
-        r = patterns_list[active_pattern].ROWS;
-        strcpy(current_pattern_name, patterns_list[active_pattern].NAME.c_str());
-        enable_write = true;
-    }
-    
-    ImGui::PushItemWidth(200);
-    ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
-    ImGui::Text("Number of rows");
-    ImGui::SliderInt("##numofrows", &r, 1, 64);
-    ImGui::PopStyleColor();
-    
-    ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
-    ImGui::Text("Pattern name");
-    ImGui::PopStyleColor();
-    
-    if (ImGui::InputText("##patternname", current_pattern_name, 24, ImGuiInputTextFlags_CharsNoBlank))
-    {
-        
-    }
-    
-    ImGui::PopItemWidth();
-    
-    float modal_width = ImGui::GetWindowSize().x;
-    float modal_height = ImGui::GetWindowSize().y;
-    ImGui::SetCursorPos(ImVec2(modal_width- 180, modal_height - 30));
-    
-    if (ImGui::Button("OK", ImVec2(80,0)))
-    {
-        enable_write = false;
-        
-        if (strlen(current_pattern_name) != 0)
-        {
-            patterns_list[active_pattern].NAME = current_pattern_name;
-        }
-        
-        // NOTE: Set the "Rows" slider to MAX_ROWS_PER_PATTERN and DON'T change the row count
-        // directly as below ! Use ResizePattern()
-        //patterns_list[active_pattern].ROWS = r;
-        ResizePattern(active_pattern, r);
-        ImGui::CloseCurrentPopup();
-    }
-    
-    ImGui::SameLine();
-    if (ImGui::Button("Cancel", ImVec2(80,0)))
-    {
-        enable_write = false;
-        ImGui::CloseCurrentPopup();
-    }
-    ImGui::EndPopup();
-}
 ImGui::PopID();
 
 // Draw Instrument buttons
-ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN, UI.INSTRUMENTS_LIST_Y));
+ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN), UI.INSTRUMENTS_LIST_Y));
 
 ImGui::PushID("instrument_add");
-if (ImGui::ImageButton(buttons[1], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0))
 {
     CreateInstrument(instruments_list);
 }
@@ -298,12 +238,12 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_del");
-if (ImGui::ImageButton(buttons[3], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0))
 {
-    //
+    DeleteInstrument();
 }
 
 if (ImGui::IsItemHovered())
@@ -313,10 +253,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_up");
-if (ImGui::ImageButton(buttons[4], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[4], ImVec2(16, 16), 0))
 {
     //
 }
@@ -328,10 +268,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_down");
-if (ImGui::ImageButton(buttons[0], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[0], ImVec2(16, 16), 0))
 {
     //
 }
@@ -343,10 +283,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_options");
-if (ImGui::ImageButton(buttons[5], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[5], ImVec2(16, 16), 0))
 {
     ImGui::OpenPopup("Instrument options");
 }
@@ -367,10 +307,10 @@ ImGui::PopID();
 
 
 // Draw Sample buttons
-ImGui::SetCursorPos(ImVec2(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + UI.MARGIN, UI.SAMPLES_LIST_Y));
+ImGui::SetCursorPos(ImVec2(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + (2 * UI.MARGIN), UI.SAMPLES_LIST_Y));
 
 ImGui::PushID("sample_add");
-if (ImGui::ImageButton(buttons[1], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0))
 {
     auto f = pfd::open_file("Load sample(s)", "/tmp/",{ "Wave Files (.wav)", "*.wav"},true);
     
@@ -393,10 +333,10 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("sample_instrument_add");
-if (ImGui::ImageButton(buttons[2], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[2], ImVec2(16, 16), 0))
 {
     // add sample/instrument pair
 }
@@ -408,12 +348,12 @@ if (ImGui::IsItemHovered())
 ImGui::PopID();
 
 
-ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + UI.MARGIN);
+ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("sample_del");
-if (ImGui::ImageButton(buttons[3], ImVec2(16, 16)))
+if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0))
 {
-    //
+    DeleteSample();
 }
 
 if (ImGui::IsItemHovered())

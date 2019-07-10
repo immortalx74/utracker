@@ -2,13 +2,10 @@
 // - Check if a sample was removed from disk (popup warning? something else?).
 // - Calculate correct speed (BPM relationship with rows_per_beat).
 // - Possible bug when changing BPM/ticks while on playback. (slows down?)
-// - Implement delete/move up/move down for patterns/instruments.
+// - Implement move up/move down for patterns/instruments.
 //   What should happen when moving/deleting patterns/instruments?
 //   For instruments, should the notes switch to next instrument?
 //   What if the instrument with higher index gets removed? 
-//   For patterns, there's a lot of data to be moved around.
-// - Implement cut/copy/paste. Cursor is always top-left of selection,
-//   handle both toolbar and context menu.
 // - Bug when playing module. Notes should stop just like when playing
 //   a single pattern.
 // - Add a "pan" field to notes and include it on PlayRow. It will be set by an FX
@@ -24,8 +21,7 @@
 //   Set volume [same as above], Set instrument[same as above]
 // - BUG: On module playback mode, stop goes to next pattern. Should stay
 //   on same pattern and cursor should be set to row zero.
-// - Write ResizePattern. Should be able to grow/shrink the provided pattern
-//   and calculate offsets for all other patterns
+// - Fix Solo/Mute. Should be updated even after firing notes.
 //============================================================================
 
 #include <SFML/Graphics/RenderWindow.hpp>

@@ -112,6 +112,7 @@ bool CreatePattern(std::vector<PATTERN_> &patterns_list, int rows, std::vector<s
 	
 	return true;
 }
+
 bool DeletePattern(std::vector<PATTERN_> &patterns_list, std::vector<std::vector<NOTE_DATA>> &module)
 {
     if (patterns_list.size() == 1)
@@ -143,6 +144,7 @@ bool DeletePattern(std::vector<PATTERN_> &patterns_list, std::vector<std::vector
     
     return true;
 }
+
 bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
 {
 	int last_instrument_index = instruments_list.size() - 1;
@@ -169,6 +171,23 @@ bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
     instruments_list.push_back(new_instrument);
     
     return true;
+}
+
+bool DeleteInstrument()
+{
+    if (instruments_list.size() > 1)
+    {
+        instruments_list.erase(instruments_list.begin() + active_instrument);
+        
+        if (active_instrument > instruments_list.size() - 1)
+        {
+            active_instrument = instruments_list.size() - 1;
+        }
+        
+        return true;
+    }
+    
+    return false;
 }
 
 bool CreateTrack(std::vector<TRACK> &tracks_list, FMOD::System *fsys)
@@ -354,10 +373,7 @@ float ConvertRange (float from_min, float from_max, float to_min, float to_max, 
 }
 
 
-bool LoadSample(
-std::vector<SAMPLE> &samples_list,
-std::string filename,
-FMOD::System *fsystem)
+bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename, FMOD::System *fsystem)
 {
     int last_sample_index = samples_list.size() - 1;
     
@@ -383,9 +399,45 @@ FMOD::System *fsystem)
     new_sample.NAME = name;
     new_sample.FILENAME = filename;
     new_sample.SOUND = snd;
-    //TODO: Check if a sample with the same name is loaded already. If it has been loaded DON'T add it!!!
     
     samples_list.push_back(new_sample);
+    return true;
+}
+
+bool DeleteSample()
+{
+    if (samples_list.size() == 0)
+    {
+        return false;
+    }
+    
+    samples_list[active_sample].SOUND->release();
+    
+    samples_list.erase(samples_list.begin() + active_sample);
+    
+    //NOTE: Temp!!! Set Instruments which where assigned this sample in their sample map
+    // to sample zero.
+    
+    int current_note_sample;
+    
+    for (int i = 0; i < instruments_list.size(); ++i)
+    {
+        for (int j = 0; j < 120; ++j)
+        {
+            current_note_sample = instruments_list[i].SAMPLE_MAP[j];
+            
+            if (current_note_sample == active_sample)
+            {
+                instruments_list[i].SAMPLE_MAP[j] = 0;
+            }
+        }
+    }
+    
+    if (active_sample > samples_list.size() - 1)
+    {
+        active_sample = samples_list.size() - 1;
+    }
+    
     return true;
 }
 

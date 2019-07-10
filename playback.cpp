@@ -95,6 +95,7 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
             vol_master = ((float)master_volume / 64.0f);
             vol_final = vol_note * vol_track * vol_master;
             
+            
             ch->setVolume(vol_final);
             ch->setPan(pan_track);
             result = ch->setFrequency(freq);
