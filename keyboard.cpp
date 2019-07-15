@@ -17,6 +17,16 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
         PasteFromClipboard();
     }
     
+    if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_A]) && io.KeyCtrl)
+    {
+        selection_exists = true;
+        
+        selection.START_ROW = 0;
+        selection.START_COL = 0;
+        selection.END_ROW = patterns_list[active_pattern].ROWS - 1;
+        selection.END_COL = (tracks * 4) - 1;
+    }
+    
     
     // arrows navigation
     if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_DownArrow]) && active_cell.ROW < pattern_rows - 1)

@@ -5,6 +5,11 @@
 #define MAX_ROWS_PER_PATTERN 512
 #define MAX_BPM 512
 
+#define DEFAULT_NTH_ROW_HIGHLIGHT 8
+#define DEFAULT_TRACK_COUNT 8
+#define DEFAULT_BPM 125
+#define DEFAULT_ROWS_PER_BEAT 4
+
 std::future<bool> future_play;
 std::future<bool> future_tick;
 
@@ -62,7 +67,7 @@ struct UI_SIZING
     
 	float TRACK_HEADERS_START = 46;
 	float TRACK_HEADERS_HEIGHT = 60;
-	float TRACK_SLIDERS_WIDTH = 104;
+	float TRACK_SLIDERS_WIDTH = 108;
 };
 
 struct PATTERN_
@@ -184,19 +189,19 @@ int col_note = IM_COL32(100,130,200,255);
 int col_instrument = IM_COL32(200,200,60,255);
 int col_volume = IM_COL32(20,170,20,255);
 
-int tracks = 8;
+int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;
 int active_instrument = 0;
 int active_sample = 0;
 int octave = 5;
 int samplemap_octave = 0;
-int bpm = 125;
-int rows_per_beat = 4;
+int bpm = DEFAULT_BPM;
+int rows_per_beat = DEFAULT_ROWS_PER_BEAT;
 int step = 0;
 int master_volume = 64;
 bool btn_repeat = false;
 bool btn_repeat_changed = false;
-int nth_row_highlight = 8;
+int nth_row_highlight = DEFAULT_NTH_ROW_HIGHLIGHT;
 
 int key_repeat_delay = 20;
 int key_repeat_counter = key_repeat_delay;

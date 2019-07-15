@@ -118,8 +118,8 @@ ImGui::PopItemWidth();
 
 // show debug info
 ImGui::Spacing();
-ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
-ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
+//ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
+//ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 
 //ImGui::Text("cell_x:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.X).c_str());
 //ImGui::Text("cell_y:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.Y).c_str());
@@ -140,7 +140,7 @@ if (application_state == 2) as ="END_PATTERN";
 if (application_state == 3) as ="PLAYING";
 if (application_state == 4) as ="EDITOR";
 
-ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
+//ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
 
 //=======================
 // Draw PATTERN_ buttons

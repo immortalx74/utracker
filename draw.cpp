@@ -10,14 +10,14 @@ ImVec2 highlight_br;
 
 for (int r = 0; r < pattern_rows; r += nth_row_highlight)
 {
-	highlight_tl = ImVec2(c.x, c.y);
+	highlight_tl = ImVec2(c.x-4, c.y);
 	highlight_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
 	draw_list->AddRectFilled(highlight_tl, highlight_br, col_nth_row_highlight);
 	c.y += nth_row_highlight * UI.CELL_HEIGHT;
 }
 
 // draw active row
-ImVec2 row_tl = ImVec2(c.x, active_cell.Y - ImGui::GetScrollY());
+ImVec2 row_tl = ImVec2(c.x-4, active_cell.Y - ImGui::GetScrollY());
 ImVec2 row_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH)-8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
 draw_list->AddRectFilled(row_tl, row_br, col_active_row);
 

@@ -7,7 +7,12 @@ ImGui::Columns(tracks);
 
 for (int t = 0; t < tracks_list.size(); ++t)
 {
-    std::string track_text = " Track:";
+    std::string track_text = "Track: ";
+    
+    if (t < 9)
+    {
+        track_text += "0";
+    }
 	track_text += std::to_string(t + 1);
 	ImGui::PushStyleColor(ImGuiCol_Button, col_title_text);
 	ImGui::Text(track_text.c_str());
@@ -94,6 +99,7 @@ for (int t = 0; t < tracks_list.size(); ++t)
 	ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
 	ImGui::NextColumn();
 }
+
 
 ImGui::EndChild();
 ImGui::Columns(1);

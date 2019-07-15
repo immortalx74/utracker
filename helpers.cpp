@@ -571,3 +571,13 @@ void PasteFromClipboard()
         }
     }
 }
+
+void MovePattern(int direction)
+{
+    // -1 up, 1 down
+    if (direction == -1)
+    {
+        
+    }
+    
+}
