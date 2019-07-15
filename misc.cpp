@@ -1,3 +1,4 @@
+bool ppp =false;
 #define MAX_TRACKS_PER_MODULE 32
 #define MAX_PATTERNS_PER_MODULE 32
 #define MAX_INSTRUMENTS_PER_MODULE 32

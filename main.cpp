@@ -40,6 +40,7 @@
 #include "imgui-SFML.h"
 
 #include "portable-file-dialogs.h"
+#include "iniparser.hpp"
 
 #include <string>
 #include <iostream>
@@ -71,6 +72,40 @@
 
 int main()
 {
+    int ival;
+	std::string sval;
+	// Creating ini file object
+	INI::File ft;
+	// Loading from file
+	if (!ft.Load("settings.ini"))
+	{
+		print("hey");
+	}
+    
+	ft.GetSection("Main")->SetValue("value1",20);
+    ft.GetSection("Main")->SetValue("value2","HeyDude");
+    
+    ft.GetSection("Sound")->SetValue("volume",10);
+    ival = ft.GetValue("Sound:volume",3).AsInt();
+    print(ival);
+    
+	// get "value1" from section "Main". If there is no such entry return default value 1
+	//ival = ft.GetSection("Main")->GetValue("value1",1).AsInt();
+	// get "value2" from section "Main", defaulting to 2
+	//ival = ft.GetValue("Main:value2",2).AsInt();
+	// set "value1" in subsection "subsect" of section "Main"
+	//ft.SetValue("Main.subsect:value1",345.5);
+	// get "value1" from subsection "subsect" of section "Main"
+	//dval = ft.GetSection("Main")->GetSubSection("subsect")->GetValue("value1").AsDouble();
+	// set 4th element of array "array" in section "Main" to 32.1
+	//ft.GetSection("Main")->SetArrayValue("array",4,32.1);
+	// get 4th element of array "array" in section "Main"
+	//dval = ft.GetSection("Main")->GetValue("array").AsArray()[4].AsDouble();
+    
+    
+    ft.Save("settings.ini");
+    
+    
     
 	sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
 	window.setPosition(ImVec2(300,0));
@@ -98,10 +133,19 @@ int main()
         
 #include "leftpane.cpp"
         
+        
 		// Draw toolbar==================================
 		UI.TOOLBAR_X = UI.LEFT_PANE_X + UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN);
 		UI.TOOLBAR_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_X - UI.LEFT_PANE_WIDTH - (3 * UI.MARGIN);
-		DrawToolbar(toolbar_buttons, toolbar_tooltips);
+		
+        DrawToolbar(toolbar_buttons, toolbar_tooltips);
+        
+        //bool pp_opened = true;
+        if (ppp)
+        {
+            ImGui::OpenPopup("Settings");
+        }
+#include "settings.cpp"
         
 		// Main==========================================
 		UI.MAIN_X = ImGui::GetCursorPosX();

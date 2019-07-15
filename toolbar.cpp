@@ -1,4 +1,5 @@
-void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::string,13> &toolbar_tooltips)
+void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
+                 std::array<std::string,13> &toolbar_tooltips)
 {
 	ImGui::SetNextWindowSize(ImVec2(UI.TOOLBAR_WIDTH, UI.TOOLBAR_HEIGHT));
 	ImGui::SetNextWindowPos(ImVec2(UI.TOOLBAR_X, UI.TOOLBAR_Y));
@@ -63,6 +64,13 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons, std::array<std::stri
             {
                 PasteFromClipboard();
             }
+            
+            if (i == 12) // settings
+            {
+                //ImGui::OpenPopup("Settings");
+                ppp = true;
+            }
+            
 		}
         
 		if (ImGui::IsItemHovered())
