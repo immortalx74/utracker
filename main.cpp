@@ -133,7 +133,6 @@ int main()
         
 #include "leftpane.cpp"
         
-        
 		// Draw toolbar==================================
 		UI.TOOLBAR_X = UI.LEFT_PANE_X + UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN);
 		UI.TOOLBAR_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_X - UI.LEFT_PANE_WIDTH - (3 * UI.MARGIN);
@@ -141,7 +140,7 @@ int main()
         DrawToolbar(toolbar_buttons, toolbar_tooltips);
         
         //bool pp_opened = true;
-        if (ppp)
+        if (is_settings_open)
         {
             ImGui::OpenPopup("Settings");
         }

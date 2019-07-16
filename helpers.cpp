@@ -36,10 +36,10 @@ void LoadTextures()
     }
 }
 
-void ResizePattern(int pattern_index, int new_row_count)
+void ResizePattern(int new_row_count)
 {
-    int old_row_count = patterns_list[pattern_index].ROWS;
-    int old_pattern_offset = patterns_list[pattern_index].OFFSET;
+    int old_row_count = patterns_list[active_pattern].ROWS;
+    int old_pattern_offset = patterns_list[active_pattern].OFFSET;
     
     if (new_row_count == old_row_count)
     {
@@ -47,22 +47,54 @@ void ResizePattern(int pattern_index, int new_row_count)
     }
     else if (new_row_count < old_row_count)
     {
-        module.erase(module.begin() + old_pattern_offset + new_row_count, module.begin() + old_pattern_offset + old_row_count);
-        patterns_list[pattern_index].ROWS = new_row_count;
+        module.erase(module.begin() + old_pattern_offset + new_row_count, module.begin() +
+                     old_pattern_offset + old_row_count);
+        patterns_list[active_pattern].ROWS = new_row_count;
         
-        for (int i = pattern_index + 1; i < patterns_list.size(); ++i)
+        for (int i = active_pattern + 1; i < patterns_list.size(); ++i)
         {
             patterns_list[i].OFFSET -= old_row_count - new_row_count;
         }
     }
     else
     {
+        patterns_list[active_pattern].ROWS = new_row_count;
         
+        for (int i = active_pattern + 1; i < patterns_list.size(); ++i)
+        {
+            // this is wrong!!!
+            patterns_list[i].OFFSET += new_row_count - old_row_count;
+        }
+        
+        int start = old_pattern_offset + old_row_count;
+        int end = start + new_row_count - old_row_count;
+        
+        for (int i = start; i < end; ++i)
+        {
+            std::vector<NOTE_DATA> row;
+            
+            for (int j = 0; j < tracks; ++j)
+            {
+                NOTE_DATA cur_track_row_data;
+                
+                cur_track_row_data.NAME = "---";
+                cur_track_row_data.FREQUENCY = 0.0f;
+                cur_track_row_data.INSTRUMENT = 0;
+                cur_track_row_data.VOLUME = 0;
+                cur_track_row_data.FX = -1;
+                cur_track_row_data.FX_PARAM = -1;
+                row.push_back(cur_track_row_data);
+            }
+            
+            module.push_back(row);
+        }
     }
     
 }
 
-bool CreatePattern(std::vector<PATTERN_> &patterns_list, int rows, std::vector<std::vector<NOTE_DATA>> &module)
+bool CreatePattern(std::vector<PATTERN_> &patterns_list,
+                   int rows,
+                   std::vector<std::vector<NOTE_DATA>> &module)
 {
 	int last_pattern_rows = 0;
 	int last_pattern_offset = 0;

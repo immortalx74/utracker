@@ -103,79 +103,79 @@ ImGui::Columns(tracks);
 // grid drawing loop
 for (int i = pattern_start; i < pattern_end; ++i)
 {
-	for (int j = 0; j < tracks; ++j)
-	{
+    for (int j = 0; j < tracks; ++j)
+    {
         if (module[i][j].NAME != "---")
-		{
+        {
             ImGui::PushStyleColor(ImGuiCol_Text, col_note);
-			ImGui::Text(module[i][j].NAME.c_str());
-			ImGui::PopStyleColor();		
-		}
-		else
-		{
-			ImGui::Text(module[i][j].NAME.c_str());	
-		}
+            ImGui::Text(module[i][j].NAME.c_str());
+            ImGui::PopStyleColor();		
+        }
+        else
+        {
+            ImGui::Text(module[i][j].NAME.c_str());	
+        }
         
-		ImGui::SameLine();
-		
-		if (module[i][j].INSTRUMENT != 0)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, col_instrument);
-			int instr = module[i][j].INSTRUMENT;
-			std::string instr_str = std::to_string(instr);
-			if (instr < 10) 
-			{
-				instr_str = " 0" + instr_str;
-			}
-			else
-			{
-				instr_str = " " + instr_str;
-			}
-			ImGui::Text(instr_str.c_str());
-			ImGui::PopStyleColor();
-		}
-		else
-		{
-			ImGui::Text(" --");
-		}
-		ImGui::SameLine();
-		
-		if (module[i][j].VOLUME != 0.0f)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, col_volume);
-			int vol = module[i][j].VOLUME;
-			std::string vol_str = std::to_string(vol);
-			if (vol < 10)
-			{
-				vol_str = " 0" + vol_str;
-			}
-			else
-			{
-				vol_str = " " + vol_str;
-			}
-			ImGui::Text(vol_str.c_str());
-			ImGui::PopStyleColor();
-		}
-		else
-		{
-			ImGui::Text(" --");
-		}
-		ImGui::SameLine();
-		
-		if (module[i][j].FX != -1)
-		{
-			ImGui::Text(std::to_string(module[i][j].FX).c_str());
-		}
-		else
-		{
-			ImGui::Text("---");
-		}
-		// ImGui::PushStyleColor(ImGuiCol_Separator, col_volume);
-		ImGui::NextColumn();
-		// ImGui::PopStyleColor();
-	}
-	
-	ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
+        ImGui::SameLine();
+        
+        if (module[i][j].INSTRUMENT != 0)
+        {
+            ImGui::PushStyleColor(ImGuiCol_Text, col_instrument);
+            int instr = module[i][j].INSTRUMENT;
+            std::string instr_str = std::to_string(instr);
+            if (instr < 10) 
+            {
+                instr_str = " 0" + instr_str;
+            }
+            else
+            {
+                instr_str = " " + instr_str;
+            }
+            ImGui::Text(instr_str.c_str());
+            ImGui::PopStyleColor();
+        }
+        else
+        {
+            ImGui::Text(" --");
+        }
+        ImGui::SameLine();
+        
+        if (module[i][j].VOLUME != 0.0f)
+        {
+            ImGui::PushStyleColor(ImGuiCol_Text, col_volume);
+            int vol = module[i][j].VOLUME;
+            std::string vol_str = std::to_string(vol);
+            if (vol < 10)
+            {
+                vol_str = " 0" + vol_str;
+            }
+            else
+            {
+                vol_str = " " + vol_str;
+            }
+            ImGui::Text(vol_str.c_str());
+            ImGui::PopStyleColor();
+        }
+        else
+        {
+            ImGui::Text(" --");
+        }
+        ImGui::SameLine();
+        
+        if (module[i][j].FX != -1)
+        {
+            ImGui::Text(std::to_string(module[i][j].FX).c_str());
+        }
+        else
+        {
+            ImGui::Text("---");
+        }
+        //ImGui::PushStyleColor(ImGuiCol_Separator, col_volume);
+        ImGui::NextColumn();
+        //ImGui::PopStyleColor();
+    }
+    
+    ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
 }
 
 ImGui::Columns(1);

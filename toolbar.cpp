@@ -68,7 +68,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
             if (i == 12) // settings
             {
                 //ImGui::OpenPopup("Settings");
-                ppp = true;
+                is_settings_open= true;
             }
             
 		}

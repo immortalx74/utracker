@@ -16,7 +16,7 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     ImGui::PushItemWidth(200);
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
     ImGui::Text("Number of rows");
-    ImGui::SliderInt("##numofrows", &r, 1, 64);
+    ImGui::SliderInt("##numofrows", &r, 1, MAX_ROWS_PER_PATTERN);
     ImGui::PopStyleColor();
     
     ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
@@ -43,10 +43,8 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
             patterns_list[active_pattern].NAME = current_pattern_name;
         }
         
-        // NOTE: Set the "Rows" slider to MAX_ROWS_PER_PATTERN and DON'T change the row count
-        // directly as below ! Use ResizePattern()
-        //patterns_list[active_pattern].ROWS = r;
-        ResizePattern(active_pattern, r);
+        ResizePattern(r);
+        
         ImGui::CloseCurrentPopup();
     }
     

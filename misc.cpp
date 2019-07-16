@@ -1,4 +1,3 @@
-bool ppp =false;
 #define MAX_TRACKS_PER_MODULE 32
 #define MAX_PATTERNS_PER_MODULE 32
 #define MAX_INSTRUMENTS_PER_MODULE 32
@@ -210,6 +209,8 @@ bool key_pressed = false;
 
 bool selection_begin = false;
 bool selection_exists = false;
+
+bool is_settings_open = false;
 
 std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","Play",
 	"Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
