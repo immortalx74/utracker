@@ -173,21 +173,22 @@ APP_STATE application_state = EDITOR;
 UI_SIZING UI;
 ACTIVE_CELL active_cell;
 
-int col_toggle_button = IM_COL32(255,130,0,255);
-int col_title_text = IM_COL32(255,130,0,255);
-int col_active_cell = IM_COL32(255,130,0,255);
-int col_active_cell_border = IM_COL32(255,255,255,255);
-int col_active_row = IM_COL32(77,77,135,255);
-int col_nth_row_highlight = IM_COL32(60,60,60,255);
-int col_selection = IM_COL32(90,90,90,255);
-int col_button = IM_COL32(0,0,0,255);
-int col_row_headers = IM_COL32(80,80,80,255);
-int col_mute = IM_COL32(40,40,240,255);
-ImVec4 col_column_separator = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+ImVec4 col_toggle_button = {1.0f, 0.509f, 0.0f, 1.0f};
+ImVec4 col_title_text = {1.0f, 0.509f, 0.0f, 1.0f};
+ImVec4 col_active_cell = {1.0f, 0.509f, 0.0f, 1.0f};
+ImVec4 col_active_cell_border = {1.0f, 1.0f, 1.0f, 1.0f};
+ImVec4 col_active_row = {0.301f, 0.301f, 0.529f, 1.0f};
+ImVec4 col_nth_row_highlight = {0.235f, 0.235f, 0.235f, 1.0f};
+ImVec4 col_selection = {0.352f, 0.352f, 0.352f, 1.0f};
+ImVec4 col_button = {0.0f, 0.0f, 0.0f, 1.0f};
+ImVec4 col_row_headers = {0.313f, 0.313f, 0.313f, 1.0f};
+ImVec4 col_mute = {0.156f, 0.156f, 0.941f, 1.0f};
 
-int col_note = IM_COL32(100,130,200,255);
-int col_instrument = IM_COL32(200,200,60,255);
-int col_volume = IM_COL32(20,170,20,255);
+ImVec4 col_column_separator = {1.00f, 1.00f, 1.00f, 1.00f};
+
+ImVec4 col_note = {0.392f, 0.509f, 0.784f, 1.00f};
+ImVec4 col_instrument = {0.784f, 0.784f, 0.235f, 1.00f};
+ImVec4 col_volume = {0.078f, 0.666f, 0.078f, 1.00f};
 
 int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;

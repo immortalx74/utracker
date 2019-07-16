@@ -12,25 +12,25 @@ for (int r = 0; r < pattern_rows; r += nth_row_highlight)
 {
 	highlight_tl = ImVec2(c.x-4, c.y);
 	highlight_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
-	draw_list->AddRectFilled(highlight_tl, highlight_br, col_nth_row_highlight);
+	draw_list->AddRectFilled(highlight_tl, highlight_br, ImColor(col_nth_row_highlight));
 	c.y += nth_row_highlight * UI.CELL_HEIGHT;
 }
 
 // draw active row
 ImVec2 row_tl = ImVec2(c.x-4, active_cell.Y - ImGui::GetScrollY());
 ImVec2 row_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH)-8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
-draw_list->AddRectFilled(row_tl, row_br, col_active_row);
+draw_list->AddRectFilled(row_tl, row_br, ImColor(col_active_row));
 
 // draw active cell
 ImVec2 cell_tl = ImVec2(active_cell.X - ImGui::GetScrollX(), active_cell.Y - ImGui::GetScrollY());
 ImVec2 cell_br = ImVec2(active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(), active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
 
-draw_list->AddRectFilled(cell_tl, cell_br, col_active_cell);
+draw_list->AddRectFilled(cell_tl, cell_br, ImColor(col_active_cell));
 
 if (ImGui::IsWindowFocused())
 {
 	
-	draw_list->AddRect(cell_tl, cell_br, col_active_cell_border);
+	draw_list->AddRect(cell_tl, cell_br, ImColor(col_active_cell_border));
 }
 
 // Auto scroll when using arrow keys / on playback
@@ -95,7 +95,7 @@ if (selection_exists)
     
     ImVec2 selection_tl = ImVec2((scol * UI.CELL_WIDTH) + winx - ImGui::GetScrollX(), (srow * UI.CELL_HEIGHT) + winy - ImGui::GetScrollY());
 	ImVec2 selection_br = ImVec2((ecol * UI.CELL_WIDTH) + winx - ImGui::GetScrollX(), (erow * UI.CELL_HEIGHT) + winy - ImGui::GetScrollY());
-	draw_list->AddRectFilled(selection_tl, selection_br, col_selection);
+	draw_list->AddRectFilled(selection_tl, selection_br, ImColor(col_selection));
 }
 
 ImGui::Columns(tracks);

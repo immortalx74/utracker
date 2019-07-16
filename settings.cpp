@@ -25,7 +25,14 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         break;
         
         case 1: // colors
-        ImGui::Text("Heading Text");
+        //static float f[4] = { 0.4f,0.7f,0.0f,0.5f };
+        //float f[4] = ImGui::ColorConvertU32ToFloat4(col_toggle_button);
+        static float f[4];
+        f[0] = col_toggle_button.x;
+        
+        
+        ImGui::ColorEdit4("##testcolor", f, ImGuiColorEditFlags_NoInputs);
+        ImGui::SameLine(); ImGui::Text("Heading Text");
         ImGui::Text("Cursor");
         ImGui::Text("Cursor Border");
         ImGui::Text("Current Row");
