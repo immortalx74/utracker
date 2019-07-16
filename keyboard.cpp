@@ -85,7 +85,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
         
         if (ImGui::IsKeyPressed(i) && !key_pressed)
 		{
-			key_pressed = true;
+            key_pressed = true;
             
 			if (active_cell.COL % 4 == 0) // note cell
 			{

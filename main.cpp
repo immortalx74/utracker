@@ -4,8 +4,6 @@
 // - Possible bug when changing BPM/ticks while on playback. (slows down?)
 // - Implement move up/move down for patterns/instruments.
 //   What should happen when moving/deleting patterns/instruments?
-//   For instruments, should the notes switch to next instrument?
-//   What if the instrument with higher index gets removed? 
 // - Bug when playing module. Notes should stop just like when playing
 //   a single pattern.
 // - Add a "pan" field to notes and include it on PlayRow. It will be set by an FX

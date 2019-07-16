@@ -572,6 +572,10 @@ void CopyToClipboard(int srow, int scol, int erow, int ecol, bool cut)
 
 void PasteFromClipboard()
 {
+    if (clipboard.CLIPBOARD_DATA.empty())
+    {
+        return;
+    }
     int offset = patterns_list[active_pattern].OFFSET ;
     int act_cell_track = active_cell.COL / 4;
     int row_count = clipboard.END_ROW - clipboard.START_ROW + 1;

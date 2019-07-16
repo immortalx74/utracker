@@ -10,6 +10,11 @@
 #define DEFAULT_BPM 125
 #define DEFAULT_ROWS_PER_BEAT 4
 
+#define DEFAULT_COL_TITLE_TEXT {1.0f, 0.509f, 0.0f, 1.0f}
+// add all default color constants
+
+
+
 std::future<bool> future_play;
 std::future<bool> future_tick;
 
@@ -173,7 +178,8 @@ APP_STATE application_state = EDITOR;
 UI_SIZING UI;
 ACTIVE_CELL active_cell;
 
-ImVec4 col_toggle_button = {1.0f, 0.509f, 0.0f, 1.0f};
+//ImVec4 col_toggle_button = {1.0f, 0.509f, 0.0f, 1.0f};
+ImVec4 col_toggle_button = DEFAULT_COL_TITLE_TEXT;
 ImVec4 col_title_text = {1.0f, 0.509f, 0.0f, 1.0f};
 ImVec4 col_active_cell = {1.0f, 0.509f, 0.0f, 1.0f};
 ImVec4 col_active_cell_border = {1.0f, 1.0f, 1.0f, 1.0f};

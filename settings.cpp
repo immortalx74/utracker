@@ -1,10 +1,10 @@
-ImGui::SetNextWindowSize(ImVec2(600, 400));
+ImGui::SetNextWindowSize(ImVec2(588, 400));
 
 if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoResize))
 {
     static int page = 0;
     
-    if (ImGui::Button("General", ImVec2(80, 0)))
+    if (ImGui::Button("Keyboard", ImVec2(80, 0)))
     {
         page = 0;
     }
@@ -14,41 +14,47 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         page = 1;
     }
     
+    
     ImVec2 parent_pos = ImGui::GetWindowPos();
     ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
-    ImGui::BeginChild("##pagecontent", ImVec2(480,320), true);
+    ImGui::BeginChild("##pagecontent", ImVec2(480,338), true);
+    bool check_ctrl = false;
+    bool check_alt = false;
+    bool check_shift = false;
     
     switch (page)
     {
         case 0: // general
+        ImGui::Checkbox("CTRL", &check_ctrl);
         ImGui::Text("heyyyy!");
         break;
         
         case 1: // colors
-        //static float f[4] = { 0.4f,0.7f,0.0f,0.5f };
-        //float f[4] = ImGui::ColorConvertU32ToFloat4(col_toggle_button);
-        static float f[4];
-        f[0] = col_toggle_button.x;
         
-        
-        ImGui::ColorEdit4("##testcolor", f, ImGuiColorEditFlags_NoInputs);
-        ImGui::SameLine(); ImGui::Text("Heading Text");
-        ImGui::Text("Cursor");
-        ImGui::Text("Cursor Border");
-        ImGui::Text("Current Row");
-        ImGui::Text("Nth Row Highlight");
-        ImGui::Text("Selection Rectangle");
-        ImGui::Text("Buttons");
-        ImGui::Text("Note Text");
-        ImGui::Text("Instrument Text");
-        ImGui::Text("Volume Text");
+        ImGui::ColorEdit4("Heading Text", (float*)&col_title_text, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Cursor", (float*)&col_active_cell, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Cursor Border", (float*)&col_active_cell_border, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Current Row", (float*)&col_active_row, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Nth Row Highlight", (float*)&col_nth_row_highlight, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Selection Rectangle", (float*)&col_selection, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Buttons", (float*)&col_button, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Note Text", (float*)&col_note, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Instrument Text", (float*)&col_instrument, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit4("Volume Text", (float*)&col_volume, ImGuiColorEditFlags_NoInputs);
         
         break;
     }
     
     ImGui::EndChild();
     
-    ImGui::SetCursorPos(ImVec2(420, 370));
+    ImGui::SetCursorPos(ImVec2(276, 370));
+    
+    if (ImGui::Button("Reset to Defaults"))
+    {
+        col_title_text = DEFAULT_COL_TITLE_TEXT;
+    }
+    
+    ImGui::SameLine();
     
     if (ImGui::Button("OK", ImVec2(80,0)))
     {
