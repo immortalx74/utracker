@@ -1,7 +1,7 @@
 typedef std::chrono::milliseconds ms;
 typedef std::chrono::duration<float> fsec;
 
-bool RowTick(int mils)
+bool RowTick(double mils)
 {
 	bool looping = true;
     
@@ -124,7 +124,8 @@ bool PlayPattern(FMOD::System *fsystem, int start, int end, int track_count)
             PlayRow(fsystem, i, track_count);
 		}
         
-		future_tick = std::async(std::launch::async, RowTick, 60000/bpm/rows_per_beat);
+        double row_tick_delay = 60000.0f/(double)bpm/(double)rows_per_beat;
+		future_tick = std::async(std::launch::async, RowTick, row_tick_delay);
 		if (future_tick.get() && i < end - 1)
 		{
 			active_cell.ROW++;

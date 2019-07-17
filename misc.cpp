@@ -14,11 +14,13 @@
 // add all default color constants
 
 
+// add default keyboard bindings
+#define DEFAULT_BINDING_COPY {true, false, false, ImGuiKey_C}
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
 
-struct UI_SIZING
+struct UI_METRICS
 {
 	float MARGIN = 4;
     
@@ -145,19 +147,19 @@ enum LCA
 
 struct ACTIVE_CELL
 {
-	int X;
-	int Y;
-	int ROW;
-	int COL;
+	int X = 306;
+	int Y = 132;
+	int ROW = 0;
+	int COL = 0;
 	LCA LAST_CURSOR_ACTION;
 };
 
 struct SELECTION
 {
-	int START_X;
-	int START_Y;
-	int END_X;
-	int END_Y;
+	int START_X = 0;
+	int START_Y = 0;
+	int END_X = 0;
+	int END_Y = 0;
     
     int START_COL;
     int START_ROW;
@@ -174,9 +176,18 @@ enum APP_STATE
 	EDITOR
 };
 
+struct KEYBOARD_BINDING
+{
+    bool MDFR_CTRL = false;
+    bool MDFR_ALT = false;
+    bool MDFR_SHIFT = false;
+    int KEY = 0;
+};
+
 APP_STATE application_state = EDITOR;
-UI_SIZING UI;
+UI_METRICS UI;
 ACTIVE_CELL active_cell;
+std::array<KEYBOARD_BINDING, 20> app_key;
 
 //ImVec4 col_toggle_button = {1.0f, 0.509f, 0.0f, 1.0f};
 ImVec4 col_toggle_button = DEFAULT_COL_TITLE_TEXT;

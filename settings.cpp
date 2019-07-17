@@ -24,7 +24,7 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     
     switch (page)
     {
-        case 0: // general
+        case 0: // keyboard
         if (ImGui::Checkbox("CTRL", &check_ctrl))
         {
             print(check_ctrl);

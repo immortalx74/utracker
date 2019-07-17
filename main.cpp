@@ -168,7 +168,8 @@ int main()
 		}
         
 		ImGui::SetNextWindowSize(ImVec2(UI.MAIN_WIDTH, UI.MAIN_HEIGHT));
-        
+        ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN),
+                                       UI.TOOLBAR_HEIGHT + UI.MARGIN));
 		ImGui::Begin("main", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
         
 #include "drawheaders.cpp"

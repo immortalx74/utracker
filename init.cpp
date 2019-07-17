@@ -32,16 +32,6 @@ for (int i = 0; i < tracks; ++i)
 CreatePattern(patterns_list, 64, module); // create default PATTERN_
 CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
 
-active_cell.X = 306;
-active_cell.Y = 132;
-active_cell.ROW = 0;
-active_cell.COL = 0;
-
-selection.START_X = 0;
-selection.START_Y = 0;
-selection.END_X = 0;
-selection.END_Y = 0;
-
 float grid_scroll_x = 0.0f;
 float grid_scroll_y = 0.0f;
 

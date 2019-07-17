@@ -36,45 +36,55 @@ if (ImGui::IsWindowFocused())
 // Auto scroll when using arrow keys / on playback
 ImVec2 rect_start, rect_end;
 
-rect_start.x = active_cell.X+14 - ImGui::GetScrollX(); rect_start.y = active_cell.Y+8 - ImGui::GetScrollY();
-rect_end.x = active_cell.X+15 - ImGui::GetScrollX(); rect_end.y = active_cell.Y+9 - ImGui::GetScrollY();
+float sx = ImGui::GetScrollX();
+float sy = ImGui::GetScrollY();
 
-if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
+if (active_cell.LAST_CURSOR_ACTION == DOWN)
 {
-	float sx = ImGui::GetScrollX();
-	float sy = ImGui::GetScrollY();
+    rect_start.x = active_cell.X - ImGui::GetScrollX(); rect_start.y = active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY();
+    rect_end.x = active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(); rect_end.y = active_cell.Y + (2 * UI.CELL_HEIGHT) - ImGui::GetScrollY();
     
-	if (active_cell.LAST_CURSOR_ACTION == DOWN)
-	{
-		sy += UI.CELL_HEIGHT;
+    if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
+    {
+        sy += UI.CELL_HEIGHT;
 		ImGui::SetScrollY(sy);
-	}
-	else if (active_cell.LAST_CURSOR_ACTION == UP)
-	{
-		sy -= UI.CELL_HEIGHT;
+    }
+}
+else if (active_cell.LAST_CURSOR_ACTION == UP)
+{
+    rect_start.x = active_cell.X - ImGui::GetScrollX(); rect_start.y = active_cell.Y - UI.CELL_HEIGHT - ImGui::GetScrollY();
+    rect_end.x = active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(); rect_end.y = active_cell.Y - ImGui::GetScrollY();
+    
+    if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
+    {
+        sy -= UI.CELL_HEIGHT;
 		ImGui::SetScrollY(sy);
-	}
-	else if (active_cell.LAST_CURSOR_ACTION == RIGHT)
-	{
-		sx += UI.CELL_WIDTH;
+    }
+}
+else if (active_cell.LAST_CURSOR_ACTION == RIGHT)
+{
+    rect_start.x = active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(); rect_start.y = active_cell.Y - ImGui::GetScrollY();
+    rect_end.x = active_cell.X + (2 * UI.CELL_WIDTH) - ImGui::GetScrollX(); rect_end.y = active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY();
+    
+    if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
+    {
+        sx += UI.CELL_WIDTH;
 		ImGui::SetScrollX(sx);
-	}
-	else if (active_cell.LAST_CURSOR_ACTION == LEFT)
-	{
-		sx -= UI.CELL_WIDTH;
+    }
+}
+else if (active_cell.LAST_CURSOR_ACTION == LEFT)
+{
+    rect_start.x = active_cell.X - UI.CELL_WIDTH - ImGui::GetScrollX(); rect_start.y = active_cell.Y - ImGui::GetScrollY();
+    rect_end.x = active_cell.X - ImGui::GetScrollX(); rect_end.y = active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY();
+    
+    if (!ImGui::IsRectVisible(rect_start,rect_end) && (key_pressed || application_state == PLAYING))
+    {
+        sx -= UI.CELL_WIDTH;
 		ImGui::SetScrollX(sx);
-	}
-	
+    }
 }
 
 // draw selection
-//if (selection_exists)
-//{
-//ImVec2 selection_tl = ImVec2(selection.START_X - ImGui::GetScrollX(), selection.START_Y - ImGui::GetScrollY());
-//ImVec2 selection_br = ImVec2(selection.END_X - ImGui::GetScrollX(), selection.END_Y - ImGui::GetScrollY());
-//draw_list->AddRectFilled(selection_tl, selection_br, col_selection);
-//}
-
 if (selection_exists)
 {
 	int srow,scol,erow,ecol;
@@ -170,9 +180,8 @@ for (int i = pattern_start; i < pattern_end; ++i)
         {
             ImGui::Text("---");
         }
-        //ImGui::PushStyleColor(ImGuiCol_Separator, col_volume);
+        
         ImGui::NextColumn();
-        //ImGui::PopStyleColor();
     }
     
     ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
