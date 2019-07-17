@@ -209,9 +209,7 @@ int master_volume = 64;
 bool btn_repeat = false;
 bool btn_repeat_changed = false;
 int nth_row_highlight = DEFAULT_NTH_ROW_HIGHLIGHT;
-
-int key_repeat_delay = 20;
-int key_repeat_counter = key_repeat_delay;
+;
 bool key_pressed = false;
 
 bool selection_begin = false;

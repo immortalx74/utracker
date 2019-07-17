@@ -18,14 +18,17 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     ImVec2 parent_pos = ImGui::GetWindowPos();
     ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
     ImGui::BeginChild("##pagecontent", ImVec2(480,338), true);
-    bool check_ctrl = false;
-    bool check_alt = false;
-    bool check_shift = false;
+    static bool check_ctrl = false;
+    static bool check_alt = false;
+    static bool check_shift = false;
     
     switch (page)
     {
         case 0: // general
-        ImGui::Checkbox("CTRL", &check_ctrl);
+        if (ImGui::Checkbox("CTRL", &check_ctrl))
+        {
+            print(check_ctrl);
+        }
         ImGui::Text("heyyyy!");
         break;
         
