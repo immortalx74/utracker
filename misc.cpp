@@ -1,3 +1,4 @@
+//hard limits
 #define MAX_TRACKS_PER_MODULE 32
 #define MAX_PATTERNS_PER_MODULE 32
 #define MAX_INSTRUMENTS_PER_MODULE 32
@@ -5,17 +6,30 @@
 #define MAX_ROWS_PER_PATTERN 512
 #define MAX_BPM 512
 
+//default app settings
 #define DEFAULT_NTH_ROW_HIGHLIGHT 8
 #define DEFAULT_TRACK_COUNT 8
 #define DEFAULT_BPM 125
 #define DEFAULT_ROWS_PER_BEAT 4
 
-#define DEFAULT_COL_TITLE_TEXT {1.0f, 0.509f, 0.0f, 1.0f}
-// add all default color constants
+//default colors
+#define DEFAULT_COL_TOGGLE_BUTTON {1.0f, 0.509f, 0.0f, 1.0f};
+#define DEFAULT_COL_TITLE_TEXT {1.0f, 0.509f, 0.0f, 1.0f};
+#define DEFAULT_COL_ACTIVE_CELL {1.0f, 0.509f, 0.0f, 1.0f};
+#define DEFAULT_COL_ACTIVE_CELL_BORDER {1.0f, 1.0f, 1.0f, 1.0f};
+#define DEFAULT_COL_ACTIVE_ROW {0.301f, 0.301f, 0.529f, 1.0f};
+#define DEFAULT_COL_NTH_ROW_HIGHLIGHT {0.235f, 0.235f, 0.235f, 1.0f};
+#define DEFAULT_COL_SELECTION {0.352f, 0.352f, 0.352f, 1.0f};
+#define DEFAULT_COL_BUTTON {0.0f, 0.0f, 0.0f, 1.0f};
+#define DEFAULT_COL_ROW_HEADERS {0.313f, 0.313f, 0.313f, 1.0f};
+#define DEFAULT_COL_MUTE {0.156f, 0.156f, 0.941f, 1.0f};
+#define DEFAULT_COL_COLUMN_SEPARATOR {1.00f, 1.00f, 1.00f, 1.00f};
+#define DEFAULT_COL_NOTE {0.392f, 0.509f, 0.784f, 1.00f};
+#define DEFAULT_COL_INSTRUMENT {0.784f, 0.784f, 0.235f, 1.00f};
+#define DEFAULT_COL_VOLUME {0.078f, 0.666f, 0.078f, 1.00f};
 
-
-// add default keyboard bindings
-#define DEFAULT_BINDING_COPY {true, false, false, ImGuiKey_C}
+//default keyboard bindings
+//#define DEFAULT_BINDING_COPY {true, false, false, ImGuiKey_C}
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
@@ -184,28 +198,32 @@ struct KEYBOARD_BINDING
     int KEY = 0;
 };
 
+enum BINDING_NAMES
+{
+    Cut,
+    Copy,
+    Paste,
+};
+
 APP_STATE application_state = EDITOR;
 UI_METRICS UI;
 ACTIVE_CELL active_cell;
-std::array<KEYBOARD_BINDING, 20> app_key;
+std::array<KEYBOARD_BINDING, 20> key_binding;
 
-//ImVec4 col_toggle_button = {1.0f, 0.509f, 0.0f, 1.0f};
-ImVec4 col_toggle_button = DEFAULT_COL_TITLE_TEXT;
-ImVec4 col_title_text = {1.0f, 0.509f, 0.0f, 1.0f};
-ImVec4 col_active_cell = {1.0f, 0.509f, 0.0f, 1.0f};
-ImVec4 col_active_cell_border = {1.0f, 1.0f, 1.0f, 1.0f};
-ImVec4 col_active_row = {0.301f, 0.301f, 0.529f, 1.0f};
-ImVec4 col_nth_row_highlight = {0.235f, 0.235f, 0.235f, 1.0f};
-ImVec4 col_selection = {0.352f, 0.352f, 0.352f, 1.0f};
-ImVec4 col_button = {0.0f, 0.0f, 0.0f, 1.0f};
-ImVec4 col_row_headers = {0.313f, 0.313f, 0.313f, 1.0f};
-ImVec4 col_mute = {0.156f, 0.156f, 0.941f, 1.0f};
-
-ImVec4 col_column_separator = {1.00f, 1.00f, 1.00f, 1.00f};
-
-ImVec4 col_note = {0.392f, 0.509f, 0.784f, 1.00f};
-ImVec4 col_instrument = {0.784f, 0.784f, 0.235f, 1.00f};
-ImVec4 col_volume = {0.078f, 0.666f, 0.078f, 1.00f};
+ImVec4 col_toggle_button = DEFAULT_COL_TOGGLE_BUTTON;
+ImVec4 col_title_text = DEFAULT_COL_TITLE_TEXT;
+ImVec4 col_active_cell = DEFAULT_COL_ACTIVE_CELL;
+ImVec4 col_active_cell_border = DEFAULT_COL_ACTIVE_CELL_BORDER;
+ImVec4 col_active_row = DEFAULT_COL_ACTIVE_ROW;
+ImVec4 col_nth_row_highlight = DEFAULT_COL_NTH_ROW_HIGHLIGHT;
+ImVec4 col_selection = DEFAULT_COL_SELECTION;
+ImVec4 col_button = DEFAULT_COL_BUTTON;
+ImVec4 col_row_headers = DEFAULT_COL_ROW_HEADERS;
+ImVec4 col_mute = DEFAULT_COL_MUTE;
+ImVec4 col_column_separator = DEFAULT_COL_COLUMN_SEPARATOR;
+ImVec4 col_note = DEFAULT_COL_NOTE;
+ImVec4 col_instrument = DEFAULT_COL_INSTRUMENT;
+ImVec4 col_volume = DEFAULT_COL_VOLUME;
 
 int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;

@@ -85,7 +85,7 @@ int main()
     
     ft.GetSection("Sound")->SetValue("volume",10);
     ival = ft.GetValue("Sound:volume",3).AsInt();
-    print(ival);
+    //print(ival);
     
 	// get "value1" from section "Main". If there is no such entry return default value 1
 	//ival = ft.GetSection("Main")->GetValue("value1",1).AsInt();
@@ -102,8 +102,6 @@ int main()
     
     
     ft.Save("settings.ini");
-    
-    
     
 	sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
 	window.setPosition(ImVec2(300,0));
