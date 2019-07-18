@@ -64,6 +64,7 @@ if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTR
 		}
 	}
 }
+
 ImGui::ListBoxFooter();
 
 // Samples list 

@@ -25,11 +25,14 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     switch (page)
     {
         case 0: // keyboard
-        if (ImGui::Checkbox("CTRL", &check_ctrl))
+        
+        for (int i = 0; i < key_binding.size(); ++i)
         {
-            print(check_ctrl);
+            ImGui::Checkbox("CTRL", &key_binding[i].MDFR_CTRL); ImGui::SameLine();
+            ImGui::Checkbox("ALT", &key_binding[i].MDFR_ALT); ImGui::SameLine();
+            ImGui::Checkbox("SHIFT", &key_binding[i].MDFR_SHIFT); ImGui::SameLine();
+            ImGui::Text(key_binding[i].FRIENDLY_NAME.c_str());
         }
-        ImGui::Text("heyyyy!");
         break;
         
         case 1: // colors

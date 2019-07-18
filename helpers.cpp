@@ -617,3 +617,13 @@ void MovePattern(int direction)
     }
     
 }
+
+bool GetModifiers(KEYBOARD_BINDING binding)
+{
+    
+    ImGuiIO& io = ImGui::GetIO();
+    bool result = (binding.MDFR_CTRL == io.KeyCtrl &&
+                   binding.MDFR_ALT == io.KeyAlt &&
+                   binding.MDFR_SHIFT == io.KeyShift);
+    return result;
+}

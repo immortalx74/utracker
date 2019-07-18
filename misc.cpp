@@ -29,7 +29,22 @@
 #define DEFAULT_COL_VOLUME {0.078f, 0.666f, 0.078f, 1.00f};
 
 //default keyboard bindings
-//#define DEFAULT_BINDING_COPY {true, false, false, ImGuiKey_C}
+#define DEFAULT_BINDING_CURSOR_UP {"Cursor Up", false, false, false, ImGuiKey_UpArrow}
+#define DEFAULT_BINDING_CURSOR_DOWN {"Cursor Down", false, false, false, ImGuiKey_DownArrow}
+#define DEFAULT_BINDING_CURSOR_LEFT {"Cursor Left", false, false, false, ImGuiKey_LeftArrow}
+#define DEFAULT_BINDING_CURSOR_RIGHT {"Cursor Right", false, false, false, ImGuiKey_RightArrow}
+#define DEFAULT_BINDING_CUT {"Cut", true, false, false, ImGuiKey_X}
+#define DEFAULT_BINDING_COPY {"Copy", true, false, false, ImGuiKey_C}
+#define DEFAULT_BINDING_PASTE {"Paste", true, false, false, ImGuiKey_V}
+#define DEFAULT_BINDING_SELECT_ALL {"Select All", true, false, false, ImGuiKey_A}
+#define DEFAULT_BINDING_NEXT_INSTRUMENT {"Next Instrument", true, false, false, ImGuiKey_DownArrow}
+#define DEFAULT_BINDING_PREVIOUS_INSTRUMENT {"Previous Instrument", true, false, false, ImGuiKey_UpArrow}
+#define DEFAULT_BINDING_NEXT_PATTERN {"Next Pattern", false, false, false, ImGuiKey_NumpadPlus}
+#define DEFAULT_BINDING_PREVIOUS_PATTERN {"Previous Pattern", false, false, false, ImGuiKey_NumpadMinus}
+#define DEFAULT_BINDING_NEXT_OCTAVE {"Next Octave", false, false, false, ImGuiKey_Multiply}
+#define DEFAULT_BINDING_PREVIOUS_OCTAVE {"Previous Octave", false, false, false, ImGuiKey_Divide}
+#define DEFAULT_BINDING_INCREASE_STEP {"Increase Step", true, false, false, ImGuiKey_RightArrow}
+#define DEFAULT_BINDING_DECREASE_STEP {"Decrease Step", true, false, false, ImGuiKey_LeftArrow}
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
@@ -192,6 +207,7 @@ enum APP_STATE
 
 struct KEYBOARD_BINDING
 {
+    std::string FRIENDLY_NAME;
     bool MDFR_CTRL = false;
     bool MDFR_ALT = false;
     bool MDFR_SHIFT = false;
@@ -200,9 +216,22 @@ struct KEYBOARD_BINDING
 
 enum BINDING_NAMES
 {
+    CursorUp,
+    CursorDown,
+    CursorLeft,
+    CursorRight,
     Cut,
     Copy,
     Paste,
+    SelectAll,
+    NextInstrument,
+    PreviousInstrument,
+    NextPattern,
+    PreviousPattern,
+    NextOctave,
+    PreviousOctave,
+    IncreaseStep,
+    DecreaseStep
 };
 
 APP_STATE application_state = EDITOR;
