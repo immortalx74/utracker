@@ -116,13 +116,6 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         int xxoff = 0;
         for (int k = 0; k < 12; ++k)
         {
-            //if (instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + k] == i)
-            //{
-            //dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
-            //ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), col_active_cell);
-            //}
-            //
-            //xxoff += 28;
             if (instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + k] == i)
             {
                 dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
@@ -144,7 +137,6 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             if (relative_cell_x >=0 && relative_cell_x <= 11 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x >= 0 && mrelative_y >= 0)
             {
                 instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
-                //instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + relative_cell_x] = relative_cell_y;
             }
             else if (relative_cell_x < 0 && relative_cell_y >= 0 && relative_cell_y <= samples_list.size() - 1 && mrelative_x < 0 && mrelative_y >= 0)
             {
@@ -170,7 +162,6 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             for (int i = 0; i < 12; ++i)
             {
                 instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + i]= selected_sample;
-                //instruments_list[active_instrument].SAMPLE_MAP[(12 * samplemap_octave) + i]= selected_sample;
             }
         }
         
@@ -181,7 +172,6 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             for (int i = 0; i < 120; ++i)
             {
                 instruments_list[active_instrument].TEMP_MAP[i]= selected_sample;
-                //instruments_list[active_instrument].SAMPLE_MAP[i]= selected_sample;
             }
         }
         

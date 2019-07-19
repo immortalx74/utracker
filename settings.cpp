@@ -14,7 +14,6 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         page = 1;
     }
     
-    
     ImVec2 parent_pos = ImGui::GetWindowPos();
     ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
     ImGui::BeginChild("##pagecontent", ImVec2(480,338), true);
