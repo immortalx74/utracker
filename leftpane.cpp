@@ -2,6 +2,7 @@
 int app_window_height = io.DisplaySize.y;
 ImGui::SetNextWindowSize(ImVec2(UI.LEFT_PANE_WIDTH, app_window_height));
 ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_X + UI.MARGIN, UI.LEFT_PANE_Y));
+ImGui::PushStyleColor(ImGuiCol_WindowBg, col_window_bg);
 ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
 // patterns list
@@ -12,6 +13,8 @@ ImGui::PopStyleColor();
 UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
 UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
 
+
+ImGui::PushStyleColor(ImGuiCol_FrameBg, col_frame_bg);
 if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -34,6 +37,7 @@ if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS
 	}
 }
 ImGui::ListBoxFooter();
+ImGui::PopStyleColor();
 
 // Instruments list 
 ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
@@ -43,6 +47,8 @@ ImGui::PopStyleColor();
 UI.INSTRUMENTS_LIST_X = ImGui::GetCursorPosX();
 UI.INSTRUMENTS_LIST_Y = ImGui::GetCursorPosY();
 
+
+ImGui::PushStyleColor(ImGuiCol_FrameBg, col_frame_bg);
 if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTRUMENTS_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -66,6 +72,7 @@ if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTR
 }
 
 ImGui::ListBoxFooter();
+ImGui::PopStyleColor();
 
 // Samples list 
 ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
@@ -75,6 +82,7 @@ ImGui::PopStyleColor();
 UI.SAMPLES_LIST_X = ImGui::GetCursorPosX();
 UI.SAMPLES_LIST_Y = ImGui::GetCursorPosY();
 
+ImGui::PushStyleColor(ImGuiCol_FrameBg, col_frame_bg);
 if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -103,7 +111,7 @@ if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_L
 }
 
 ImGui::ListBoxFooter();
-
+ImGui::PopStyleColor();
 
 
 // Draw sliders
@@ -365,3 +373,4 @@ ImGui::PopID();
 
 
 ImGui::End();
+ImGui::PopStyleColor();

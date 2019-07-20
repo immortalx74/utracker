@@ -50,6 +50,7 @@
 #include "helpers.cpp"
 #include "playback.cpp"
 #include "toolbar.cpp"
+#include "ini_settings.cpp"
 
 #pragma comment (lib, "Comdlg32")
 #pragma comment (lib, "OLE32")
@@ -68,42 +69,10 @@
 //} MY_GLOBS;
 //
 
+
 int main()
 {
-    int ival;
-	std::string sval;
-	// Creating ini file object
-	INI::File ft;
-	// Loading from file
-	if (!ft.Load("settings.ini"))
-	{
-		print("hey");
-	}
-    
-	ft.GetSection("Main")->SetValue("value1",20);
-    ft.GetSection("Main")->SetValue("value2","HeyDude");
-    
-    ft.GetSection("Sound")->SetValue("volume",10);
-    ival = ft.GetValue("Sound:volume",3).AsInt();
-    //print(ival);
-    
-	// get "value1" from section "Main". If there is no such entry return default value 1
-	//ival = ft.GetSection("Main")->GetValue("value1",1).AsInt();
-	// get "value2" from section "Main", defaulting to 2
-	//ival = ft.GetValue("Main:value2",2).AsInt();
-	// set "value1" in subsection "subsect" of section "Main"
-	//ft.SetValue("Main.subsect:value1",345.5);
-	// get "value1" from subsection "subsect" of section "Main"
-	//dval = ft.GetSection("Main")->GetSubSection("subsect")->GetValue("value1").AsDouble();
-	// set 4th element of array "array" in section "Main" to 32.1
-	//ft.GetSection("Main")->SetArrayValue("array",4,32.1);
-	// get 4th element of array "array" in section "Main"
-	//dval = ft.GetSection("Main")->GetValue("array").AsArray()[4].AsDouble();
-    
-    
-    ft.Save("settings.ini");
-    
-	sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
 	window.setPosition(ImVec2(300,0));
     window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
@@ -168,7 +137,9 @@ int main()
 		ImGui::SetNextWindowSize(ImVec2(UI.MAIN_WIDTH, UI.MAIN_HEIGHT));
         ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN),
                                        UI.TOOLBAR_HEIGHT + UI.MARGIN));
-		ImGui::Begin("main", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+		
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, col_window_bg);
+        ImGui::Begin("main", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
         
 #include "drawheaders.cpp"
 #include "mouse.cpp"
@@ -178,7 +149,9 @@ int main()
 #include "appstate.cpp"
         
 		ImGui::EndChild();
-		ImGui::End();
+		ImGui::PopStyleColor();
+        ImGui::End();
+        ImGui::PopStyleColor();
         
 		// demo window
 		if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_PageDown)))
@@ -189,6 +162,7 @@ int main()
 		if (show_demo)
 		{
 			ImGui::ShowDemoWindow();
+            //ImGui::ShowStyleEditor();
 		}
 		
 		//======================================================

@@ -1,26 +1,27 @@
 typedef std::chrono::milliseconds ms;
-typedef std::chrono::duration<float> fsec;
+typedef std::chrono::duration<double> fsec;
 
 bool RowTick(double mils)
 {
-	bool looping = true;
+    bool looping = true;
     
-	auto start = std::chrono::high_resolution_clock::now();
-	auto stop = start;
-	while(looping)
-	{
-		stop = std::chrono::high_resolution_clock::now();
-		fsec fs = stop - start;
-		ms d = std::chrono::duration_cast<ms>(fs);
+    auto start = std::chrono::high_resolution_clock::now();
+    auto stop = start;
+    while(looping)
+    {
+        stop = std::chrono::high_resolution_clock::now();
+        fsec fs = stop - start;
+        ms d = std::chrono::duration_cast<ms>(fs);
         
-		if (d.count() >= mils)
-		{
-			looping = false;
-			return true;
-		}
-	}
-	return true;
+        if (d.count() >= mils)
+        {
+            looping = false;
+            return true;
+        }
+    }
+    return true;
 }
+
 
 bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int track_count)
 {
@@ -119,17 +120,16 @@ bool PlayPattern(FMOD::System *fsystem, int start, int end, int track_count)
     
 	for (int i = start; i < end; ++i)
 	{
-		if (RowHasContent(module, i, track_count))
-		{
-            PlayRow(fsystem, i, track_count);
-		}
+        PlayRow(fsystem, i, track_count);
         
-        double row_tick_delay = 60000.0f/(double)bpm/(double)rows_per_beat;
-		future_tick = std::async(std::launch::async, RowTick, row_tick_delay);
-		if (future_tick.get() && i < end - 1)
+        double row_tick_delay = (60000.0f/(double)bpm/(double)rows_per_beat);
+		
+        future_tick = std::async(std::launch::async, RowTick, row_tick_delay);
+		
+        if (future_tick.get() && i < end - 1)
 		{
 			active_cell.ROW++;
-		}
+        }
         
 		if (application_state == EDITOR)
 		{

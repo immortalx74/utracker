@@ -1,6 +1,7 @@
 // draw track headers
 ImGui::SetNextWindowContentSize(ImVec2((tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING, UI.CELL_HEIGHT));
 ImGui::SetCursorPosX(UI.TRACK_HEADERS_START);
+
 ImGui::BeginChild("##trackheaders", ImVec2(0, UI.TRACK_HEADERS_HEIGHT), false);
 ImGui::SetScrollX(grid_scroll_x);
 ImGui::Columns(tracks);
@@ -102,10 +103,12 @@ for (int t = 0; t < tracks_list.size(); ++t)
 
 
 ImGui::EndChild();
+
 ImGui::Columns(1);
 
 // draw row headers
 ImGui::SetNextWindowContentSize(ImVec2(UI.CELL_WIDTH, (patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT) + UI.CELL_WIDTH));
+
 ImGui::BeginChild("##rowheaders", ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar);
 ImGui::SetScrollY(grid_scroll_y);
 ImGui::SetCursorPosY(8);
@@ -118,9 +121,12 @@ for (int p = 0; p < patterns_list[active_pattern].ROWS; ++p)
 }
 ImGui::EndChild();
 
+
 ImGui::SetCursorPosY(UI.MAIN_X + UI.TRACK_HEADERS_HEIGHT + UI.MARGIN);
 ImGui::SetCursorPosX(UI.CELL_WIDTH + 8);
 ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT));
+
+ImGui::PushStyleColor(ImGuiCol_ChildBg, col_grid_bg);
 ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 grid_scroll_x = ImGui::GetScrollX(); // update scroll_x to sync with track headers scrolling

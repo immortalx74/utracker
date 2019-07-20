@@ -27,6 +27,9 @@
 #define DEFAULT_COL_NOTE {0.392f, 0.509f, 0.784f, 1.00f};
 #define DEFAULT_COL_INSTRUMENT {0.784f, 0.784f, 0.235f, 1.00f};
 #define DEFAULT_COL_VOLUME {0.078f, 0.666f, 0.078f, 1.00f};
+#define DEFAULT_COL_WINDOW_BG {0.06f, 0.06f, 0.06f, 0.94f};
+#define DEFAULT_COL_FRAME_BG {0.16f, 0.29f, 0.48f, 0.54f};
+#define DEFAULT_COL_GRID_BG {0.06f, 0.06f, 0.06f, 0.94f};
 
 //default keyboard bindings
 #define DEFAULT_BINDING_CURSOR_UP {"Cursor Up", false, false, false, ImGuiKey_UpArrow}
@@ -214,6 +217,8 @@ struct KEYBOARD_BINDING
     int KEY = 0;
 };
 
+
+
 enum BINDING_NAMES
 {
     CursorUp,
@@ -237,7 +242,7 @@ enum BINDING_NAMES
 APP_STATE application_state = EDITOR;
 UI_METRICS UI;
 ACTIVE_CELL active_cell;
-std::array<KEYBOARD_BINDING, 20> key_binding;
+std::array<KEYBOARD_BINDING, 16> key_binding; // change size when adding new binding
 
 ImVec4 col_toggle_button = DEFAULT_COL_TOGGLE_BUTTON;
 ImVec4 col_title_text = DEFAULT_COL_TITLE_TEXT;
@@ -253,6 +258,9 @@ ImVec4 col_column_separator = DEFAULT_COL_COLUMN_SEPARATOR;
 ImVec4 col_note = DEFAULT_COL_NOTE;
 ImVec4 col_instrument = DEFAULT_COL_INSTRUMENT;
 ImVec4 col_volume = DEFAULT_COL_VOLUME;
+ImVec4 col_window_bg = DEFAULT_COL_WINDOW_BG;
+ImVec4 col_frame_bg = DEFAULT_COL_FRAME_BG;
+ImVec4 col_grid_bg = DEFAULT_COL_GRID_BG;
 
 int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;
@@ -293,3 +301,84 @@ std::vector<std::vector<NOTE_DATA>> module;
 SELECTION selection;
 
 CLIPBOARD clipboard;
+
+// change size when adding new key name
+std::array<std::string, 77> key_names = {
+    "Tab",
+    "Left Arrow",
+    "Right Arrow",
+    "Up Arrow",
+    "Down Arrow",
+    "Page Up",
+    "Page Down",
+    "Home",
+    "End",
+    "Insert",
+    "Delete",
+    "BackSpace",
+    "Space",
+    "Return",
+    "Escape",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "Numpad0",
+    "Numpad1",
+    "Numpad2",
+    "Numpad3",
+    "Numpad4",
+    "Numpad5",
+    "Numpad6",
+    "Numpad7",
+    "Numpad8",
+    "Numpad9",
+    "+",
+    "-",
+    "/",
+    "*"
+};
