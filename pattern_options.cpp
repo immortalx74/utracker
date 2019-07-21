@@ -14,12 +14,12 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     }
     
     ImGui::PushItemWidth(200);
-    ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+    ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
     ImGui::Text("Number of rows");
     ImGui::SliderInt("##numofrows", &r, 1, MAX_ROWS_PER_PATTERN);
     ImGui::PopStyleColor();
     
-    ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+    ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
     ImGui::Text("Pattern name");
     ImGui::PopStyleColor();
     

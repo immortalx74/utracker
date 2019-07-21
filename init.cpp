@@ -1,40 +1,19 @@
-//===========================================================================
-//INI::File ft;
-//
-//if (!ft.Load("settings.ini"))
-//{
-//print("INI ERROR!");
-//}
-//
-//for (int i = 0; i < key_binding.size(); ++i)
-//{
-//std::string color_name = key_binding[i].FRIENDLY_NAME;
-//std::string final_string = "Colors:" + color_name;
-//ft.SetValue(final_string, 50);
-//}
-//
-//ft.Save("settings.ini");
-
-//===========================================================================
-
-
-
 LoadTextures();
 
 io.ConfigWindowsMoveFromTitleBarOnly = true;
 ImVec4* colors = ImGui::GetStyle().Colors;
-colors[ImGuiCol_Separator] = col_column_separator;
-colors[ImGuiCol_SeparatorHovered] = col_column_separator;
-colors[ImGuiCol_SeparatorActive] = col_column_separator;
+colors[ImGuiCol_Separator] = col_track_separator;
+colors[ImGuiCol_SeparatorHovered] = col_track_separator;
+colors[ImGuiCol_SeparatorActive] = col_track_separator;
 
 ImGuiStyle& style = ImGui::GetStyle();
 style.FrameBorderSize = 1.0f;
 
-FMOD::System     *fsystem;
-FMOD::Sound      *sound;
-FMOD::Channel    *channel = 0;
-FMOD::ChannelGroup *channelgroup;
-FMOD_RESULT       result;
+//FMOD::System     *fsystem;
+//FMOD::Sound      *sound;
+//FMOD::Channel    *channel = 0;
+//FMOD::ChannelGroup *channelgroup;
+//FMOD_RESULT       result;
 
 result = FMOD::System_Create(&fsystem);
 ERRCHECK(result);
@@ -84,6 +63,23 @@ key_binding[PreviousOctave] = DEFAULT_BINDING_PREVIOUS_OCTAVE;
 key_binding[IncreaseStep] = DEFAULT_BINDING_INCREASE_STEP;
 key_binding[DecreaseStep] = DEFAULT_BINDING_DECREASE_STEP;
 
+color_info[HeadingText] = {"Heading Text", col_heading_text, DEFAULT_COL_HEADING_TEXT};
+color_info[Cursor] = {"Cursor", col_cursor, DEFAULT_COL_CURSOR};
+color_info[CursorBorder] = {"Cursor Border", col_cursor_border, DEFAULT_COL_CURSOR_BORDER};
+color_info[CurrentRow] = {"Current Row", col_current_row, DEFAULT_COL_CURRENT_ROW};
+color_info[NthRowHighlight] = {"Nth Row Highlight", col_nth_row_highlight, DEFAULT_COL_NTH_ROW_HIGHLIGHT};
+color_info[SelectionRectangle] = {"Selection Rectangle", col_selection_rectangle, DEFAULT_COL_SELECTION_RECTANGLE};
+color_info[Buttons] = {"Buttons", col_buttons, DEFAULT_COL_BUTTONS};
+color_info[NoteText] = {"Note Text", col_note_text, DEFAULT_COL_NOTE_TEXT};
+color_info[InstrumentText] = {"Instrument Text", col_instrument_text, DEFAULT_COL_INSTRUMENT_TEXT};
+color_info[VolumeText] = {"Volume Text", col_volume_text, DEFAULT_COL_VOLUME_TEXT};
+color_info[WindowBackground] = {"Window Background", col_window_background, DEFAULT_COL_WINDOW_BACKGROUND};
+color_info[FrameBackground] = {"Frame Background", col_frame_background, DEFAULT_COL_FRAME_BACKGROUND};
+color_info[PatternBackground] = {"Pattern Background", col_pattern_background, DEFAULT_COL_PATTERN_BACKGROUND};
+color_info[ToggleButton] = {"Toggle Button", col_toggle_button, DEFAULT_COL_TOGGLE_BUTTON};
+color_info[MuteButton] = {"Mute Button", col_mute_button, DEFAULT_COL_MUTE_BUTTON};
+color_info[Text] = {"Text", col_text, DEFAULT_COL_TEXT};
+color_info[PatternForeground] = {"Pattern Foreground", col_pattern_foreground, DEFAULT_COL_PATTERN_FOREGROUND};
 
 IniLoadSettings();
 

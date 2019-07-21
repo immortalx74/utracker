@@ -12,7 +12,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         enable_write = true;
     }
     
-    ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+    ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
     ImGui::Text("Instrument name");
     ImGui::PopStyleColor();
     
@@ -21,7 +21,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     ImGui::InputText("##instrumentnname", current_instrument_name, 24, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank);
     ImGui::PopItemWidth();
     
-    ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+    ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
     ImGui::Spacing();
     ImGui::Spacing();
     //======================================================
@@ -67,12 +67,12 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     int mrelative_x = ImGui::GetMousePos().x - 176 - ImGui::GetWindowPos().x;
     int mrelative_y = ImGui::GetMousePos().y - 8 - ImGui::GetWindowPos().y;
     
-    dl->AddLine(ImVec2(cpx,cpy+so), ImVec2(cpx,cpy+(list_size * 17)+so),ImColor(col_active_cell_border));
+    dl->AddLine(ImVec2(cpx,cpy+so), ImVec2(cpx,cpy+(list_size * 17)+so),ImColor(col_cursor_border));
     
     // vertical separators
     for (int j = 0; j < 13; ++j)
     {
-        dl->AddLine(ImVec2(cpx+xoff,cpy+so), ImVec2(cpx+xoff,cpy+(list_size * 17)+so),ImColor(col_active_cell_border));
+        dl->AddLine(ImVec2(cpx+xoff,cpy+so), ImVec2(cpx+xoff,cpy+(list_size * 17)+so),ImColor(col_cursor_border));
         xoff += 28;
     }
     
@@ -81,7 +81,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     
     for (int i = 0; i < samples_list.size(); ++i)
     {
-        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+8,ImGui::GetWindowPos().y+8-so), ImVec2(ImGui::GetWindowPos().x+512,ImGui::GetWindowPos().y+8-so), ImColor(col_active_cell_border));
+        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+8,ImGui::GetWindowPos().y+8-so), ImVec2(ImGui::GetWindowPos().x+512,ImGui::GetWindowPos().y+8-so), ImColor(col_cursor_border));
         
         std::string full_name = samples_list[i].NAME;
         std::string trunc_name = full_name.substr(0, 20);
@@ -97,11 +97,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         ImVec4 col;
         if (selected_sample == i)
         {
-            col = col_title_text;
-        }
-        else
-        {
-            col = col_row_headers;
+            col = col_heading_text;
         }
         
         ImGui::PushStyleColor(ImGuiCol_Text, col);
@@ -111,7 +107,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         csp = ImGui::GetCursorPos();
         cpx = csp.x;
         cpy = csp.y;
-        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+cpx,ImGui::GetWindowPos().y+cpy-so), ImVec2(ImGui::GetWindowPos().x+cpx+504,ImGui::GetWindowPos().y+cpy-so), ImColor(col_active_cell_border));
+        dl->AddLine(ImVec2(ImGui::GetWindowPos().x+cpx,ImGui::GetWindowPos().y+cpy-so), ImVec2(ImGui::GetWindowPos().x+cpx+504,ImGui::GetWindowPos().y+cpy-so), ImColor(col_cursor_border));
         
         int xxoff = 0;
         for (int k = 0; k < 12; ++k)
@@ -119,7 +115,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
             if (instruments_list[active_instrument].TEMP_MAP[(12 * samplemap_octave) + k] == i)
             {
                 dl->AddRectFilled(ImVec2(ImGui::GetWindowPos().x+177 + xxoff,ImGui::GetWindowPos().y+cpy-16-so),
-                                  ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), ImColor(col_active_cell));
+                                  ImVec2(ImGui::GetWindowPos().x+177 + xxoff + 26,ImGui::GetWindowPos().y+cpy-so), ImColor(col_cursor));
             }
             
             xxoff += 28;
@@ -151,11 +147,11 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     // Assign sample to octave(s)
     if (selected_sample >= 0 && selected_sample < samples_list.size())
     {
-        ImGui::PushStyleColor(ImGuiCol_Text, col_title_text);
+        ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
         ImGui::Text("Assign selected sample to:");
         ImGui::PopStyleColor();
         
-        ImGui::PushStyleColor(ImGuiCol_Button, col_button);
+        ImGui::PushStyleColor(ImGuiCol_Button, col_buttons);
         
         if (ImGui::Button("Current octave"))
         {

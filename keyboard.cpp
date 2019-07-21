@@ -230,7 +230,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
                     {
                         int sample_index = NoteToSample(keychar, active_instrument);
                         FMOD::Sound *s = samples_list[sample_index].SOUND;
-                        PlayNote(fsystem, channel, s, channelgroup, freq);
+                        PlayNote(channel, s, channelgroup, freq);
                     }
                     
                     int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;

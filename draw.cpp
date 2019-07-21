@@ -12,25 +12,26 @@ for (int r = 0; r < pattern_rows; r += nth_row_highlight)
 {
 	highlight_tl = ImVec2(c.x-4, c.y);
 	highlight_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
-	draw_list->AddRectFilled(highlight_tl, highlight_br, ImColor(col_nth_row_highlight));
+	draw_list->AddRectFilled(highlight_tl, highlight_br, ImColor(color_info[NthRowHighlight].COLOR_VALUE));
 	c.y += nth_row_highlight * UI.CELL_HEIGHT;
 }
 
 // draw active row
 ImVec2 row_tl = ImVec2(c.x-4, active_cell.Y - ImGui::GetScrollY());
 ImVec2 row_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH)-8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
-draw_list->AddRectFilled(row_tl, row_br, ImColor(col_active_row));
+//draw_list->AddRectFilled(row_tl, row_br, ImColor(col_current_row));
+draw_list->AddRectFilled(row_tl, row_br, ImColor(color_info[CurrentRow].COLOR_VALUE));
 
 // draw active cell
 ImVec2 cell_tl = ImVec2(active_cell.X - ImGui::GetScrollX(), active_cell.Y - ImGui::GetScrollY());
 ImVec2 cell_br = ImVec2(active_cell.X + UI.CELL_WIDTH - ImGui::GetScrollX(), active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
 
-draw_list->AddRectFilled(cell_tl, cell_br, ImColor(col_active_cell));
+draw_list->AddRectFilled(cell_tl, cell_br, ImColor(color_info[Cursor].COLOR_VALUE));
 
 if (ImGui::IsWindowFocused())
 {
 	
-	draw_list->AddRect(cell_tl, cell_br, ImColor(col_active_cell_border));
+	draw_list->AddRect(cell_tl, cell_br, ImColor(color_info[CursorBorder].COLOR_VALUE));
 }
 
 // Auto scroll when using arrow keys / on playback
@@ -105,7 +106,7 @@ if (selection_exists)
     
     ImVec2 selection_tl = ImVec2((scol * UI.CELL_WIDTH) + winx - ImGui::GetScrollX(), (srow * UI.CELL_HEIGHT) + winy - ImGui::GetScrollY());
 	ImVec2 selection_br = ImVec2((ecol * UI.CELL_WIDTH) + winx - ImGui::GetScrollX(), (erow * UI.CELL_HEIGHT) + winy - ImGui::GetScrollY());
-	draw_list->AddRectFilled(selection_tl, selection_br, ImColor(col_selection));
+	draw_list->AddRectFilled(selection_tl, selection_br, ImColor(color_info[SelectionRectangle].COLOR_VALUE));
 }
 
 ImGui::Columns(tracks);
@@ -117,20 +118,22 @@ for (int i = pattern_start; i < pattern_end; ++i)
     {
         if (module[i][j].NAME != "---")
         {
-            ImGui::PushStyleColor(ImGuiCol_Text, col_note);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[NoteText].COLOR_VALUE);
             ImGui::Text(module[i][j].NAME.c_str());
             ImGui::PopStyleColor();		
         }
         else
         {
-            ImGui::Text(module[i][j].NAME.c_str());	
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[PatternForeground].COLOR_VALUE);
+            ImGui::Text(module[i][j].NAME.c_str());
+            ImGui::PopStyleColor();
         }
         
         ImGui::SameLine();
         
         if (module[i][j].INSTRUMENT != 0)
         {
-            ImGui::PushStyleColor(ImGuiCol_Text, col_instrument);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[InstrumentText].COLOR_VALUE);
             int instr = module[i][j].INSTRUMENT;
             std::string instr_str = std::to_string(instr);
             if (instr < 10) 
@@ -146,13 +149,15 @@ for (int i = pattern_start; i < pattern_end; ++i)
         }
         else
         {
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[PatternForeground].COLOR_VALUE);
             ImGui::Text(" --");
+            ImGui::PopStyleColor();
         }
         ImGui::SameLine();
         
         if (module[i][j].VOLUME != 0.0f)
         {
-            ImGui::PushStyleColor(ImGuiCol_Text, col_volume);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[VolumeText].COLOR_VALUE);
             int vol = module[i][j].VOLUME;
             std::string vol_str = std::to_string(vol);
             if (vol < 10)
@@ -168,7 +173,9 @@ for (int i = pattern_start; i < pattern_end; ++i)
         }
         else
         {
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[PatternForeground].COLOR_VALUE);
             ImGui::Text(" --");
+            ImGui::PopStyleColor();
         }
         ImGui::SameLine();
         
@@ -178,7 +185,9 @@ for (int i = pattern_start; i < pattern_end; ++i)
         }
         else
         {
+            ImGui::PushStyleColor(ImGuiCol_Text, color_info[PatternForeground].COLOR_VALUE);
             ImGui::Text("---");
+            ImGui::PopStyleColor();
         }
         
         ImGui::NextColumn();

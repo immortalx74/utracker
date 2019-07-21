@@ -1,7 +1,5 @@
 //============================================================================
 // - Check if a sample was removed from disk (popup warning? something else?).
-// - Calculate correct speed (BPM relationship with rows_per_beat).
-// - Possible bug when changing BPM/ticks while on playback. (slows down?)
 // - Implement move up/move down for patterns/instruments.
 //   What should happen when moving/deleting patterns/instruments?
 // - Bug when playing module. Notes should stop just like when playing
@@ -11,7 +9,7 @@
 //   min/max.NOTE:This is an imgui issue.
 // - Implement saving/loading application settings. Suggested fields:
 //   Default new pattern rows/track count/BPM/Ticks/Middle octave.
-//   Window state (pos/size/maximized). Color scheme. Keyb shortcuts.
+//   Window state (pos/size/maximized).
 // - Read/Write file format.
 // - WAV export.
 // - Right click context menu: Shift note(s) up/down by 1 or by octave,
@@ -74,7 +72,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
 	window.setPosition(ImVec2(300,0));
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(30);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
     sf::Clock deltaClock;
@@ -94,7 +92,7 @@ int main()
 		fsystem->update();
 		io.KeyRepeatRate = 0.035f;
         
-		ImGui::PushStyleColor(ImGuiCol_Button, col_button);
+		ImGui::PushStyleColor(ImGuiCol_Button, color_info[Buttons].COLOR_VALUE);
         
 #include "leftpane.cpp"
         
@@ -138,7 +136,7 @@ int main()
         ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN),
                                        UI.TOOLBAR_HEIGHT + UI.MARGIN));
 		
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, col_window_bg);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, color_info[WindowBackground].COLOR_VALUE);
         ImGui::Begin("main", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
         
 #include "drawheaders.cpp"
@@ -172,8 +170,8 @@ int main()
 	}
     
     // shut down
-    result = fsystem->close();
-    ERRCHECK(result);
+    //result = fsystem->close();
+    //ERRCHECK(result);
     result = fsystem->release();
     ERRCHECK(result);
     

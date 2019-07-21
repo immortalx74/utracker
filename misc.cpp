@@ -1,3 +1,23 @@
+#define ABOUT_TEXT "Tracker v0.1 alpha 2019\n\
+By John Dodis (Immortalx) jfdodis@yahoo.com\n\
+\n\
+Credits:\n\
+\n\
+Omar Cornut for the amazing Dear ImGui UI library\n\
+https://github.com/ocornut/imgui\n\
+\n\
+Firelight Technologies for the powerful FMOD audio library\n\
+https://www.fmod.com/\n\
+\n\
+Sam Hocevar for the suprisingly easy portable file dialogs\n\
+https://github.com/samhocevar/portable-file-dialogs\n\
+\n\
+Lek-sys for his straight-forward ini parser\n\
+https://github.com/Lek-sys/LeksysINI\n\
+\n\
+Last but not least, my son for helping me out with everything!\n\
+https://github.com/mdodis"
+
 //hard limits
 #define MAX_TRACKS_PER_MODULE 32
 #define MAX_PATTERNS_PER_MODULE 32
@@ -13,23 +33,25 @@
 #define DEFAULT_ROWS_PER_BEAT 4
 
 //default colors
-#define DEFAULT_COL_TOGGLE_BUTTON {1.0f, 0.509f, 0.0f, 1.0f};
-#define DEFAULT_COL_TITLE_TEXT {1.0f, 0.509f, 0.0f, 1.0f};
-#define DEFAULT_COL_ACTIVE_CELL {1.0f, 0.509f, 0.0f, 1.0f};
-#define DEFAULT_COL_ACTIVE_CELL_BORDER {1.0f, 1.0f, 1.0f, 1.0f};
-#define DEFAULT_COL_ACTIVE_ROW {0.301f, 0.301f, 0.529f, 1.0f};
-#define DEFAULT_COL_NTH_ROW_HIGHLIGHT {0.235f, 0.235f, 0.235f, 1.0f};
-#define DEFAULT_COL_SELECTION {0.352f, 0.352f, 0.352f, 1.0f};
-#define DEFAULT_COL_BUTTON {0.0f, 0.0f, 0.0f, 1.0f};
-#define DEFAULT_COL_ROW_HEADERS {0.313f, 0.313f, 0.313f, 1.0f};
-#define DEFAULT_COL_MUTE {0.156f, 0.156f, 0.941f, 1.0f};
-#define DEFAULT_COL_COLUMN_SEPARATOR {1.00f, 1.00f, 1.00f, 1.00f};
-#define DEFAULT_COL_NOTE {0.392f, 0.509f, 0.784f, 1.00f};
-#define DEFAULT_COL_INSTRUMENT {0.784f, 0.784f, 0.235f, 1.00f};
-#define DEFAULT_COL_VOLUME {0.078f, 0.666f, 0.078f, 1.00f};
-#define DEFAULT_COL_WINDOW_BG {0.06f, 0.06f, 0.06f, 0.94f};
-#define DEFAULT_COL_FRAME_BG {0.16f, 0.29f, 0.48f, 0.54f};
-#define DEFAULT_COL_GRID_BG {0.06f, 0.06f, 0.06f, 0.94f};
+#define DEFAULT_COL_TOGGLE_BUTTON {1.0f, 0.509f, 0.0f, 1.0f}
+#define DEFAULT_COL_HEADING_TEXT {1.0f, 0.509f, 0.0f, 1.0f}
+#define DEFAULT_COL_CURSOR {1.0f, 0.509f, 0.0f, 1.0f}
+#define DEFAULT_COL_CURSOR_BORDER {1.0f, 1.0f, 1.0f, 1.0f}
+#define DEFAULT_COL_CURRENT_ROW {0.301f, 0.301f, 0.529f, 1.0f}
+#define DEFAULT_COL_NTH_ROW_HIGHLIGHT {0.235f, 0.235f, 0.235f, 1.0f}
+#define DEFAULT_COL_SELECTION_RECTANGLE {0.352f, 0.352f, 0.352f, 1.0f}
+#define DEFAULT_COL_BUTTONS {0.0f, 0.0f, 0.0f, 1.0f}
+#define DEFAULT_COL_MUTE_BUTTON {0.156f, 0.156f, 0.941f, 1.0f}
+#define DEFAULT_COL_TRACK_SEPARATOR {1.00f, 1.00f, 1.00f, 1.00f}
+#define DEFAULT_COL_NOTE_TEXT {0.392f, 0.509f, 0.784f, 1.00f}
+#define DEFAULT_COL_INSTRUMENT_TEXT {0.784f, 0.784f, 0.235f, 1.00f}
+#define DEFAULT_COL_VOLUME_TEXT {0.078f, 0.666f, 0.078f, 1.00f}
+#define DEFAULT_COL_WINDOW_BACKGROUND {0.06f, 0.06f, 0.06f, 0.94f}
+#define DEFAULT_COL_FRAME_BACKGROUND {0.16f, 0.29f, 0.48f, 0.54f}
+#define DEFAULT_COL_PATTERN_BACKGROUND {0.06f, 0.06f, 0.06f, 0.94f}
+#define DEFAULT_COL_TEXT {1.0f, 1.0f, 1.0f, 1.0f}
+#define DEFAULT_COL_PATTERN_FOREGROUND {1.0f, 1.0f, 1.0f, 1.0f}
+
 
 //default keyboard bindings
 #define DEFAULT_BINDING_CURSOR_UP {"Cursor Up", false, false, false, ImGuiKey_UpArrow}
@@ -239,28 +261,31 @@ enum BINDING_NAMES
     DecreaseStep
 };
 
+
+
 APP_STATE application_state = EDITOR;
 UI_METRICS UI;
 ACTIVE_CELL active_cell;
 std::array<KEYBOARD_BINDING, 16> key_binding; // change size when adding new binding
 
 ImVec4 col_toggle_button = DEFAULT_COL_TOGGLE_BUTTON;
-ImVec4 col_title_text = DEFAULT_COL_TITLE_TEXT;
-ImVec4 col_active_cell = DEFAULT_COL_ACTIVE_CELL;
-ImVec4 col_active_cell_border = DEFAULT_COL_ACTIVE_CELL_BORDER;
-ImVec4 col_active_row = DEFAULT_COL_ACTIVE_ROW;
+ImVec4 col_heading_text = DEFAULT_COL_HEADING_TEXT;
+ImVec4 col_cursor = DEFAULT_COL_CURSOR;
+ImVec4 col_cursor_border = DEFAULT_COL_CURSOR_BORDER;
+ImVec4 col_current_row = DEFAULT_COL_CURRENT_ROW;
 ImVec4 col_nth_row_highlight = DEFAULT_COL_NTH_ROW_HIGHLIGHT;
-ImVec4 col_selection = DEFAULT_COL_SELECTION;
-ImVec4 col_button = DEFAULT_COL_BUTTON;
-ImVec4 col_row_headers = DEFAULT_COL_ROW_HEADERS;
-ImVec4 col_mute = DEFAULT_COL_MUTE;
-ImVec4 col_column_separator = DEFAULT_COL_COLUMN_SEPARATOR;
-ImVec4 col_note = DEFAULT_COL_NOTE;
-ImVec4 col_instrument = DEFAULT_COL_INSTRUMENT;
-ImVec4 col_volume = DEFAULT_COL_VOLUME;
-ImVec4 col_window_bg = DEFAULT_COL_WINDOW_BG;
-ImVec4 col_frame_bg = DEFAULT_COL_FRAME_BG;
-ImVec4 col_grid_bg = DEFAULT_COL_GRID_BG;
+ImVec4 col_selection_rectangle = DEFAULT_COL_SELECTION_RECTANGLE;
+ImVec4 col_buttons = DEFAULT_COL_BUTTONS;
+ImVec4 col_mute_button = DEFAULT_COL_MUTE_BUTTON;
+ImVec4 col_track_separator = DEFAULT_COL_TRACK_SEPARATOR;
+ImVec4 col_note_text = DEFAULT_COL_NOTE_TEXT;
+ImVec4 col_instrument_text = DEFAULT_COL_INSTRUMENT_TEXT;
+ImVec4 col_volume_text = DEFAULT_COL_VOLUME_TEXT;
+ImVec4 col_window_background = DEFAULT_COL_WINDOW_BACKGROUND;
+ImVec4 col_frame_background = DEFAULT_COL_FRAME_BACKGROUND;
+ImVec4 col_pattern_background = DEFAULT_COL_PATTERN_BACKGROUND;
+ImVec4 col_text = DEFAULT_COL_TEXT;
+ImVec4 col_pattern_foreground = DEFAULT_COL_PATTERN_FOREGROUND;
 
 int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;
@@ -301,6 +326,37 @@ std::vector<std::vector<NOTE_DATA>> module;
 SELECTION selection;
 
 CLIPBOARD clipboard;
+
+struct COLOR_INFO
+{
+    std::string COLOR_NAME;
+    ImVec4 COLOR_VALUE;
+    ImVec4 DEFAULT_COLOR_VALUE;
+};
+
+enum APP_COLORS
+{
+    HeadingText,
+    Cursor,
+    CursorBorder,
+    CurrentRow,
+    NthRowHighlight,
+    SelectionRectangle,
+    Buttons,
+    NoteText,
+    InstrumentText,
+    VolumeText,
+    WindowBackground,
+    FrameBackground,
+    PatternBackground,
+    ToggleButton,
+    MuteButton,
+    Text,
+    PatternForeground
+};
+
+// change size when adding new col definitions
+std::array<COLOR_INFO, 17> color_info;
 
 // change size when adding new key name
 std::array<std::string, 77> key_names = {
@@ -382,3 +438,12 @@ std::array<std::string, 77> key_names = {
     "/",
     "*"
 };
+
+
+FMOD::System     *fsystem;
+FMOD::Sound      *sound;
+FMOD::Channel    *channel = 0;
+FMOD::ChannelGroup *channelgroup;
+FMOD_RESULT       result;
+
+unsigned long long parentclock = 0;

@@ -141,6 +141,8 @@ bool CreatePattern(std::vector<PATTERN_> &patterns_list,
 		
         module.push_back(row);
     }
+    
+    active_pattern = patterns_list.size() - 1;
 	
 	return true;
 }
@@ -197,10 +199,8 @@ bool CreateInstrument(std::vector<INSTRUMENT> &instruments_list)
         new_instrument.NAME = "(no name)";
     }
     
-    
-    // TODO: Add default sample map here
-    
     instruments_list.push_back(new_instrument);
+    active_instrument = instruments_list.size() - 1;
     
     return true;
 }
@@ -433,6 +433,8 @@ bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename, FMOD::S
     new_sample.SOUND = snd;
     
     samples_list.push_back(new_sample);
+    
+    active_sample = samples_list.size() - 1;
     return true;
 }
 

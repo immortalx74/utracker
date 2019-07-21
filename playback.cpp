@@ -44,7 +44,7 @@ bool RowHasContent(std::vector<std::vector<NOTE_DATA>> &module, int row, int tra
 	return false;
 }
 
-bool PlayNote(FMOD::System *fsystem, FMOD::Channel *channel, FMOD::Sound *sound,
+bool PlayNote(FMOD::Channel *channel, FMOD::Sound *sound,
               FMOD::ChannelGroup *channelgroup,float frequency)
 {
 	FMOD_RESULT result;
@@ -103,6 +103,7 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
 			ERRCHECK(result);
             
             ch->setPaused(false);
+            
 		}
         
         else if (module[row][i].NAME == "= =")
@@ -114,7 +115,7 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
 	return true;
 }
 
-bool PlayPattern(FMOD::System *fsystem, int start, int end, int track_count)
+bool PlayPattern(int start, int end, int track_count)
 {
 	FMOD_RESULT result;
     
@@ -125,7 +126,7 @@ bool PlayPattern(FMOD::System *fsystem, int start, int end, int track_count)
         double row_tick_delay = (60000.0f/(double)bpm/(double)rows_per_beat);
 		
         future_tick = std::async(std::launch::async, RowTick, row_tick_delay);
-		
+        
         if (future_tick.get() && i < end - 1)
 		{
 			active_cell.ROW++;
@@ -145,7 +146,7 @@ bool PlayPattern(FMOD::System *fsystem, int start, int end, int track_count)
 }
 
 
-bool PlayModule(FMOD::System *fsystem, int start, int end, int track_count)
+bool PlayModule(int start, int end, int track_count)
 {
 	FMOD_RESULT result;
 	float freq;
@@ -159,7 +160,7 @@ bool PlayModule(FMOD::System *fsystem, int start, int end, int track_count)
         pat_rows = patterns_list[active_pattern].ROWS;
         pat_end = pat_start + pat_rows;
         
-		PlayPattern(fsystem, pat_start, pat_end, track_count);
+		PlayPattern(pat_start, pat_end, track_count);
         
 		if (active_pattern < end - 1)
 		{

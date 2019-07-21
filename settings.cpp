@@ -13,6 +13,15 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     {
         page = 1;
     }
+    if (ImGui::Button("Sound", ImVec2(80, 0)))
+    {
+        page = 2;
+    }
+    
+    if (ImGui::Button("About", ImVec2(80, 0)))
+    {
+        page = 3;
+    }
     
     ImVec2 parent_pos = ImGui::GetWindowPos();
     
@@ -21,6 +30,7 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     static bool check_shift = false;
     static int selected = 0;
     std::string binding_name;
+    std::string color_name;
     std::string section_and_name;
     INI::File ft;
     ft.Load("settings.ini");
@@ -103,20 +113,40 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
         ImGui::BeginChild("##page1", ImVec2(260,338), true);
         
-        ImGui::ColorEdit4("Heading Text", (float*)&col_title_text, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Cursor", (float*)&col_active_cell, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Cursor Border", (float*)&col_active_cell_border, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Current Row", (float*)&col_active_row, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Nth Row Highlight", (float*)&col_nth_row_highlight, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Selection Rectangle", (float*)&col_selection, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Buttons", (float*)&col_button, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Note Text", (float*)&col_note, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Instrument Text", (float*)&col_instrument, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Volume Text", (float*)&col_volume, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Window Background", (float*)&col_window_bg, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Frame Background", (float*)&col_frame_bg, ImGuiColorEditFlags_NoInputs);
-        ImGui::ColorEdit4("Pattern Background", (float*)&col_grid_bg, ImGuiColorEditFlags_NoInputs);
+        for (int j = 0; j < color_info.size(); ++j)
+        {
+            color_name = color_info[j].COLOR_NAME;
+            section_and_name = "Colors:" + color_name;
+            
+            if (ImGui::ColorEdit4(color_info[j].COLOR_NAME.c_str(), (float*)&color_info[j].COLOR_VALUE, ImGuiColorEditFlags_NoInputs))
+            {
+                float valx = (color_info[j].COLOR_VALUE.x * 100) / 100;
+                float valy = (color_info[j].COLOR_VALUE.y * 100) / 100;
+                float valz = (color_info[j].COLOR_VALUE.z * 100) / 100;
+                float valw = (color_info[j].COLOR_VALUE.w * 100) / 100;
+                ft.SetArrayValue(section_and_name, 0, valx);
+                ft.SetArrayValue(section_and_name, 1, valy);
+                ft.SetArrayValue(section_and_name, 2, valz);
+                ft.SetArrayValue(section_and_name, 3, valw);
+                ft.Save("settings.ini");
+            }
+            
+        }
         
+        ImGui::EndChild();
+        break;
+        
+        case 2: // TODO:sound
+        ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
+        ImGui::BeginChild("##page2", ImVec2(260,338), true);
+        ImGui::EndChild();
+        break;
+        
+        case 3: // about
+        ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
+        ImGui::BeginChild("##page3", ImVec2(480,338), true);
+        //ImGui::Text(ABOUT_TEXT);
+        ImGui::InputTextMultiline("##aboutbox", ABOUT_TEXT, 600, ImVec2(450,324));
         ImGui::EndChild();
         break;
     }
@@ -125,37 +155,7 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     
     if (ImGui::Button("Reset to Defaults"))
     {
-        col_title_text = DEFAULT_COL_TITLE_TEXT;
-        col_active_cell = DEFAULT_COL_ACTIVE_CELL;
-        col_active_cell_border = DEFAULT_COL_ACTIVE_CELL_BORDER;
-        col_active_row = DEFAULT_COL_ACTIVE_ROW;
-        col_nth_row_highlight = DEFAULT_COL_NTH_ROW_HIGHLIGHT;
-        col_selection = DEFAULT_COL_SELECTION;
-        col_button = DEFAULT_COL_BUTTON;
-        col_note = DEFAULT_COL_NOTE;
-        col_instrument = DEFAULT_COL_INSTRUMENT;
-        col_volume = DEFAULT_COL_VOLUME;
-        col_window_bg = DEFAULT_COL_WINDOW_BG;
-        col_frame_bg = DEFAULT_COL_FRAME_BG;
-        col_grid_bg = DEFAULT_COL_GRID_BG;
-        
-        key_binding[Cut] = DEFAULT_BINDING_CUT;
-        key_binding[Copy] = DEFAULT_BINDING_COPY;
-        key_binding[Paste] = DEFAULT_BINDING_PASTE;
-        key_binding[SelectAll] = DEFAULT_BINDING_SELECT_ALL;
-        key_binding[NextInstrument] = DEFAULT_BINDING_NEXT_INSTRUMENT;
-        key_binding[PreviousInstrument] = DEFAULT_BINDING_PREVIOUS_INSTRUMENT;
-        key_binding[CursorUp] = DEFAULT_BINDING_CURSOR_UP;
-        key_binding[CursorDown] = DEFAULT_BINDING_CURSOR_DOWN;
-        key_binding[CursorLeft] = DEFAULT_BINDING_CURSOR_LEFT;
-        key_binding[CursorRight] = DEFAULT_BINDING_CURSOR_RIGHT;
-        key_binding[NextPattern] = DEFAULT_BINDING_NEXT_PATTERN;
-        key_binding[PreviousPattern] = DEFAULT_BINDING_PREVIOUS_PATTERN;
-        key_binding[NextOctave] = DEFAULT_BINDING_NEXT_OCTAVE;
-        key_binding[PreviousOctave] = DEFAULT_BINDING_PREVIOUS_OCTAVE;
-        key_binding[IncreaseStep] = DEFAULT_BINDING_INCREASE_STEP;
-        key_binding[DecreaseStep] = DEFAULT_BINDING_DECREASE_STEP;
-        
+        IniSaveDefaults();
     }
     
     ImGui::SameLine();
