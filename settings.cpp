@@ -116,7 +116,7 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         for (int j = 0; j < color_info.size(); ++j)
         {
             color_name = color_info[j].COLOR_NAME;
-            section_and_name = "Colors:" + color_name;
+            std::string subsection = color_schemes[active_color_scheme].NAME;
             
             if (ImGui::ColorEdit4(color_info[j].COLOR_NAME.c_str(), (float*)&color_info[j].COLOR_VALUE, ImGuiColorEditFlags_NoInputs))
             {
@@ -124,10 +124,11 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
                 float valy = (color_info[j].COLOR_VALUE.y * 100) / 100;
                 float valz = (color_info[j].COLOR_VALUE.z * 100) / 100;
                 float valw = (color_info[j].COLOR_VALUE.w * 100) / 100;
-                ft.SetArrayValue(section_and_name, 0, valx);
-                ft.SetArrayValue(section_and_name, 1, valy);
-                ft.SetArrayValue(section_and_name, 2, valz);
-                ft.SetArrayValue(section_and_name, 3, valw);
+                ft.GetSection("ColorScheme")->GetSubSection(subsection)->SetArrayValue(color_name, 0, valx);
+                ft.GetSection("ColorScheme")->GetSubSection(subsection)->SetArrayValue(color_name, 1, valy);
+                ft.GetSection("ColorScheme")->GetSubSection(subsection)->SetArrayValue(color_name, 2, valz);
+                ft.GetSection("ColorScheme")->GetSubSection(subsection)->SetArrayValue(color_name, 3, valw);
+                
                 ft.Save("settings.ini");
             }
             
@@ -137,7 +138,32 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         
         //colorschemes========================================
         ImGui::SetCursorPos(ImVec2(370, 28));
-        IniGetColorSchemes();
+        ImGui::Text("Color Schemes");
+        
+        ImGui::SetCursorPos(ImVec2(370, 48));
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, color_info[FrameBackground].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+        if (ImGui::ListBoxHeader("##colorschemes", ImVec2(208, 224)))
+        {   
+            for (int i = 0; i < color_schemes.size(); ++i)
+            {
+                std::string section_name = color_schemes[i].NAME;
+                
+                if (ImGui::Selectable(section_name.c_str(), active_color_scheme == i))
+                {
+                    active_color_scheme = i;
+                }
+            }
+        }
+        ImGui::ListBoxFooter();
+        ImGui::PopStyleColor();
+        ImGui::PopStyleColor();
+        
+        ImGui::SetCursorPos(ImVec2(370, 280));
+        if (ImGui::Button("Apply Scheme"))
+        {
+            //
+        }
         //====================================================
         break;
         

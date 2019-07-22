@@ -334,6 +334,12 @@ struct COLOR_INFO
     ImVec4 DEFAULT_COLOR_VALUE;
 };
 
+struct COLOR_SCHEME
+{
+    std::string NAME;
+    COLOR_INFO DATA;
+};
+
 enum APP_COLORS
 {
     HeadingText,
@@ -358,7 +364,8 @@ enum APP_COLORS
 // change size when adding new col definitions
 std::array<COLOR_INFO, 17> color_info;
 
-std::vector<COLOR_INFO> color_schemes;
+std::array<COLOR_SCHEME, 3> color_schemes;
+int active_color_scheme = 0;
 
 // change size when adding new key name
 std::array<std::string, 77> key_names = {
@@ -447,5 +454,7 @@ FMOD::Sound      *sound;
 FMOD::Channel    *channel = 0;
 FMOD::ChannelGroup *channelgroup;
 FMOD_RESULT       result;
+
+int fmod_driver;
 
 unsigned long long parentclock = 0;

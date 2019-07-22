@@ -9,12 +9,6 @@ colors[ImGuiCol_SeparatorActive] = col_track_separator;
 ImGuiStyle& style = ImGui::GetStyle();
 style.FrameBorderSize = 1.0f;
 
-//FMOD::System     *fsystem;
-//FMOD::Sound      *sound;
-//FMOD::Channel    *channel = 0;
-//FMOD::ChannelGroup *channelgroup;
-//FMOD_RESULT       result;
-
 result = FMOD::System_Create(&fsystem);
 ERRCHECK(result);
 
@@ -82,4 +76,13 @@ color_info[Text] = {"Text", col_text, DEFAULT_COL_TEXT};
 color_info[PatternForeground] = {"Pattern Foreground", col_pattern_foreground, DEFAULT_COL_PATTERN_FOREGROUND};
 
 IniLoadSettings();
+IniGetColorSchemes();
+
+char drivername[] = "";
+int rate = 0;
+FMOD_OUTPUTTYPE output;
+fsystem->getDriverInfo(0, drivername, 50, 0, &rate, 0, 0);
+
+fsystem->getOutput(&output);
+print(drivername, rate, output);
 

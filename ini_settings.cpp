@@ -132,21 +132,30 @@ void IniGetColorSchemes()
 {
     INI::File ft;
     
-    if(!ft.Load("color_schemes.ini"))
+    if(!ft.Load("settings.ini"))
     {
         //
         return;
     }
     
-    //sectionssize returns num of sections
+    int i = 0;
     
     for (INI::File::sections_iter it = ft.SectionsBegin(); it != ft.SectionsEnd(); ++it)
 	{
-		std::cout << "Section name: " << it->first << std::endl;
-		INI::Section* sect = it->second;
-		// iterate over all entries in specific section
-		for (INI::Section::values_iter it2 = sect->ValuesBegin(); it2 != sect->ValuesEnd(); ++it2)
-			std::cout << "Entry name: " << it2->first << ", Entry value: " 
-            << it2->second.AsString() << std::endl;
-	}
+		
+        if (it->first != "Colors" && it->first != "KeyBindings")
+        {
+            std::string section_name = "";
+            section_name = it->first;
+            section_name.erase(0, 12);
+            color_schemes[i].NAME = section_name;
+            
+            color_schemes[i].DATA.COLOR_VALUE.x = (float)ft.GetValue(it->first).AsArray()[0].AsDouble();
+            color_schemes[i].DATA.COLOR_VALUE.y = (float)ft.GetValue(it->first).AsArray()[1].AsDouble();
+            color_schemes[i].DATA.COLOR_VALUE.z = (float)ft.GetValue(it->first).AsArray()[2].AsDouble();
+            color_schemes[i].DATA.COLOR_VALUE.w = (float)ft.GetValue(it->first).AsArray()[3].AsDouble();
+            i++;
+        }
+    }
+    return;
 }

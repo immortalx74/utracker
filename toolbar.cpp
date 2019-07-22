@@ -10,7 +10,6 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 	{
 		if (btn_repeat && i == 8)
 		{
-			//ImGui::PushStyleColor(ImGuiCol_Button, col_toggle_button);
             ImGui::PushStyleColor(ImGuiCol_Button, color_info[ToggleButton].COLOR_VALUE);
 			btn_repeat_changed = !btn_repeat_changed;
 		}
