@@ -160,7 +160,9 @@ if (application_state == 2) as ="END_PATTERN";
 if (application_state == 3) as ="PLAYING";
 if (application_state == 4) as ="EDITOR";
 
-//ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
+ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
+
+ImGui::Text(std::to_string(active_pattern).c_str());
 
 //=======================
 // Draw PATTERN_ buttons

@@ -35,7 +35,7 @@ if (application_state == PLAYING)
 		ImGui::SetScrollY(0);
 		active_cell.ROW = 0;
 		active_cell.Y = 132;
-	}
+    }
 }
 
 if (application_state == END_PATTERN)
@@ -43,5 +43,10 @@ if (application_state == END_PATTERN)
     for (int j = 0; j < tracks_list.size(); ++j)
     {
         tracks_list[j].CHANNELGROUP->stop();
+    }
+    
+    if (future_play.get())
+    {
+        application_state = EDITOR;
     }
 }

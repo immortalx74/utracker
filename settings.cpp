@@ -134,6 +134,11 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         }
         
         ImGui::EndChild();
+        
+        //colorschemes========================================
+        ImGui::SetCursorPos(ImVec2(370, 28));
+        IniGetColorSchemes();
+        //====================================================
         break;
         
         case 2: // TODO:sound

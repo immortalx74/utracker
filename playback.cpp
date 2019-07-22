@@ -79,6 +79,16 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
         
         if (module[row][i].NAME != "---" && module[row][i].NAME != "= =" && !tracks_list[i].MUTE)
 		{
+            if (samples_list.size() == 0)
+            {
+                return false;
+            }
+            
+            if (module[row][i].INSTRUMENT == 0 || module[row][i].INSTRUMENT > instruments_list.size() - 1)
+            {
+                return false;
+            }
+            
             chgroup->stop();
             
             sample_index = NoteToSample(module[row][i].NAME, module[row][i].INSTRUMENT);

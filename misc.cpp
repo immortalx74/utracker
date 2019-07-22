@@ -358,6 +358,8 @@ enum APP_COLORS
 // change size when adding new col definitions
 std::array<COLOR_INFO, 17> color_info;
 
+std::vector<COLOR_INFO> color_schemes;
+
 // change size when adding new key name
 std::array<std::string, 77> key_names = {
     "Tab",

@@ -127,3 +127,26 @@ void IniSaveDefaults()
     
     ft.Save("settings.ini");
 }
+
+void IniGetColorSchemes()
+{
+    INI::File ft;
+    
+    if(!ft.Load("color_schemes.ini"))
+    {
+        //
+        return;
+    }
+    
+    //sectionssize returns num of sections
+    
+    for (INI::File::sections_iter it = ft.SectionsBegin(); it != ft.SectionsEnd(); ++it)
+	{
+		std::cout << "Section name: " << it->first << std::endl;
+		INI::Section* sect = it->second;
+		// iterate over all entries in specific section
+		for (INI::Section::values_iter it2 = sect->ValuesBegin(); it2 != sect->ValuesEnd(); ++it2)
+			std::cout << "Entry name: " << it2->first << ", Entry value: " 
+            << it2->second.AsString() << std::endl;
+	}
+}
