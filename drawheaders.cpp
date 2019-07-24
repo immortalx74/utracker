@@ -15,7 +15,7 @@ for (int t = 0; t < tracks_list.size(); ++t)
         track_text += "0";
     }
 	track_text += std::to_string(t + 1);
-	ImGui::PushStyleColor(ImGuiCol_Text, color_info[HeadingText].COLOR_VALUE);
+	ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
 	ImGui::Text(track_text.c_str());
 	ImGui::PopStyleColor();
     
@@ -23,11 +23,11 @@ for (int t = 0; t < tracks_list.size(); ++t)
     ImGui::PushID(std::to_string(t).c_str());
     if (!tracks_list[t].SOLO)
     {
-        ImGui::PushStyleColor(ImGuiCol_Button, color_info[Buttons].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
     }
     else
     {
-        ImGui::PushStyleColor(ImGuiCol_Button, color_info[ToggleButton].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[ToggleButton].COLOR_VALUE);
     }
     if(ImGui::SmallButton("S"))
     {
@@ -53,11 +53,11 @@ for (int t = 0; t < tracks_list.size(); ++t)
     ImGui::SameLine();
     if (!tracks_list[t].MUTE)
     {
-        ImGui::PushStyleColor(ImGuiCol_Button, color_info[Buttons].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
     }
     else
     {
-        ImGui::PushStyleColor(ImGuiCol_Button, color_info[MuteButton].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[MuteButton].COLOR_VALUE);
     }
     
     if(ImGui::SmallButton("M"))
@@ -84,8 +84,8 @@ for (int t = 0; t < tracks_list.size(); ++t)
 	ImGui::PushItemWidth(UI.TRACK_SLIDERS_WIDTH);
 	ImGui::PushID(std::to_string(t).c_str());
     
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, color_info[FrameBackground].COLOR_VALUE);
-    ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
 	ImGui::SliderInt("##trackvolume", &tracks_list[t].VOLUME, 0, 64, "v:%02d");
 	if (ImGui::IsItemClicked(1))
 	{
@@ -118,7 +118,7 @@ ImGui::BeginChild("##rowheaders", ImVec2(0, 0), false, ImGuiWindowFlags_NoScroll
 ImGui::SetScrollY(grid_scroll_y);
 ImGui::SetCursorPosY(8);
 
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
 
 for (int p = 0; p < patterns_list[active_pattern].ROWS; ++p)
 {
@@ -136,7 +136,7 @@ ImGui::SetCursorPosY(UI.MAIN_X + UI.TRACK_HEADERS_HEIGHT + UI.MARGIN);
 ImGui::SetCursorPosX(UI.CELL_WIDTH + 8);
 ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT));
 
-ImGui::PushStyleColor(ImGuiCol_ChildBg, color_info[PatternBackground].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[PatternBackground].COLOR_VALUE);
 ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 grid_scroll_x = ImGui::GetScrollX(); // update scroll_x to sync with track headers scrolling

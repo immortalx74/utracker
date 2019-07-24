@@ -3,14 +3,14 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 {
 	ImGui::SetNextWindowSize(ImVec2(UI.TOOLBAR_WIDTH, UI.TOOLBAR_HEIGHT));
 	ImGui::SetNextWindowPos(ImVec2(UI.TOOLBAR_X, UI.TOOLBAR_Y));
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, color_info[WindowBackground].COLOR_VALUE);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
     ImGui::Begin("toolbar", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
     
 	for (int i = 0; i < 13; ++i)
 	{
 		if (btn_repeat && i == 8)
 		{
-            ImGui::PushStyleColor(ImGuiCol_Button, color_info[ToggleButton].COLOR_VALUE);
+            ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[ToggleButton].COLOR_VALUE);
 			btn_repeat_changed = !btn_repeat_changed;
 		}
 		

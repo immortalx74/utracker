@@ -33,26 +33,14 @@ void IniLoadSettings()
         
     }
     
-    // colors
-    for (int j = 0; j < color_info.size(); ++j)
-    {
-        color_name = color_info[j].COLOR_NAME;
-        section_and_name = "Colors:" + color_name;
-        
-        if (ft.GetValue(section_and_name).AsArray()[0].AsString() == "")
-        {
-            ft.SetArrayValue(section_and_name, 0, std::to_string(color_info[j].COLOR_VALUE.x));
-            ft.SetArrayValue(section_and_name, 1, std::to_string(color_info[j].COLOR_VALUE.y));
-            ft.SetArrayValue(section_and_name, 2, std::to_string(color_info[j].COLOR_VALUE.z));
-            ft.SetArrayValue(section_and_name, 3, std::to_string(color_info[j].COLOR_VALUE.w));
-        }
-        
-        color_info[j].COLOR_VALUE.x = (float)ft.GetValue(section_and_name).AsArray()[0].AsDouble();
-        color_info[j].COLOR_VALUE.y = (float)ft.GetValue(section_and_name).AsArray()[1].AsDouble();
-        color_info[j].COLOR_VALUE.z = (float)ft.GetValue(section_and_name).AsArray()[2].AsDouble();
-        color_info[j].COLOR_VALUE.w = (float)ft.GetValue(section_and_name).AsArray()[3].AsDouble();
-    }
+    int acs = 0;
     
+    if (ft.GetSection("Main")->GetValue("CurrentColorScheme", -1).AsInt() < 0)
+    {
+        ft.SetValue("Main:CurrentColorScheme", 0);
+    }
+    acs = ft.GetSection("Main")->GetValue("CurrentColorScheme").AsInt();
+    active_color_scheme = acs;
     
     ft.Save("settings.ini");
     
@@ -71,24 +59,6 @@ void IniSaveDefaults()
     
     INI::File ft;
     ft.Load("settings.ini");
-    
-    for (int i = 0; i < color_info.size(); ++i)
-    {
-        color_name = color_info[i].COLOR_NAME;
-        section_and_name = "Colors:" + color_name;
-        
-        color_info[i].COLOR_VALUE = color_info[i].DEFAULT_COLOR_VALUE;
-        
-        float valx = (color_info[i].COLOR_VALUE.x * 100) / 100;
-        float valy = (color_info[i].COLOR_VALUE.y * 100) / 100;
-        float valz = (color_info[i].COLOR_VALUE.z * 100) / 100;
-        float valw = (color_info[i].COLOR_VALUE.w * 100) / 100;
-        ft.SetArrayValue(section_and_name, 0, valx);
-        ft.SetArrayValue(section_and_name, 1, valy);
-        ft.SetArrayValue(section_and_name, 2, valz);
-        ft.SetArrayValue(section_and_name, 3, valw);
-    }
-    
     
     key_binding[Cut] = DEFAULT_BINDING_CUT;
     key_binding[Copy] = DEFAULT_BINDING_COPY;
@@ -123,8 +93,6 @@ void IniSaveDefaults()
         ft.SetArrayValue(section_and_name, 3, binding_key);
     }
     
-    
-    
     ft.Save("settings.ini");
 }
 
@@ -142,20 +110,27 @@ void IniGetColorSchemes()
     
     for (INI::File::sections_iter it = ft.SectionsBegin(); it != ft.SectionsEnd(); ++it)
 	{
-		
-        if (it->first != "Colors" && it->first != "KeyBindings")
+        
+        if (it->first != "Colors" && it->first != "KeyBindings" && it->first != "Main")
         {
             std::string section_name = "";
             section_name = it->first;
             section_name.erase(0, 12);
             color_schemes[i].NAME = section_name;
             
-            color_schemes[i].DATA.COLOR_VALUE.x = (float)ft.GetValue(it->first).AsArray()[0].AsDouble();
-            color_schemes[i].DATA.COLOR_VALUE.y = (float)ft.GetValue(it->first).AsArray()[1].AsDouble();
-            color_schemes[i].DATA.COLOR_VALUE.z = (float)ft.GetValue(it->first).AsArray()[2].AsDouble();
-            color_schemes[i].DATA.COLOR_VALUE.w = (float)ft.GetValue(it->first).AsArray()[3].AsDouble();
+            for (int j = 0; j < color_info.size(); ++j)
+            {
+                std::string value_name = color_info[j].COLOR_NAME;
+                color_schemes[i].DATA[j].COLOR_VALUE.x = (float)ft.GetSection("ColorScheme")->GetSubSection(section_name)->GetValue(value_name).AsArray()[0].AsDouble();
+                color_schemes[i].DATA[j].COLOR_VALUE.y = (float)ft.GetSection("ColorScheme")->GetSubSection(section_name)->GetValue(value_name).AsArray()[1].AsDouble();
+                color_schemes[i].DATA[j].COLOR_VALUE.z = (float)ft.GetSection("ColorScheme")->GetSubSection(section_name)->GetValue(value_name).AsArray()[2].AsDouble();
+                color_schemes[i].DATA[j].COLOR_VALUE.w = (float)ft.GetSection("ColorScheme")->GetSubSection(section_name)->GetValue(value_name).AsArray()[3].AsDouble();
+            }
+            
             i++;
         }
     }
+    color_scheme_count = i;
+    
     return;
 }

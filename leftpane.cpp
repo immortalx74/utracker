@@ -2,11 +2,12 @@
 int app_window_height = io.DisplaySize.y;
 ImGui::SetNextWindowSize(ImVec2(UI.LEFT_PANE_WIDTH, app_window_height));
 ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_X + UI.MARGIN, UI.LEFT_PANE_Y));
-ImGui::PushStyleColor(ImGuiCol_WindowBg, color_info[WindowBackground].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_WindowBg, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
 ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
 // patterns list
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[HeadingText].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
+
 ImGui::Text("Patterns");
 ImGui::PopStyleColor();
 
@@ -14,8 +15,8 @@ UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
 UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
 
 
-ImGui::PushStyleColor(ImGuiCol_FrameBg, color_info[FrameBackground].COLOR_VALUE);
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
 if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -42,7 +43,7 @@ ImGui::PopStyleColor();
 ImGui::PopStyleColor();
 
 // Instruments list 
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[HeadingText].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
 ImGui::Text("Instruments");
 ImGui::PopStyleColor();
 
@@ -50,8 +51,8 @@ UI.INSTRUMENTS_LIST_X = ImGui::GetCursorPosX();
 UI.INSTRUMENTS_LIST_Y = ImGui::GetCursorPosY();
 
 
-ImGui::PushStyleColor(ImGuiCol_FrameBg, color_info[FrameBackground].COLOR_VALUE);
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
 if (ImGui::ListBoxHeader("##inslist", ImVec2(UI.INSTRUMENTS_LIST_WIDTH, UI.INSTRUMENTS_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -79,15 +80,15 @@ ImGui::PopStyleColor();
 ImGui::PopStyleColor();
 
 // Samples list 
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[HeadingText].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
 ImGui::Text("Samples");
 ImGui::PopStyleColor();
 
 UI.SAMPLES_LIST_X = ImGui::GetCursorPosX();
 UI.SAMPLES_LIST_Y = ImGui::GetCursorPosY();
 
-ImGui::PushStyleColor(ImGuiCol_FrameBg, color_info[FrameBackground].COLOR_VALUE);
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
 if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -124,8 +125,8 @@ ImGui::PopStyleColor();
 ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + UI.MARGIN);
 
-ImGui::PushStyleColor(ImGuiCol_FrameBg, color_info[FrameBackground].COLOR_VALUE);
-ImGui::PushStyleColor(ImGuiCol_Text, color_info[Text].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
 ImGui::SliderInt("Middle octave", &octave, 1, 8);
 ImGui::SliderInt("BPM", &bpm, 32, 512);
 ImGui::SliderInt("Rows/Beat", &rows_per_beat, 1, 32);

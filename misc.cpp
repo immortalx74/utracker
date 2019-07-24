@@ -46,11 +46,12 @@ https://github.com/mdodis"
 #define DEFAULT_COL_NOTE_TEXT {0.392f, 0.509f, 0.784f, 1.00f}
 #define DEFAULT_COL_INSTRUMENT_TEXT {0.784f, 0.784f, 0.235f, 1.00f}
 #define DEFAULT_COL_VOLUME_TEXT {0.078f, 0.666f, 0.078f, 1.00f}
-#define DEFAULT_COL_WINDOW_BACKGROUND {0.06f, 0.06f, 0.06f, 0.94f}
+#define DEFAULT_COL_PANEL_BACKGROUND {0.06f, 0.06f, 0.06f, 0.94f}
 #define DEFAULT_COL_FRAME_BACKGROUND {0.16f, 0.29f, 0.48f, 0.54f}
 #define DEFAULT_COL_PATTERN_BACKGROUND {0.06f, 0.06f, 0.06f, 0.94f}
 #define DEFAULT_COL_TEXT {1.0f, 1.0f, 1.0f, 1.0f}
 #define DEFAULT_COL_PATTERN_FOREGROUND {1.0f, 1.0f, 1.0f, 1.0f}
+#define DEFAULT_COL_WINDOW_BACKGROUND {0.0f, 0.0f, 0.0f, 1.0f}
 
 
 //default keyboard bindings
@@ -76,59 +77,59 @@ std::future<bool> future_tick;
 
 struct UI_METRICS
 {
-	float MARGIN = 4;
+    float MARGIN = 4;
     
-	float LEFT_PANE_X = 0;
-	float LEFT_PANE_Y = 0;
-	float LEFT_PANE_WIDTH = 260;
-	float LEFT_PANE_HEIGHT = 0;
+    float LEFT_PANE_X = 0;
+    float LEFT_PANE_Y = 0;
+    float LEFT_PANE_WIDTH = 260;
+    float LEFT_PANE_HEIGHT = 0;
     
-	float TOOLBAR_X = 0;
-	float TOOLBAR_Y = 0;
-	float TOOLBAR_WIDTH = 0;
-	float TOOLBAR_HEIGHT = 48;
+    float TOOLBAR_X = 0;
+    float TOOLBAR_Y = 0;
+    float TOOLBAR_WIDTH = 0;
+    float TOOLBAR_HEIGHT = 48;
     
-	float MAIN_X = 0;
-	float MAIN_Y = 0;
-	float MAIN_WIDTH = 0;
-	float MAIN_HEIGHT = 0;
-	float MAIN_PADDING = 70;
+    float MAIN_X = 0;
+    float MAIN_Y = 0;
+    float MAIN_WIDTH = 0;
+    float MAIN_HEIGHT = 0;
+    float MAIN_PADDING = 70;
     
-	float GRID_X = 0;
-	float GRID_Y = 0;
-	float GRID_WIDTH = 0;
-	float GRID_HEIGHT = 0;
+    float GRID_X = 0;
+    float GRID_Y = 0;
+    float GRID_WIDTH = 0;
+    float GRID_HEIGHT = 0;
     
-	float PATTERNS_LIST_X = 0;
-	float PATTERNS_LIST_Y = 0;
-	float PATTERNS_LIST_WIDTH = 200;
-	float PATTERNS_LIST_HEIGHT = 187;
+    float PATTERNS_LIST_X = 0;
+    float PATTERNS_LIST_Y = 0;
+    float PATTERNS_LIST_WIDTH = 200;
+    float PATTERNS_LIST_HEIGHT = 187;
     
-	float INSTRUMENTS_LIST_X = 0;
-	float INSTRUMENTS_LIST_Y = 0;
-	float INSTRUMENTS_LIST_WIDTH = 200;
-	float INSTRUMENTS_LIST_HEIGHT = 187;
+    float INSTRUMENTS_LIST_X = 0;
+    float INSTRUMENTS_LIST_Y = 0;
+    float INSTRUMENTS_LIST_WIDTH = 200;
+    float INSTRUMENTS_LIST_HEIGHT = 187;
     
-	float SAMPLES_LIST_X = 0;
-	float SAMPLES_LIST_Y = 0;
-	float SAMPLES_LIST_WIDTH = 200;
-	float SAMPLES_LIST_HEIGHT = 187;
+    float SAMPLES_LIST_X = 0;
+    float SAMPLES_LIST_Y = 0;
+    float SAMPLES_LIST_WIDTH = 200;
+    float SAMPLES_LIST_HEIGHT = 187;
     
     
-	float LEFT_SLIDERS_WIDTH = 100;
+    float LEFT_SLIDERS_WIDTH = 100;
     
-	float PATTERN_OPTIONS_MODAL_WIDTH = 400;
-	float PATTERN_OPTIONS_MODAL_HEIGHT = 200;
-	float INSTRUMENT_OPTIONS_MODAL_WIDTH = 400;
-	float INSTRUMENT_OPTIONS_MODAL_HEIGHT = 200;
+    float PATTERN_OPTIONS_MODAL_WIDTH = 400;
+    float PATTERN_OPTIONS_MODAL_HEIGHT = 200;
+    float INSTRUMENT_OPTIONS_MODAL_WIDTH = 400;
+    float INSTRUMENT_OPTIONS_MODAL_HEIGHT = 200;
     
-	float TRACK_WIDTH = 120;
-	float CELL_WIDTH = 30;
-	float CELL_HEIGHT = 17;
+    float TRACK_WIDTH = 120;
+    float CELL_WIDTH = 30;
+    float CELL_HEIGHT = 17;
     
-	float TRACK_HEADERS_START = 46;
-	float TRACK_HEADERS_HEIGHT = 60;
-	float TRACK_SLIDERS_WIDTH = 108;
+    float TRACK_HEADERS_START = 46;
+    float TRACK_HEADERS_HEIGHT = 60;
+    float TRACK_SLIDERS_WIDTH = 108;
 };
 
 struct PATTERN_
@@ -150,27 +151,27 @@ struct TRACK
     int VOLUME;
     float PAN;
     bool MUTE;
-	bool SOLO;
+    bool SOLO;
     FMOD::Channel *CHANNEL;
     FMOD::ChannelGroup *CHANNELGROUP;
 };
 
 struct SAMPLE
 {
-	std::string NAME;
+    std::string NAME;
     std::string FILENAME;
-	FMOD::Sound *SOUND;
+    FMOD::Sound *SOUND;
     int LOOP_TYPE; // temp, array? vector?
 };
 
 struct NOTE_DATA
 {
-	std::string NAME;
-	float FREQUENCY;
-	int INSTRUMENT;
-	int VOLUME;
-	int FX;
-	int FX_PARAM;
+    std::string NAME;
+    float FREQUENCY;
+    int INSTRUMENT;
+    int VOLUME;
+    int FX;
+    int FX_PARAM;
 };
 
 enum CELL_TYPE
@@ -193,27 +194,27 @@ struct CLIPBOARD
 
 enum LCA
 {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 };
 
 struct ACTIVE_CELL
 {
-	int X = 306;
-	int Y = 132;
-	int ROW = 0;
-	int COL = 0;
-	LCA LAST_CURSOR_ACTION;
+    int X = 306;
+    int Y = 132;
+    int ROW = 0;
+    int COL = 0;
+    LCA LAST_CURSOR_ACTION;
 };
 
 struct SELECTION
 {
-	int START_X = 0;
-	int START_Y = 0;
-	int END_X = 0;
-	int END_Y = 0;
+    int START_X = 0;
+    int START_Y = 0;
+    int END_X = 0;
+    int END_Y = 0;
     
     int START_COL;
     int START_ROW;
@@ -223,11 +224,11 @@ struct SELECTION
 
 enum APP_STATE
 {
-	PLAY_MODULE,
-	PLAY_PATTERN,
+    PLAY_MODULE,
+    PLAY_PATTERN,
     END_PATTERN,
-	PLAYING,
-	EDITOR
+    PLAYING,
+    EDITOR
 };
 
 struct KEYBOARD_BINDING
@@ -281,11 +282,12 @@ ImVec4 col_track_separator = DEFAULT_COL_TRACK_SEPARATOR;
 ImVec4 col_note_text = DEFAULT_COL_NOTE_TEXT;
 ImVec4 col_instrument_text = DEFAULT_COL_INSTRUMENT_TEXT;
 ImVec4 col_volume_text = DEFAULT_COL_VOLUME_TEXT;
-ImVec4 col_window_background = DEFAULT_COL_WINDOW_BACKGROUND;
+ImVec4 col_panel_background = DEFAULT_COL_PANEL_BACKGROUND;
 ImVec4 col_frame_background = DEFAULT_COL_FRAME_BACKGROUND;
 ImVec4 col_pattern_background = DEFAULT_COL_PATTERN_BACKGROUND;
 ImVec4 col_text = DEFAULT_COL_TEXT;
 ImVec4 col_pattern_foreground = DEFAULT_COL_PATTERN_FOREGROUND;
+ImVec4 col_window_background = DEFAULT_COL_WINDOW_BACKGROUND;
 
 int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;
@@ -309,7 +311,7 @@ bool selection_exists = false;
 bool is_settings_open = false;
 
 std::array<std::string, 13> toolbar_tooltips = {"New","Open","Save","Save as","Play",
-	"Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
+    "Play pattern","Pause","Stop","Repeat","Cut","Copy","Paste","Settings"};
 
 bool show_demo = false;
 
@@ -337,7 +339,7 @@ struct COLOR_INFO
 struct COLOR_SCHEME
 {
     std::string NAME;
-    COLOR_INFO DATA;
+    std::array<COLOR_INFO, 19> DATA;
 };
 
 enum APP_COLORS
@@ -352,20 +354,24 @@ enum APP_COLORS
     NoteText,
     InstrumentText,
     VolumeText,
-    WindowBackground,
+    PanelBackground,
     FrameBackground,
     PatternBackground,
     ToggleButton,
     MuteButton,
     Text,
-    PatternForeground
+    PatternForeground,
+    WindowBackground,
+    TrackSeparator
 };
 
 // change size when adding new col definitions
-std::array<COLOR_INFO, 17> color_info;
+std::array<COLOR_INFO, 19> color_info;
 
-std::array<COLOR_SCHEME, 3> color_schemes;
+// 20 entries seem to be enough?
+std::array<COLOR_SCHEME, 20> color_schemes;
 int active_color_scheme = 0;
+int color_scheme_count = 0;
 
 // change size when adding new key name
 std::array<std::string, 77> key_names = {

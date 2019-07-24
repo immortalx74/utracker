@@ -92,7 +92,7 @@ int main()
 		fsystem->update();
 		io.KeyRepeatRate = 0.035f;
         
-		ImGui::PushStyleColor(ImGuiCol_Button, color_info[Buttons].COLOR_VALUE);
+		ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
         
 #include "leftpane.cpp"
         
@@ -136,7 +136,7 @@ int main()
         ImGui::SetNextWindowPos(ImVec2(UI.LEFT_PANE_WIDTH + (2 * UI.MARGIN),
                                        UI.TOOLBAR_HEIGHT + UI.MARGIN));
 		
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, color_info[WindowBackground].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
         ImGui::Begin("main", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
         
 #include "drawheaders.cpp"
@@ -164,14 +164,12 @@ int main()
 		}
 		
 		//======================================================
-		window.clear();
+		window.clear(color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
 		ImGui::SFML::Render(window);
 		window.display();
 	}
     
     // shut down
-    //result = fsystem->close();
-    //ERRCHECK(result);
     result = fsystem->release();
     ERRCHECK(result);
     

@@ -7,12 +7,12 @@ colors[ImGuiCol_SeparatorHovered] = col_track_separator;
 colors[ImGuiCol_SeparatorActive] = col_track_separator;
 
 ImGuiStyle& style = ImGui::GetStyle();
-style.FrameBorderSize = 1.0f;
+style.WindowRounding = 0.0f;
 
 result = FMOD::System_Create(&fsystem);
 ERRCHECK(result);
 
-fsystem->setOutput(FMOD_OUTPUTTYPE_WASAPI);
+//fsystem->setOutput(FMOD_OUTPUTTYPE_WASAPI);
 
 fsystem->setDSPBufferSize(128, 4);
 
@@ -67,13 +67,15 @@ color_info[Buttons] = {"Buttons", col_buttons, DEFAULT_COL_BUTTONS};
 color_info[NoteText] = {"Note Text", col_note_text, DEFAULT_COL_NOTE_TEXT};
 color_info[InstrumentText] = {"Instrument Text", col_instrument_text, DEFAULT_COL_INSTRUMENT_TEXT};
 color_info[VolumeText] = {"Volume Text", col_volume_text, DEFAULT_COL_VOLUME_TEXT};
-color_info[WindowBackground] = {"Window Background", col_window_background, DEFAULT_COL_WINDOW_BACKGROUND};
+color_info[PanelBackground] = {"Panel Background", col_panel_background, DEFAULT_COL_PANEL_BACKGROUND};
 color_info[FrameBackground] = {"Frame Background", col_frame_background, DEFAULT_COL_FRAME_BACKGROUND};
 color_info[PatternBackground] = {"Pattern Background", col_pattern_background, DEFAULT_COL_PATTERN_BACKGROUND};
 color_info[ToggleButton] = {"Toggle Button", col_toggle_button, DEFAULT_COL_TOGGLE_BUTTON};
 color_info[MuteButton] = {"Mute Button", col_mute_button, DEFAULT_COL_MUTE_BUTTON};
 color_info[Text] = {"Text", col_text, DEFAULT_COL_TEXT};
 color_info[PatternForeground] = {"Pattern Foreground", col_pattern_foreground, DEFAULT_COL_PATTERN_FOREGROUND};
+color_info[WindowBackground] = {"Window Background", col_window_background, DEFAULT_COL_WINDOW_BACKGROUND};
+color_info[TrackSeparator] = {"Track Separator", col_track_separator, DEFAULT_COL_TRACK_SEPARATOR};
 
 IniLoadSettings();
 IniGetColorSchemes();
@@ -81,8 +83,12 @@ IniGetColorSchemes();
 char drivername[] = "";
 int rate = 0;
 FMOD_OUTPUTTYPE output;
-fsystem->getDriverInfo(0, drivername, 50, 0, &rate, 0, 0);
+fsystem->getDriverInfo(1, drivername, 50, 0, &rate, 0, 0);
 
 fsystem->getOutput(&output);
 print(drivername, rate, output);
+
+int numdrivers = 0;
+fsystem->getNumDrivers(&numdrivers);
+print(numdrivers);
 
