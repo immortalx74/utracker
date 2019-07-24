@@ -14,9 +14,9 @@ ImGui::PopStyleColor();
 UI.PATTERNS_LIST_X = ImGui::GetCursorPosX();
 UI.PATTERNS_LIST_Y = ImGui::GetCursorPosY();
 
-
 ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
 ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
+
 if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -35,7 +35,7 @@ if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS
         if (ImGui::Selectable(name.c_str(), active_pattern == i))
 		{
 			active_pattern = i;
-		}
+        }
 	}
 }
 ImGui::ListBoxFooter();

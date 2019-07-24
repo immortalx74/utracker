@@ -4,6 +4,10 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 	ImGui::SetNextWindowSize(ImVec2(UI.TOOLBAR_WIDTH, UI.TOOLBAR_HEIGHT));
 	ImGui::SetNextWindowPos(ImVec2(UI.TOOLBAR_X, UI.TOOLBAR_Y));
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
+    
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.FramePadding = ImVec2(0.0f, 3.0f);
+    
     ImGui::Begin("toolbar", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
     
 	for (int i = 0; i < 13; ++i)
@@ -90,4 +94,5 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
+    style.FramePadding = ImVec2(4.0f, 3.0f);
 }

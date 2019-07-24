@@ -147,6 +147,10 @@ int main()
 #include "appstate.cpp"
         
 		ImGui::EndChild();
+        
+        // Right click context menu
+#include "right_click_context_menu.cpp"
+        
 		ImGui::PopStyleColor();
         ImGui::End();
         ImGui::PopStyleColor();

@@ -113,6 +113,8 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
         PasteFromClipboard();
     }
     
+    
+    // select all/select track
     key = key_binding[SelectAll].KEY;
     mdfr = GetModifiers(key_binding[SelectAll]);
     if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr)
@@ -125,6 +127,17 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
         selection.END_COL = (tracks * 4) - 1;
     }
     
+    key = key_binding[SelectTrack].KEY;
+    mdfr = GetModifiers(key_binding[SelectTrack]);
+    if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr)
+    {
+        selection_exists = true;
+        
+        selection.START_ROW = 0;
+        selection.START_COL = (active_cell.COL / 4) * 4;
+        selection.END_ROW = patterns_list[active_pattern].ROWS - 1;
+        selection.END_COL = selection.START_COL + 3;
+    }
     
     // arrows navigation
     key = key_binding[CursorDown].KEY;

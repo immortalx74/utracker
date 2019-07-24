@@ -137,6 +137,14 @@ ImGui::SetCursorPosX(UI.CELL_WIDTH + 8);
 ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT));
 
 ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[PatternBackground].COLOR_VALUE);
+{
+    int key = key_binding[PatternSetFocus].KEY;
+    bool mdfr = GetModifiers(key_binding[PatternSetFocus]);
+    if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr)
+    {
+        ImGui::SetNextWindowFocus();
+    }
+}
 ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 grid_scroll_x = ImGui::GetScrollX(); // update scroll_x to sync with track headers scrolling
