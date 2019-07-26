@@ -2,9 +2,9 @@ LoadTextures();
 
 io.ConfigWindowsMoveFromTitleBarOnly = true;
 ImVec4* colors = ImGui::GetStyle().Colors;
-colors[ImGuiCol_Separator] = col_track_separator;
-colors[ImGuiCol_SeparatorHovered] = col_track_separator;
-colors[ImGuiCol_SeparatorActive] = col_track_separator;
+colors[ImGuiCol_Separator] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
+colors[ImGuiCol_SeparatorHovered] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
+colors[ImGuiCol_SeparatorActive] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
 
 ImGuiStyle& style = ImGui::GetStyle();
 style.WindowRounding = 0.0f;
@@ -12,7 +12,7 @@ style.WindowRounding = 0.0f;
 result = FMOD::System_Create(&fsystem);
 ERRCHECK(result);
 
-//fsystem->setOutput(FMOD_OUTPUTTYPE_WASAPI);
+fsystem->setOutput(FMOD_OUTPUTTYPE_WASAPI);
 
 fsystem->setDSPBufferSize(128, 4);
 
@@ -81,16 +81,23 @@ color_info[TrackSeparator] = {"Track Separator", col_track_separator, DEFAULT_CO
 
 IniLoadSettings();
 IniGetColorSchemes();
+RowTick(50);
 
-char drivername[] = "";
-int rate = 0;
-FMOD_OUTPUTTYPE output;
-fsystem->getDriverInfo(1, drivername, 50, 0, &rate, 0, 0);
-
-fsystem->getOutput(&output);
-print(drivername, rate, output);
+//FMOD_OUTPUTTYPE output;
 
 int numdrivers = 0;
 fsystem->getNumDrivers(&numdrivers);
-print(numdrivers);
+char drivername[30] = "";
+int rate = 0;
 
+for (int i = 0; i < numdrivers; ++i)
+{
+    fsystem->getDriverInfo(i, drivername, 30, 0, &rate, 0, 0);
+    AUDIO_DEVICE cur_device;
+    cur_device.RATE = rate;
+    cur_device.NAME = drivername;
+    
+    audio_devices.push_back(cur_device);
+}
+
+fsystem->getDriver(&active_audio_device);

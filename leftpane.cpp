@@ -167,6 +167,8 @@ ImGui::Text(std::to_string(active_pattern).c_str());
 
 //=======================
 // Draw PATTERN_ buttons
+
+//ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
 ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN), UI.PATTERNS_LIST_Y));
 
 ImGui::PushID("pattern_add");
@@ -244,6 +246,7 @@ bool p_opened = true;
 #include "pattern_options.cpp"
 
 ImGui::PopID();
+//ImGui::PopStyleColor();
 
 // Draw Instrument buttons
 ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN), UI.INSTRUMENTS_LIST_Y));

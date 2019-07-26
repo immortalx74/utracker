@@ -109,6 +109,11 @@ if (selection_exists)
 	draw_list->AddRectFilled(selection_tl, selection_br, ImColor(color_schemes[active_color_scheme].DATA[SelectionRectangle].COLOR_VALUE));
 }
 
+ImVec4* colors = ImGui::GetStyle().Colors;
+colors[ImGuiCol_Separator] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
+colors[ImGuiCol_SeparatorHovered] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
+colors[ImGuiCol_SeparatorActive] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
+
 ImGui::Columns(tracks);
 
 // grid drawing loop

@@ -465,6 +465,11 @@ FMOD::Channel    *channel = 0;
 FMOD::ChannelGroup *channelgroup;
 FMOD_RESULT       result;
 
-int fmod_driver;
+struct AUDIO_DEVICE
+{
+    std::string NAME;
+    int RATE = 0;
+};
 
-unsigned long long parentclock = 0;
+std::vector<AUDIO_DEVICE> audio_devices;
+int active_audio_device = 0;

@@ -145,6 +145,7 @@ ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[
         ImGui::SetNextWindowFocus();
     }
 }
+
 ImGui::BeginChild("##scrollinggrid", ImVec2(0, 0), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 grid_scroll_x = ImGui::GetScrollX(); // update scroll_x to sync with track headers scrolling

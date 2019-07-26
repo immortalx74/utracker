@@ -1,3 +1,4 @@
+
 //============================================================================
 // - Check if a sample was removed from disk (popup warning? something else?).
 // - Implement move up/move down for patterns/instruments.
@@ -155,7 +156,7 @@ int main()
         ImGui::End();
         ImGui::PopStyleColor();
         
-		// demo window
+        // demo window
 		if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_PageDown)))
 		{
 			show_demo = !show_demo;

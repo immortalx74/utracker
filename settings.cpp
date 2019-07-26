@@ -171,11 +171,23 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         }
         break;
         
-        case 2: // TODO:sound
+        case 2: // sound
         {
             ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
             ImGui::BeginChild("##page2", ImVec2(260,338), true);
+            
+            for (int i = 0; i < audio_devices.size(); ++i)
+            {
+                if (ImGui::Selectable(audio_devices[i].NAME.c_str(), active_audio_device == i))
+                {
+                    active_audio_device= i;
+                }
+            }
+            
             ImGui::EndChild();
+            
+            ImGui::SetCursorPos(ImVec2(370, 28));
+            ImGui::Text("fdfdfdf");
         }
         break;
         

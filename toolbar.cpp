@@ -6,7 +6,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
     
     ImGuiStyle& style = ImGui::GetStyle();
-    style.FramePadding = ImVec2(0.0f, 3.0f);
+    style.FramePadding = ImVec2(1.0f, 3.0f);
     
     ImGui::Begin("toolbar", false, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
     
@@ -34,7 +34,12 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
             
 			if (i == 4) // play module
 			{
-				if (application_state != PLAYING)
+				if (selection_exists)
+                {
+                    selection_exists = false;
+                }
+                
+                if (application_state != PLAYING)
 				{
 					application_state = PLAY_MODULE;
 				}
@@ -42,7 +47,12 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
             
 			if (i == 5) // play pattern
 			{
-				if (application_state != PLAYING)
+				if (selection_exists)
+                {
+                    selection_exists = false;
+                }
+                
+                if (application_state != PLAYING)
 				{
 					application_state = PLAY_PATTERN;
 				}
