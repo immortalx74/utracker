@@ -80,7 +80,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
                 PasteFromClipboard();
             }
             
-            if (i == 12) // settings
+            if (i == 12 && application_state == EDITOR) // settings
             {
                 //ImGui::OpenPopup("Settings");
                 is_settings_open= true;

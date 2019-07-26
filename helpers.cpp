@@ -255,6 +255,7 @@ void CellSet(int row, int col, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>>
     if (col % 4 == 1) module[row][col / 4].INSTRUMENT = nd.INSTRUMENT;
     if (col % 4 == 2) module[row][col / 4].VOLUME = nd.VOLUME;
     if (col % 4 == 3) module[row][col / 4].FX = nd.FX;
+    if (col % 4 == 3) module[row][col / 4].FX_PARAM = nd.FX_PARAM;
 }
 
 int NoteToSample(std::string note, int instrument)

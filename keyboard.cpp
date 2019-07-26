@@ -203,9 +203,10 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
         {
             channelgroup->stop();
             key_pressed = false;
+            is_playing = false;
         }
         
-        if (ImGui::IsKeyPressed(i) && !key_pressed)
+        if (ImGui::IsKeyPressed(i) && !is_playing)
         {
             key_pressed = true;
             
@@ -229,34 +230,47 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
                     nd.FREQUENCY = 0;
                     nd.INSTRUMENT = 0;
                     nd.VOLUME = 0;
-                    nd.FX = 0;
-                    nd.FX_PARAM = 0;
+                    nd.FX = -1;
+                    nd.FX_PARAM = -1;
                     
-                    CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+                    if (selection_exists)
+                    {
+                        // delete selection
+                        for (int i = selection.START_ROW + pattern_start; i < selection.END_ROW + pattern_start + 1; ++i)
+                        {
+                            for (int j = selection.START_COL; j < selection.END_COL; ++j)
+                            {
+                                CellSet(i, j, nd, module);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+                    }
                 }
                 else if (keychar != "invalid" && keychar !="= =" && keychar != "del")
                 {
                     float freq = NoteToFrequency(keychar);
                     nd.FREQUENCY = freq;
                     
-                    if (active_instrument >0 && samples_list.size() > 0)
+                    if (active_instrument >0 && samples_list.size() > 0 && key_pressed)
                     {
                         int sample_index = NoteToSample(keychar, active_instrument);
                         FMOD::Sound *s = samples_list[sample_index].SOUND;
+                        
+                        if (channel->isPlaying(&is_playing))
+                        {
+                            key_pressed = false;
+                            is_playing = true;
+                        }
                         PlayNote(channel, s, channelgroup, freq);
                     }
                     
-                    int cur_instr = module[active_cell.ROW + pattern_start][active_cell.COL/4].INSTRUMENT;
                     int cur_vol = module[active_cell.ROW + pattern_start][active_cell.COL/4].VOLUME;
                     
-                    if (cur_instr == 0 && active_instrument > 0)
-                    {
-                        nd.INSTRUMENT = active_instrument;
-                    }
-                    else
-                    {
-                        nd.INSTRUMENT = cur_instr;
-                    }
+                    nd.INSTRUMENT = active_instrument;
+                    
                     if (cur_vol == 0)
                     {
                         nd.VOLUME = 64;

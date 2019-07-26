@@ -473,3 +473,5 @@ struct AUDIO_DEVICE
 
 std::vector<AUDIO_DEVICE> audio_devices;
 int active_audio_device = 0;
+
+bool is_playing = false;

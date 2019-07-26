@@ -87,12 +87,12 @@ RowTick(50);
 
 int numdrivers = 0;
 fsystem->getNumDrivers(&numdrivers);
-char drivername[30] = "";
+char drivername[60] = "";
 int rate = 0;
 
 for (int i = 0; i < numdrivers; ++i)
 {
-    fsystem->getDriverInfo(i, drivername, 30, 0, &rate, 0, 0);
+    fsystem->getDriverInfo(i, drivername, 60, 0, &rate, 0, 0);
     AUDIO_DEVICE cur_device;
     cur_device.RATE = rate;
     cur_device.NAME = drivername;

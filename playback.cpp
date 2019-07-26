@@ -57,7 +57,7 @@ bool PlayNote(FMOD::Channel *channel, FMOD::Sound *sound,
 	result = channel->setFrequency(frequency);
 	ERRCHECK(result);
     
-	return true;
+    return true;
 }
 
 bool PlayRow(FMOD::System *fsystem, int row, int track_count)
@@ -113,7 +113,6 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
 			ERRCHECK(result);
             
             ch->setPaused(false);
-            
 		}
         
         else if (module[row][i].NAME == "= =")
