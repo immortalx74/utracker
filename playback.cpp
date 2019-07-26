@@ -136,20 +136,21 @@ bool PlayPattern(int start, int end, int track_count)
 		
         future_tick = std::async(std::launch::async, RowTick, row_tick_delay);
         
-        if (future_tick.get() && i < end - 1)
+        if (future_tick.get() && i < end - 1 && application_state != EDITOR)
 		{
 			active_cell.ROW++;
         }
         
 		if (application_state == EDITOR)
 		{
-			for (int j = 0; j < tracks_list.size(); ++j)
+            for (int j = 0; j < tracks_list.size(); ++j)
             {
                 tracks_list[j].CHANNELGROUP->stop();
             }
-			return true;
+            return true;
 		}
 	}
+    
     application_state = END_PATTERN;
 	return true;
 }
@@ -178,6 +179,8 @@ bool PlayModule(int start, int end, int track_count)
         
         if (application_state == END_PATTERN)
         {
+            active_cell.ROW = 0;
+            active_cell.Y = 132;
             application_state = PLAYING;
         }
         

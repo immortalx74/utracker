@@ -24,17 +24,23 @@ if (application_state == EDITOR)
 {
 	FMOD_RESULT result;
 	result = channel->stop();
+    if (active_cell.ROW == 0)
+    {
+        ImGui::SetScrollY(0);
+    }
 }
 
 if (application_state == PLAYING)
 {
 	active_cell.LAST_CURSOR_ACTION = DOWN;
 	active_cell.Y = 132 + (active_cell.ROW * UI.CELL_HEIGHT);
-	if (active_cell.ROW >= patterns_list[active_pattern].ROWS - 1)
+	if (active_cell.ROW > patterns_list[active_pattern].ROWS - 1)
 	{
 		ImGui::SetScrollY(0);
-		active_cell.ROW = 0;
-		active_cell.Y = 132;
+    }
+    if (active_cell.ROW == 0)
+    {
+        ImGui::SetScrollY(0);
     }
 }
 
