@@ -53,7 +53,7 @@ bool PlayNote(FMOD::Channel *channel, FMOD::Sound *sound,
 	ERRCHECK(result);
     
 	channel->setChannelGroup(channelgroup);
-	
+    
 	result = channel->setFrequency(frequency);
 	ERRCHECK(result);
     

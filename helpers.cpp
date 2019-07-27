@@ -396,6 +396,7 @@ double NoteToFrequency(std::string note)
     }
     
     double n = (1378.125 * pow(2, octave)) * pow(1.059463, position); // 1378.125 = C-0 frequency
+    //double n = (261.7f * pow(2, octave)); // 1378.125 = C-0 frequency
     return n;
 }
 

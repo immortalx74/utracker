@@ -264,6 +264,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
                             key_pressed = false;
                             is_playing = true;
                         }
+                        
                         PlayNote(channel, s, channelgroup, freq);
                     }
                     
