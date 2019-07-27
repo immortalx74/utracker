@@ -2,24 +2,32 @@
 //============================================================================
 // - Check if a sample was removed from disk (popup warning? something else?).
 // - Implement move up/move down for patterns/instruments.
-//   What should happen when moving/deleting patterns/instruments?
+//   What should happen when moving patterns/instruments?
 // - Bug when playing module. Notes should stop just like when playing
 //   a single pattern.
 // - Add a "pan" field to notes and include it on PlayRow. It will be set by an FX
 // - Prevent sliders (and possibly other ui elements) of having values <>
 //   min/max.NOTE:This is an imgui issue.
-// - Implement saving/loading application settings. Suggested fields:
-//   Default new pattern rows/track count/BPM/Ticks/Middle octave.
 //   Window state (pos/size/maximized).
 // - Read/Write file format.
 // - WAV export.
-// - Right click context menu: Shift note(s) up/down by 1 or by octave,
-//   [selection,current track, current pattern, whole module?]
 //   Set volume [same as above], Set instrument[same as above]
-// - BUG: On module playback mode, stop goes to next pattern. Should stay
-//   on same pattern and cursor should be set to row zero.
 // - Fix Solo/Mute. Should be updated even after firing notes.
 //============================================================================
+
+// imx family's program restructuring MODEL (I.F.P.R.M.)
+//struct {
+//public:
+//int get_myx()
+//{
+//std::cout << "get_myx\n";
+//return this->myx;
+//}
+//private:
+//int myx = 1500;
+//} MY_GLOBS;
+//
+
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -55,27 +63,18 @@
 #pragma comment (lib, "OLE32")
 #pragma comment (lib, "shell32")
 
-// imx family's program restructuring MODEL (I.F.P.R.M.)
-//struct {
-//public:
-//int get_myx()
-//{
-//std::cout << "get_myx\n";
-//return this->myx;
-//}
-//private:
-//int myx = 1500;
-//} MY_GLOBS;
-//
-
-
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1024, 920), "Tracker alpha", sf::Style::Default);
-	window.setPosition(ImVec2(300,0));
+    unsigned int w_width = 1024;
+    unsigned int w_height = 920;
+    unsigned int m_width = sf::VideoMode::getDesktopMode().width;
+    unsigned int m_height = sf::VideoMode::getDesktopMode().height;
+    
+    sf::RenderWindow window(sf::VideoMode(w_width, w_height), "Tracker alpha", sf::Style::Default);
     window.setFramerateLimit(30);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+    window.setPosition(ImVec2((m_width - w_width) / 2, (m_height - w_height - 100) / 2));
     sf::Clock deltaClock;
     
 #include "init.cpp"

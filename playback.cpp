@@ -170,9 +170,9 @@ bool PlayModule(int start, int end, int track_count)
         pat_rows = patterns_list[active_pattern].ROWS;
         pat_end = pat_start + pat_rows;
         
-		PlayPattern(pat_start, pat_end, track_count);
+        PlayPattern(pat_start, pat_end, track_count);
         
-		if (active_pattern < end - 1)
+		if (active_pattern < end - 1 && application_state != EDITOR)
 		{
 			active_pattern++;
 		}
@@ -186,11 +186,11 @@ bool PlayModule(int start, int end, int track_count)
         
 		if (application_state == EDITOR)
 		{
-			for (int j = 0; j < tracks_list.size(); ++j)
+            for (int j = 0; j < tracks_list.size(); ++j)
             {
                 tracks_list[j].CHANNELGROUP->stop();
             }
-			return true;
+            return true;
 		}
 	}
 	application_state = EDITOR;
