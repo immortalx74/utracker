@@ -28,6 +28,7 @@
 //} MY_GLOBS;
 //
 
+// git commit test
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
