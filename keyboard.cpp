@@ -86,6 +86,18 @@ if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr)
     }
 }
 
+
+// clear selection
+key = key_binding[ClearSelection].KEY;
+mdfr = GetModifiers(key_binding[ClearSelection]);
+if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr)
+{
+    if (selection_exists)
+    {
+        selection_exists = false;
+    }
+}
+
 // relevant only when grid has focus
 if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state == EDITOR)
 {
@@ -206,7 +218,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
             is_playing = false;
         }
         
-        if (ImGui::IsKeyPressed(i) && !is_playing)
+        if (ImGui::IsKeyPressed(i) && !is_playing && !key_pressed)
         {
             key_pressed = true;
             

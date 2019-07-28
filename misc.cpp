@@ -73,6 +73,7 @@ https://github.com/mdodis"
 #define DEFAULT_BINDING_DECREASE_STEP {"Decrease Step", true, false, false, ImGuiKey_LeftArrow}
 #define DEFAULT_BINDING_PATTERN_SET_FOCUS {"Pattern Set Focus", false, false, false, ImGuiKey_Enter}
 #define DEFAULT_BINDING_SELECT_TRACK {"Select Track", true, false, false, ImGuiKey_L}
+#define DEFAULT_BINDING_CLEAR_SELECTION {"Clear Selection", false, false, false, ImGuiKey_Escape}
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
@@ -263,7 +264,8 @@ enum BINDING_NAMES
     IncreaseStep,
     DecreaseStep,
     PatternSetFocus,
-    SelectTrack
+    SelectTrack,
+    ClearSelection
 };
 
 
@@ -271,7 +273,7 @@ enum BINDING_NAMES
 APP_STATE application_state = EDITOR;
 UI_METRICS UI;
 ACTIVE_CELL active_cell;
-std::array<KEYBOARD_BINDING, 18> key_binding; // change size when adding new binding
+std::array<KEYBOARD_BINDING, 19> key_binding; // change size when adding new binding
 
 ImVec4 col_toggle_button = DEFAULT_COL_TOGGLE_BUTTON;
 ImVec4 col_heading_text = DEFAULT_COL_HEADING_TEXT;

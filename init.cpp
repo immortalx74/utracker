@@ -58,6 +58,7 @@ key_binding[IncreaseStep] = DEFAULT_BINDING_INCREASE_STEP;
 key_binding[DecreaseStep] = DEFAULT_BINDING_DECREASE_STEP;
 key_binding[PatternSetFocus] = DEFAULT_BINDING_PATTERN_SET_FOCUS;
 key_binding[SelectTrack] = DEFAULT_BINDING_SELECT_TRACK;
+key_binding[ClearSelection] = DEFAULT_BINDING_CLEAR_SELECTION;
 
 color_info[HeadingText] = {"Heading Text", col_heading_text, DEFAULT_COL_HEADING_TEXT};
 color_info[Cursor] = {"Cursor", col_cursor, DEFAULT_COL_CURSOR};
@@ -81,7 +82,7 @@ color_info[TrackSeparator] = {"Track Separator", col_track_separator, DEFAULT_CO
 
 IniLoadSettings();
 IniGetColorSchemes();
-RowTick(50);
+RowTick(100);
 
 //FMOD_OUTPUTTYPE output;
 

@@ -78,6 +78,7 @@ void IniSaveDefaults()
     key_binding[DecreaseStep] = DEFAULT_BINDING_DECREASE_STEP;
     key_binding[PatternSetFocus] = DEFAULT_BINDING_PATTERN_SET_FOCUS;
     key_binding[SelectTrack] = DEFAULT_BINDING_SELECT_TRACK;
+    key_binding[ClearSelection] = DEFAULT_BINDING_CLEAR_SELECTION;
     
     for (int j = 0; j < key_binding.size(); ++j)
     {
