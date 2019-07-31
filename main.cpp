@@ -26,7 +26,7 @@
 //} MY_GLOBS;
 //
 
-// some other test
+// work test
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
