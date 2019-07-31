@@ -1,3 +1,5 @@
+window.setSize(ImVec2(window_metrics.WIDTH, window_metrics.HEIGHT));
+
 LoadTextures();
 
 io.ConfigWindowsMoveFromTitleBarOnly = true;

@@ -11,9 +11,6 @@
 // - Read/Write file format.
 // - WAV export.
 // - Fix Solo/Mute. Should be updated even after firing notes.
-// - BUG: Step scrolls only when playing notes with no instrument
-// - BUG: Instrument sample-maps save correctly but show false information
-//   in sample map editor.
 //============================================================================
 
 // imx family's program restructuring MODEL (I.F.P.R.M.)
@@ -67,16 +64,14 @@
 
 int main()
 {
-    unsigned int w_width = 1024;
-    unsigned int w_height = 920;
     unsigned int m_width = sf::VideoMode::getDesktopMode().width;
     unsigned int m_height = sf::VideoMode::getDesktopMode().height;
     
-    sf::RenderWindow window(sf::VideoMode(w_width, w_height), "Tracker alpha", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode(window_metrics.WIDTH, window_metrics.HEIGHT), "Tracker alpha", sf::Style::Default);
     window.setFramerateLimit(30);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-    window.setPosition(ImVec2((m_width - w_width) / 2, (m_height - w_height - 100) / 2));
+    window.setPosition(ImVec2((m_width - window_metrics.WIDTH) / 2, (m_height - window_metrics.HEIGHT - 100) / 2));
     sf::Clock deltaClock;
     
 #include "init.cpp"
@@ -178,6 +173,8 @@ int main()
     // shut down
     result = fsystem->release();
     ERRCHECK(result);
+    
+    IniSaveWindow(window);
     
 	ImGui::SFML::Shutdown();
     

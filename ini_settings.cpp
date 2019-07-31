@@ -33,6 +33,7 @@ void IniLoadSettings()
         
     }
     
+    // get color scheme
     int acs = 0;
     
     if (ft.GetSection("Main")->GetValue("CurrentColorScheme", -1).AsInt() < 0)
@@ -41,6 +42,29 @@ void IniLoadSettings()
     }
     acs = ft.GetSection("Main")->GetValue("CurrentColorScheme").AsInt();
     active_color_scheme = acs;
+    
+    // window size/pos
+    if (ft.GetSection("Main")->GetValue("WindowX", -1).AsInt() < 0)
+    {
+        ft.SetValue("Main:WindowX", 0);
+    }
+    if (ft.GetSection("Main")->GetValue("WindowY", -1).AsInt() < 0)
+    {
+        ft.SetValue("Main:WindowY", 0);
+    }
+    if (ft.GetSection("Main")->GetValue("WindowWidth", -1).AsInt() < 0)
+    {
+        ft.SetValue("Main:WindowWidth", window_metrics.WIDTH);
+    }
+    if (ft.GetSection("Main")->GetValue("WindowHeight", -1).AsInt() < 0)
+    {
+        ft.SetValue("Main:WindowHeight", window_metrics.HEIGHT);
+    }
+    
+    window_metrics.X = ft.GetSection("Main")->GetValue("WindowX").AsInt();
+    window_metrics.Y = ft.GetSection("Main")->GetValue("WindowY").AsInt();
+    window_metrics.WIDTH = ft.GetSection("Main")->GetValue("WindowWidth").AsInt();
+    window_metrics.HEIGHT = ft.GetSection("Main")->GetValue("WindowHeight").AsInt();
     
     ft.Save("settings.ini");
     
@@ -137,4 +161,25 @@ void IniGetColorSchemes()
     color_scheme_count = i;
     
     return;
+}
+
+void IniSaveWindow(sf::RenderWindow &w)
+{
+    INI::File ft;
+    
+    if(!ft.Load("settings.ini"))
+    {
+        //
+        return;
+    }
+    
+    ImVec2 cur_window_size = w.getSize();
+    ImVec2 cur_window_pos = w.getPosition();
+    
+    ft.SetValue("Main:WindowX", cur_window_pos.x);
+    ft.SetValue("Main:WindowY", cur_window_pos.y);
+    ft.SetValue("Main:WindowWidth", cur_window_size.x);
+    ft.SetValue("Main:WindowHeight", cur_window_size.y);
+    
+    ft.Save("settings.ini");
 }

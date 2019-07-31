@@ -136,6 +136,16 @@ struct UI_METRICS
     float TRACK_SLIDERS_WIDTH = 108;
 };
 
+struct WINDOW_METRICS
+{
+    int X = 0;
+    int Y = 0;
+    int WIDTH = 1024;
+    int HEIGHT = 920;
+};
+
+WINDOW_METRICS window_metrics;
+
 struct PATTERN_
 {
     std::string NAME;
