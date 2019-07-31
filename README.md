@@ -13,6 +13,7 @@ Although nowadays the drop in prices of audio hardware with pro features, in com
 The uTracker window is split in 3 panels:
 
 -   Left Panel
+
     The 3 stacked lists host the Patterns, Instruments and Samples, respectively.
        - Patterns list
 Use the patterns list buttons to add, remove, move up/down patterns, and access the current pattern's options. At the options window you can change the current pattern's name, and add/delete rows. 
