@@ -14,11 +14,13 @@ The uTracker window is split in 3 panels:
 
 -   Left Panel
 
-    The 3 stacked lists host the Patterns, Instruments and Samples, respectively.
+    The 3 stacked lists host the Patterns, Instruments and Samples, respectively:
        - Patterns list
+       
 Use the patterns list buttons to add, remove, move up/down patterns, and access the current pattern's options. At the options window you can change the current pattern's name, and add/delete rows. 
     > Note: If there's existing data on deleted rows, it too gets deleted.
        - Instruments list
+       
 Use the instruments list buttons to add, remove, move up/down instruments, and access the current instrument's options. At the options window you can change the current instrument's name and edit its sample-map.
 
 
