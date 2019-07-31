@@ -86,7 +86,7 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
             
             if (module[row][i].INSTRUMENT == 0 || module[row][i].INSTRUMENT > instruments_list.size() - 1)
             {
-                return false;
+                continue;
             }
             
             chgroup->stop();

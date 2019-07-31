@@ -1,4 +1,5 @@
 ImGui::SetNextWindowSize(ImVec2(UI.PATTERN_OPTIONS_MODAL_WIDTH, UI.PATTERN_OPTIONS_MODAL_HEIGHT));
+ImGui::PushStyleColor(ImGuiCol_PopupBg, color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
 
 if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResize))
 {
@@ -14,12 +15,7 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     }
     
     ImGui::PushItemWidth(200);
-    ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
-    ImGui::Text("Number of rows");
-    ImGui::SliderInt("##numofrows", &r, 1, MAX_ROWS_PER_PATTERN);
-    ImGui::PopStyleColor();
-    
-    ImGui::PushStyleColor(ImGuiCol_Text, col_heading_text);
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
     ImGui::Text("Pattern name");
     ImGui::PopStyleColor();
     
@@ -27,6 +23,11 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     {
         
     }
+    
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
+    ImGui::Text("Number of rows");
+    ImGui::SliderInt("##numofrows", &r, 1, MAX_ROWS_PER_PATTERN);
+    ImGui::PopStyleColor();
     
     ImGui::PopItemWidth();
     
@@ -56,3 +57,4 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     }
     ImGui::EndPopup();
 }
+ImGui::PopStyleColor();

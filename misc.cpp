@@ -74,6 +74,7 @@ https://github.com/mdodis"
 #define DEFAULT_BINDING_PATTERN_SET_FOCUS {"Pattern Set Focus", false, false, false, ImGuiKey_Enter}
 #define DEFAULT_BINDING_SELECT_TRACK {"Select Track", true, false, false, ImGuiKey_L}
 #define DEFAULT_BINDING_CLEAR_SELECTION {"Clear Selection", false, false, false, ImGuiKey_Escape}
+#define DEFAULT_BINDING_DELETE {"Delete", false, false, false, ImGuiKey_Delete}
 
 std::future<bool> future_play;
 std::future<bool> future_tick;
@@ -265,7 +266,8 @@ enum BINDING_NAMES
     DecreaseStep,
     PatternSetFocus,
     SelectTrack,
-    ClearSelection
+    ClearSelection,
+    Delete
 };
 
 
@@ -273,7 +275,7 @@ enum BINDING_NAMES
 APP_STATE application_state = EDITOR;
 UI_METRICS UI;
 ACTIVE_CELL active_cell;
-std::array<KEYBOARD_BINDING, 19> key_binding; // change size when adding new binding
+std::array<KEYBOARD_BINDING, 20> key_binding; // change size when adding new binding
 
 ImVec4 col_toggle_button = DEFAULT_COL_TOGGLE_BUTTON;
 ImVec4 col_heading_text = DEFAULT_COL_HEADING_TEXT;
@@ -466,6 +468,8 @@ FMOD::Sound      *sound;
 FMOD::Channel    *channel = 0;
 FMOD::ChannelGroup *channelgroup;
 FMOD_RESULT       result;
+
+FMOD::DSP *dsp;
 
 struct AUDIO_DEVICE
 {

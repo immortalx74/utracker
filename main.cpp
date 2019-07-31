@@ -8,11 +8,12 @@
 // - Add a "pan" field to notes and include it on PlayRow. It will be set by an FX
 // - Prevent sliders (and possibly other ui elements) of having values <>
 //   min/max.NOTE:This is an imgui issue.
-//   Window state (pos/size/maximized).
 // - Read/Write file format.
 // - WAV export.
-//   Set volume [same as above], Set instrument[same as above]
 // - Fix Solo/Mute. Should be updated even after firing notes.
+// - BUG: Step scrolls only when playing notes with no instrument
+// - BUG: Instrument sample-maps save correctly but show false information
+//   in sample map editor.
 //============================================================================
 
 // imx family's program restructuring MODEL (I.F.P.R.M.)
@@ -167,7 +168,7 @@ int main()
 			ImGui::ShowDemoWindow();
             //ImGui::ShowStyleEditor();
 		}
-		
+        
 		//======================================================
 		window.clear(color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
 		ImGui::SFML::Render(window);

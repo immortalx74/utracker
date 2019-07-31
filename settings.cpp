@@ -1,4 +1,5 @@
 ImGui::SetNextWindowSize(ImVec2(588, 400));
+ImGui::PushStyleColor(ImGuiCol_PopupBg, color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
 
 if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoResize))
 {
@@ -42,6 +43,8 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         case 0: // keyboard
         {
             ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
             ImGui::BeginChild("##page0", ImVec2(260,338), true);
             
             for (int i = 0; i < key_binding.size(); ++i)
@@ -53,7 +56,10 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
             }
             
             ImGui::EndChild();
+            ImGui::PopStyleColor();
             
+            
+            ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
             ImGui::SetCursorPos(ImVec2(370, 28));
             if (ImGui::Checkbox("CTRL", &key_binding[selected].MDFR_CTRL))
             {
@@ -84,11 +90,14 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
             ImGui::SetCursorPos(ImVec2(370, 128));
             
             ImGui::Text("Key binding:");
+            ImGui::PopStyleColor();
             
             ImGui::SetCursorPos(ImVec2(370, 148));
             
             ImGui::PushItemWidth(208);
             
+            ImGui::PushStyleColor(ImGuiCol_PopupBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
             if (ImGui::BeginCombo("##keynamesarray", key_names[key_binding[selected].KEY].c_str()))
             {
                 for (int i = 0; i < key_names.size(); ++i)
@@ -106,7 +115,9 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
                 
                 ImGui::EndCombo();
             }
-            
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
             ImGui::PopItemWidth();
         }
         break;
@@ -114,6 +125,8 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         case 1: // colors
         {
             ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+            
             ImGui::BeginChild("##page1", ImVec2(260,338), true);
             
             for (int j = 0; j < color_info.size(); ++j)
@@ -121,6 +134,8 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
                 color_name = color_info[j].COLOR_NAME;
                 std::string subsection = color_schemes[active_color_scheme].NAME;
                 
+                
+                ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
                 if (ImGui::ColorEdit4(color_info[j].COLOR_NAME.c_str(), (float*)&color_schemes[active_color_scheme].DATA[j].COLOR_VALUE, ImGuiColorEditFlags_NoInputs))
                 {
                     float valx = (color_schemes[active_color_scheme].DATA[j].COLOR_VALUE.x * 100) / 100;
@@ -135,13 +150,17 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
                     
                     ft.Save("settings.ini");
                 }
+                ImGui::PopStyleColor();
             }
             
             ImGui::EndChild();
+            ImGui::PopStyleColor();
             
             //colorschemes========================================
             ImGui::SetCursorPos(ImVec2(370, 28));
+            ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
             ImGui::Text("Color Schemes");
+            ImGui::PopStyleColor();
             
             ImGui::SetCursorPos(ImVec2(370, 48));
             ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
@@ -174,6 +193,8 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         case 2: // sound
         {
             ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
             ImGui::BeginChild("##page2", ImVec2(480,140), true);//260 338
             
             for (int i = 0; i < audio_devices.size(); ++i)
@@ -186,15 +207,26 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
             }
             
             ImGui::EndChild();
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
         }
         break;
         
         case 3: // about
         {
             ImGui::SetNextWindowPos(ImVec2(parent_pos.x + 100, parent_pos.y + 24));
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
+            ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
             ImGui::BeginChild("##page3", ImVec2(480,338), true);
+            
+            ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
             ImGui::InputTextMultiline("##aboutbox", ABOUT_TEXT, 600, ImVec2(450,324));
+            ImGui::PopStyleColor();
+            
             ImGui::EndChild();
+            
+            ImGui::PopStyleColor();
+            ImGui::PopStyleColor();
         }
         break;
     }
@@ -218,3 +250,5 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     
     ImGui::EndPopup();
 }
+
+ImGui::PopStyleColor();

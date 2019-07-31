@@ -19,6 +19,9 @@ fsystem->setDSPBufferSize(128, 4);
 result = fsystem->init(1000, FMOD_INIT_NORMAL, 0);
 ERRCHECK(result);
 
+result = fsystem->createDSPByType(FMOD_DSP_TYPE_FFT, &dsp);
+ERRCHECK(result);
+
 result = fsystem->createChannelGroup("mychannels", &channelgroup);
 ERRCHECK(result);
 
@@ -59,6 +62,7 @@ key_binding[DecreaseStep] = DEFAULT_BINDING_DECREASE_STEP;
 key_binding[PatternSetFocus] = DEFAULT_BINDING_PATTERN_SET_FOCUS;
 key_binding[SelectTrack] = DEFAULT_BINDING_SELECT_TRACK;
 key_binding[ClearSelection] = DEFAULT_BINDING_CLEAR_SELECTION;
+key_binding[Delete] = DEFAULT_BINDING_DELETE;
 
 color_info[HeadingText] = {"Heading Text", col_heading_text, DEFAULT_COL_HEADING_TEXT};
 color_info[Cursor] = {"Cursor", col_cursor, DEFAULT_COL_CURSOR};

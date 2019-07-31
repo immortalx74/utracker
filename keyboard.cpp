@@ -2,6 +2,67 @@
 int key;
 bool mdfr;
 
+// TEMP! DSP dom freq
+
+//channelgroup->addDSP(0, dsp);
+//if (ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_A]))
+//{
+//float val;
+//dsp->setParameterInt(FMOD_DSP_FFT_WINDOWTYPE, FMOD_DSP_FFT_WINDOW_TRIANGLE);
+//dsp->setParameterInt(FMOD_DSP_FFT_WINDOWSIZE, 4096);
+//dsp->getParameterFloat(FMOD_DSP_FFT_DOMINANT_FREQ, &val, 0, 0);
+//print(val);
+//}
+
+
+// delete
+key = key_binding[Delete].KEY;
+mdfr = GetModifiers(key_binding[Delete]);
+if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr)
+{
+    NOTE_DATA nd = {"---", 0, 0, 0, -1, -1};
+    if (selection_exists)
+    {
+        // delete data at selection
+        int srow, scol, erow, ecol;
+        
+        if (selection.START_ROW > selection.END_ROW)
+        {
+            srow = selection.END_ROW;
+            erow = selection.START_ROW;
+        }
+        else
+        {
+            srow = selection.START_ROW;
+            erow = selection.END_ROW;
+        }
+        
+        if (selection.START_COL > selection.END_COL)
+        {
+            scol = selection.END_COL;
+            ecol = selection.START_COL;
+        }
+        else
+        {
+            scol = selection.START_COL;
+            ecol = selection.END_COL;
+        }
+        
+        for (int i = srow + pattern_start; i < erow + pattern_start + 1; ++i)
+        {
+            for (int j = scol; j <= ecol; ++j)
+            {
+                CellSet(i, j, nd, module);
+            }
+        }
+    }
+    else
+    {
+        // delete data at cursor
+        CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
+    }
+}
+
 // select next/previous instrument
 key = key_binding[NextInstrument].KEY;
 mdfr = GetModifiers(key_binding[NextInstrument]);
@@ -218,7 +279,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
             is_playing = false;
         }
         
-        if (ImGui::IsKeyPressed(i) && !is_playing && !key_pressed)
+        if (ImGui::IsKeyPressed(i)&& !key_pressed && !is_playing)
         {
             key_pressed = true;
             
@@ -228,40 +289,18 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
                 NOTE_DATA nd;
                 nd.NAME = keychar;
                 
-                if (keychar == "= =" || keychar == "del")
+                if (keychar == "= =")
                 {
-                    if (keychar == "= =")
-                    {
-                        nd.NAME = "= =";
-                    }
-                    else
-                    {
-                        nd.NAME = "---";
-                    }
-                    
+                    nd.NAME = "= =";
                     nd.FREQUENCY = 0;
                     nd.INSTRUMENT = 0;
                     nd.VOLUME = 0;
                     nd.FX = -1;
                     nd.FX_PARAM = -1;
                     
-                    if (selection_exists)
-                    {
-                        // delete selection
-                        for (int i = selection.START_ROW + pattern_start; i < selection.END_ROW + pattern_start + 1; ++i)
-                        {
-                            for (int j = selection.START_COL; j < selection.END_COL; ++j)
-                            {
-                                CellSet(i, j, nd, module);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
-                    }
+                    CellSet(active_cell.ROW + pattern_start, active_cell.COL, nd, module);
                 }
-                else if (keychar != "invalid" && keychar !="= =" && keychar != "del")
+                else if (keychar != "invalid" && keychar !="= =")
                 {
                     float freq = NoteToFrequency(keychar);
                     nd.FREQUENCY = freq;
@@ -273,8 +312,8 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
                         
                         if (channel->isPlaying(&is_playing))
                         {
-                            key_pressed = false;
-                            is_playing = true;
+                            //key_pressed = false;
+                            //is_playing = true;
                         }
                         
                         PlayNote(channel, s, channelgroup, freq);
@@ -296,7 +335,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
                 }
                 
                 // apply step to cursor
-                if (keychar != "invalid" && keychar != "del")
+                if (keychar != "invalid")
                 {
                     if (pattern_start + active_cell.ROW + step < pattern_end)
                     {

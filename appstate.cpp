@@ -24,10 +24,6 @@ if (application_state == EDITOR)
 {
 	FMOD_RESULT result;
 	result = channel->stop();
-    if (active_cell.ROW == 0)
-    {
-        ImGui::SetScrollY(0);
-    }
 }
 
 if (application_state == PLAYING)

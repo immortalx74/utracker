@@ -325,8 +325,7 @@ std::string KeyToNote(int key, int cur_octave)
         case 50: 	note = "G#"; cur_octave++; break; //. key
         case 52: 	note = "A-"; cur_octave++; break; /// key
         
-        case 55: return "= ="; // = key
-        case 66: return "del"; // del key
+        case 55: return "= ="; // = key (note off)
         
         default:	return "invalid";
     }
@@ -427,7 +426,7 @@ bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename, FMOD::S
     std::string name = filename.substr(n+1);
     FMOD::Sound *snd;
     FMOD_RESULT result;
-    result = fsystem->createSound(filename.c_str(), FMOD_CREATESAMPLE, 0, &snd);
+    result = fsystem->createSound(filename.c_str(), FMOD_CREATESAMPLE || FMOD_LOOP_NORMAL, 0, &snd);
     
     SAMPLE new_sample;
     new_sample.NAME = name;
@@ -447,13 +446,6 @@ bool DeleteSample()
         return false;
     }
     
-    samples_list[active_sample].SOUND->release();
-    
-    samples_list.erase(samples_list.begin() + active_sample);
-    
-    //NOTE: Temp!!! Set Instruments which where assigned this sample in their sample map
-    // to sample zero.
-    
     int current_note_sample;
     
     for (int i = 0; i < instruments_list.size(); ++i)
@@ -466,8 +458,16 @@ bool DeleteSample()
             {
                 instruments_list[i].SAMPLE_MAP[j] = 0;
             }
+            
+            else if (current_note_sample > active_sample)
+            {
+                instruments_list[i].SAMPLE_MAP[j] = current_note_sample - 1;
+            }
         }
     }
+    
+    samples_list[active_sample].SOUND->release();
+    samples_list.erase(samples_list.begin() + active_sample);
     
     if (active_sample > samples_list.size() - 1)
     {
