@@ -172,7 +172,8 @@ ImGui::Text(std::to_string(active_pattern).c_str());
 ImGui::SetCursorPos(ImVec2(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN), UI.PATTERNS_LIST_Y));
 
 ImGui::PushID("pattern_add");
-if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     CreatePattern(patterns_list, 64, module);
 }
@@ -186,7 +187,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_del");
-if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[3],ImVec2(16, 16), 0,sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     DeletePattern(patterns_list, module);
 }
@@ -201,7 +203,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_up");
-if (ImGui::ImageButton(buttons[4], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[4], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     //
 }
@@ -216,7 +219,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_down");
-if (ImGui::ImageButton(buttons[0], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[0], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     //
 }
@@ -231,7 +235,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.PATTERNS_LIST_X + UI.PATTERNS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("pattern_options");
-if (ImGui::ImageButton(buttons[5], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[5], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     ImGui::OpenPopup("Pattern Options");
 }
@@ -252,7 +257,8 @@ ImGui::PopID();
 ImGui::SetCursorPos(ImVec2(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN), UI.INSTRUMENTS_LIST_Y));
 
 ImGui::PushID("instrument_add");
-if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     CreateInstrument(instruments_list);
 }
@@ -267,7 +273,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_del");
-if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     DeleteInstrument();
 }
@@ -282,7 +289,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_up");
-if (ImGui::ImageButton(buttons[4], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[4], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     //
 }
@@ -297,7 +305,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_down");
-if (ImGui::ImageButton(buttons[0], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[0], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     //
 }
@@ -312,7 +321,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.INSTRUMENTS_LIST_X + UI.INSTRUMENTS_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("instrument_options");
-if (ImGui::ImageButton(buttons[5], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[5], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     ImGui::OpenPopup("Instrument options");
 }
@@ -336,7 +346,8 @@ ImGui::PopID();
 ImGui::SetCursorPos(ImVec2(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + (2 * UI.MARGIN), UI.SAMPLES_LIST_Y));
 
 ImGui::PushID("sample_add");
-if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     auto f = pfd::open_file("Load sample(s)", "/tmp/",{ "Wave Files (.wav)", "*.wav"},true);
     
@@ -362,7 +373,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("sample_instrument_add");
-if (ImGui::ImageButton(buttons[2], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[2], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     auto f = pfd::open_file("Load sample(s)", "/tmp/",{ "Wave Files (.wav)", "*.wav"},true);
     
@@ -395,7 +407,8 @@ ImGui::PopID();
 ImGui::SetCursorPosX(UI.SAMPLES_LIST_X + UI.SAMPLES_LIST_WIDTH + (2 * UI.MARGIN));
 
 ImGui::PushID("sample_del");
-if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0))
+if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 {
     DeleteSample();
 }

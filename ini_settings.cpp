@@ -1,11 +1,11 @@
-void IniLoadSettings()
+bool IniLoadSettings()
 {
     INI::File ft;
     
     if(!ft.Load("settings.ini"))
     {
         //
-        return;
+        return true;
     }
     
     std::string binding_name;
@@ -66,8 +66,12 @@ void IniLoadSettings()
     window_metrics.WIDTH = ft.GetSection("Main")->GetValue("WindowWidth").AsInt();
     window_metrics.HEIGHT = ft.GetSection("Main")->GetValue("WindowHeight").AsInt();
     
-    ft.Save("settings.ini");
+    if (ft.Save("settings.ini"))
+    {
+        return true;
+    }
     
+    return false;
 }
 
 void IniSaveDefaults()
@@ -124,14 +128,14 @@ void IniSaveDefaults()
     ft.Save("settings.ini");
 }
 
-void IniGetColorSchemes()
+bool IniGetColorSchemes()
 {
     INI::File ft;
     
     if(!ft.Load("settings.ini"))
     {
         //
-        return;
+        return true;
     }
     
     int i = 0;
@@ -160,26 +164,33 @@ void IniGetColorSchemes()
     }
     color_scheme_count = i;
     
-    return;
+    return true;
 }
 
-void IniSaveWindow(sf::RenderWindow &w)
+bool IniSaveWindow(sf::RenderWindow &w)
 {
     INI::File ft;
     
     if(!ft.Load("settings.ini"))
     {
         //
-        return;
+        return true;
     }
     
     ImVec2 cur_window_size = w.getSize();
     ImVec2 cur_window_pos = w.getPosition();
+    print(cur_window_pos.y);
     
     ft.SetValue("Main:WindowX", cur_window_pos.x);
     ft.SetValue("Main:WindowY", cur_window_pos.y);
     ft.SetValue("Main:WindowWidth", cur_window_size.x);
     ft.SetValue("Main:WindowHeight", cur_window_size.y);
     
-    ft.Save("settings.ini");
+    
+    if (ft.Save("settings.ini"))
+    {
+        return true;
+    }
+    
+    return false;
 }

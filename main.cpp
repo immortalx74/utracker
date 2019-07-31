@@ -71,11 +71,12 @@ int main()
     window.setFramerateLimit(30);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-    window.setPosition(ImVec2((m_width - window_metrics.WIDTH) / 2, (m_height - window_metrics.HEIGHT - 100) / 2));
     sf::Clock deltaClock;
     
 #include "init.cpp"
-	
+	window.setPosition(ImVec2(window_metrics.X, window_metrics.Y));
+    window.setSize(ImVec2(window_metrics.WIDTH, window_metrics.HEIGHT));
+    
     while (window.isOpen())
     {
         sf::Event event;
@@ -174,7 +175,15 @@ int main()
     result = fsystem->release();
     ERRCHECK(result);
     
-    IniSaveWindow(window);
+    while (1)
+    {
+        if (IniSaveWindow(window))
+        {
+            break;
+        }
+    }
+    
+    
     
 	ImGui::SFML::Shutdown();
     

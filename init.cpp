@@ -86,11 +86,21 @@ color_info[PatternForeground] = {"Pattern Foreground", col_pattern_foreground, D
 color_info[WindowBackground] = {"Window Background", col_window_background, DEFAULT_COL_WINDOW_BACKGROUND};
 color_info[TrackSeparator] = {"Track Separator", col_track_separator, DEFAULT_COL_TRACK_SEPARATOR};
 
-IniLoadSettings();
-IniGetColorSchemes();
-RowTick(100);
+while(1)
+{
+    if (IniLoadSettings())
+    {
+        break;
+    }
+}
 
-//FMOD_OUTPUTTYPE output;
+while(1)
+{
+    if (IniGetColorSchemes())
+    {
+        break;
+    }
+}
 
 int numdrivers = 0;
 fsystem->getNumDrivers(&numdrivers);
