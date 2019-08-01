@@ -307,7 +307,6 @@ ImVec4 col_text = DEFAULT_COL_TEXT;
 ImVec4 col_pattern_foreground = DEFAULT_COL_PATTERN_FOREGROUND;
 ImVec4 col_window_background = DEFAULT_COL_WINDOW_BACKGROUND;
 
-int tracks = DEFAULT_TRACK_COUNT;
 int active_pattern = 0;
 int active_instrument = 0;
 int active_sample = 0;

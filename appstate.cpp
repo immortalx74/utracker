@@ -3,7 +3,8 @@ if (application_state == PLAY_PATTERN)
 	active_cell.ROW = 0;
 	ImGui::SetScrollY(0);
 	application_state = PLAYING;
-	future_play = std::async(std::launch::async, PlayPattern, pattern_start, pattern_end, tracks);
+    int track_count = tracks_list.size();
+	future_play = std::async(std::launch::async, PlayPattern, pattern_start, pattern_end, track_count);
     if (application_state == END_PATTERN)
     {
         application_state = EDITOR;
@@ -17,7 +18,8 @@ if (application_state == PLAY_MODULE)
 	ImGui::SetScrollY(0);
 	application_state = PLAYING;
 	int end = patterns_list.size();
-	future_play = std::async(std::launch::async, PlayModule, 0, end, tracks);
+    int track_count = tracks_list.size();
+	future_play = std::async(std::launch::async, PlayModule, 0, end, track_count);
 }
 
 if (application_state == EDITOR)

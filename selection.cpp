@@ -42,9 +42,9 @@ if (ImGui::IsMouseDragging(0) && ImGui::IsWindowHovered() && application_state =
         selection.END_ROW = patterns_list[active_pattern].ROWS - 1;
     }
     
-    if (selection.END_COL > (tracks * 4) - 1)
+    if (selection.END_COL > (tracks_list.size() * 4) - 1)
     {
-        selection.END_COL = (tracks * 4) - 1;
+        selection.END_COL = (tracks_list.size() * 4) - 1;
     }
     
 	// auto scroll if selection out of bounds

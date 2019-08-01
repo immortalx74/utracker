@@ -57,4 +57,5 @@ if (ImGui::BeginPopupModal("Pattern Options", &p_opened, ImGuiWindowFlags_NoResi
     }
     ImGui::EndPopup();
 }
+
 ImGui::PopStyleColor();

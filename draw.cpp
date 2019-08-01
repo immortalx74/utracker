@@ -11,14 +11,14 @@ ImVec2 highlight_br;
 for (int r = 0; r < pattern_rows; r += nth_row_highlight)
 {
 	highlight_tl = ImVec2(c.x-4, c.y);
-	highlight_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
+	highlight_br = ImVec2(c.x + (tracks_list.size() * UI.TRACK_WIDTH) - 8, c.y + UI.CELL_HEIGHT);
 	draw_list->AddRectFilled(highlight_tl, highlight_br, ImColor(color_schemes[active_color_scheme].DATA[NthRowHighlight].COLOR_VALUE));
 	c.y += nth_row_highlight * UI.CELL_HEIGHT;
 }
 
 // draw active row
 ImVec2 row_tl = ImVec2(c.x-4, active_cell.Y - ImGui::GetScrollY());
-ImVec2 row_br = ImVec2(c.x + (tracks * UI.TRACK_WIDTH)-8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
+ImVec2 row_br = ImVec2(c.x + (tracks_list.size() * UI.TRACK_WIDTH)-8, active_cell.Y + UI.CELL_HEIGHT - ImGui::GetScrollY());
 //draw_list->AddRectFilled(row_tl, row_br, ImColor(col_current_row));
 draw_list->AddRectFilled(row_tl, row_br, ImColor(color_schemes[active_color_scheme].DATA[CurrentRow].COLOR_VALUE));
 
@@ -114,12 +114,12 @@ colors[ImGuiCol_Separator] = color_schemes[active_color_scheme].DATA[TrackSepara
 colors[ImGuiCol_SeparatorHovered] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
 colors[ImGuiCol_SeparatorActive] = color_schemes[active_color_scheme].DATA[TrackSeparator].COLOR_VALUE;
 
-ImGui::Columns(tracks);
+ImGui::Columns(tracks_list.size());
 
 // grid drawing loop
 for (int i = pattern_start; i < pattern_end; ++i)
 {
-    for (int j = 0; j < tracks; ++j)
+    for (int j = 0; j < tracks_list.size(); ++j)
     {
         if (module[i][j].NAME != "---")
         {

@@ -73,7 +73,7 @@ void ResizePattern(int new_row_count)
         {
             std::vector<NOTE_DATA> row;
             
-            for (int j = 0; j < tracks; ++j)
+            for (int j = 0; j < tracks_list.size(); ++j)
             {
                 NOTE_DATA cur_track_row_data;
                 
@@ -126,7 +126,7 @@ bool CreatePattern(std::vector<PATTERN_> &patterns_list,
     {
         std::vector<NOTE_DATA> row;
 		
-        for (int j = 0; j < tracks; ++j)
+        for (int j = 0; j < tracks_list.size(); ++j)
         {
             NOTE_DATA cur_track_row_data;
 			
@@ -222,7 +222,7 @@ bool DeleteInstrument()
     return false;
 }
 
-bool CreateTrack(std::vector<TRACK> &tracks_list, FMOD::System *fsys)
+bool CreateTrack(std::vector<TRACK> &tracks_list, int position)
 {
     if (tracks_list.size() == MAX_TRACKS_PER_MODULE)
     {
@@ -231,7 +231,7 @@ bool CreateTrack(std::vector<TRACK> &tracks_list, FMOD::System *fsys)
     
     TRACK new_track;
     FMOD::ChannelGroup *new_channel_group;
-    fsys->createChannelGroup(0, &new_channel_group);
+    fsystem->createChannelGroup(0, &new_channel_group);
     
     new_track.VOLUME = 64;
     new_track.PAN = 0.0f;
@@ -239,7 +239,12 @@ bool CreateTrack(std::vector<TRACK> &tracks_list, FMOD::System *fsys)
     new_track.SOLO = false;
     new_track.CHANNELGROUP = new_channel_group;
     
-    tracks_list.push_back(new_track);
+    if (position == tracks_list.size())
+    {
+        tracks_list.push_back(new_track);
+        return true;
+    }
+    
     return true;
 }
 

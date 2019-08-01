@@ -31,7 +31,7 @@ if (ImGui::BeginPopupContextItem("pattern context menu"))
         selection.START_ROW = 0;
         selection.START_COL = 0;
         selection.END_ROW = patterns_list[active_pattern].ROWS - 1;
-        selection.END_COL = (tracks * 4) - 1;
+        selection.END_COL = (tracks_list.size() * 4) - 1;
     }
     
     ImGui::EndPopup();

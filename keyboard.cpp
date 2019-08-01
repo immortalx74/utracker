@@ -197,7 +197,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
         selection.START_ROW = 0;
         selection.START_COL = 0;
         selection.END_ROW = patterns_list[active_pattern].ROWS - 1;
-        selection.END_COL = (tracks * 4) - 1;
+        selection.END_COL = (tracks_list.size() * 4) - 1;
     }
     
     key = key_binding[SelectTrack].KEY;
@@ -243,7 +243,7 @@ if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows) && application_state 
     
     key = key_binding[CursorRight].KEY;
     mdfr = GetModifiers(key_binding[CursorRight]);
-    if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr && active_cell.COL < (tracks * 4) - 1)
+    if (ImGui::IsKeyPressed(io.KeyMap[key]) && mdfr && active_cell.COL < (tracks_list.size() * 4) - 1)
     {
         active_cell.LAST_CURSOR_ACTION = RIGHT;
         active_cell.X += UI.CELL_WIDTH;

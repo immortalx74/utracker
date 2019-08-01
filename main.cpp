@@ -111,13 +111,13 @@ int main()
 		UI.MAIN_X = ImGui::GetCursorPosX();
 		UI.MAIN_Y = ImGui::GetCursorPosY();
         
-		if (UI.LEFT_PANE_WIDTH + (tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING > io.DisplaySize.x)
+		if (UI.LEFT_PANE_WIDTH + (tracks_list.size() * UI.TRACK_WIDTH) + UI.MAIN_PADDING > io.DisplaySize.x)
 		{
 			UI.MAIN_WIDTH = io.DisplaySize.x - UI.LEFT_PANE_WIDTH - UI.MARGIN;
 		}
 		else
 		{
-			UI.MAIN_WIDTH = (tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING;
+			UI.MAIN_WIDTH = (tracks_list.size() * UI.TRACK_WIDTH) + UI.MAIN_PADDING;
 		}
         
 		if (UI.TOOLBAR_HEIGHT + (patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT) + UI.MAIN_PADDING + UI.CELL_HEIGHT + UI.MARGIN > io.DisplaySize.y)

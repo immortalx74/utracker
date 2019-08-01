@@ -25,7 +25,8 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 		}
 		
 		// check button presses
-		if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24)))
+		if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24), 0, sf::Color::Transparent,
+                               color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 		{
 			if (i == 8) // repeat
 			{

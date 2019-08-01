@@ -1,10 +1,109 @@
 // draw track headers
-ImGui::SetNextWindowContentSize(ImVec2((tracks * UI.TRACK_WIDTH) + UI.MAIN_PADDING, UI.CELL_HEIGHT));
+ImVec2 cur_pos = ImGui::GetCursorPos();
+
+// track add/delete buttons
+ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
+ImGui::PushID("track_add");
+if (ImGui::ImageButton(buttons[1], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
+{
+    ImGui::OpenPopup("Add Track");
+}
+
+if (ImGui::IsItemHovered())
+{
+    ImGui::SetTooltip("Add Track");
+}
+
+if (ImGui::BeginPopup("Add Track"))
+{
+    static int position = 1;
+    ImGui::Text("Add a new track");
+    if (ImGui::RadioButton("Before", position == 0))
+    {
+        position = 0;
+    }
+    if (ImGui::RadioButton("After", position == 1))
+    {
+        position = 1;
+    }
+    
+    ImGui::Separator();
+    
+    int selected = 0;
+    for (int i = 0; i < tracks_list.size(); ++i)
+    {
+        if (ImGui::Selectable(std::to_string(i).c_str(), selected == i))
+        {
+            selected = i;
+            CreateTrack(tracks_list, tracks_list.size());
+            
+            module.resize(module.size(), std::vector<NOTE_DATA>(9));
+            for (int i = 0; i < module.size(); ++i)
+            {
+                //module[i][8].NAME = "---";
+                //module[i][8].FREQUENCY = 0.0f;
+                //module[i][8].INSTRUMENT = 0;
+                //module[i][8].VOLUME = 0;
+                //module[i][8].FX = -1;
+                //module[i][8].FX_PARAM = -1;
+                
+            }
+        }
+    }
+    
+    ImGui::EndPopup();
+}
+
+
+ImGui::PopID();
+
+ImGui::PushID("track_del");
+if (ImGui::ImageButton(buttons[3], ImVec2(16, 16), 0, sf::Color::Transparent,
+                       color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
+{
+    ImGui::OpenPopup("Delete Track");
+}
+
+if (ImGui::IsItemHovered())
+{
+    ImGui::SetTooltip("Delete Track");
+}
+
+if (ImGui::BeginPopup("Delete Track"))
+{
+    ImGui::Text("Delete track");
+    
+    ImGui::Separator();
+    
+    int selected = 0;
+    for (int i = 0; i < tracks_list.size(); ++i)
+    {
+        if (ImGui::Selectable(std::to_string(i).c_str(), selected == i))
+        {
+            selected = i;
+        }
+    }
+    
+    ImGui::EndPopup();
+}
+
+ImGui::PopID();
+ImGui::PopStyleColor();
+
+
+// start headers
+ImGui::SetCursorPos(ImVec2(cur_pos.x, cur_pos.y));
+
+ImGui::SetNextWindowContentSize(ImVec2((tracks_list.size() * UI.TRACK_WIDTH) + UI.MAIN_PADDING, UI.CELL_HEIGHT));
 ImGui::SetCursorPosX(UI.TRACK_HEADERS_START);
 
 ImGui::BeginChild("##trackheaders", ImVec2(0, UI.TRACK_HEADERS_HEIGHT), false);
+
 ImGui::SetScrollX(grid_scroll_x);
-ImGui::Columns(tracks);
+
+ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
+ImGui::Columns(tracks_list.size());
 
 for (int t = 0; t < tracks_list.size(); ++t)
 {
@@ -106,7 +205,7 @@ for (int t = 0; t < tracks_list.size(); ++t)
 	ImGui::NextColumn();
 }
 
-
+ImGui::PopStyleColor();
 ImGui::EndChild();
 
 ImGui::Columns(1);
@@ -134,7 +233,7 @@ ImGui::EndChild();
 
 ImGui::SetCursorPosY(UI.MAIN_X + UI.TRACK_HEADERS_HEIGHT + UI.MARGIN);
 ImGui::SetCursorPosX(UI.CELL_WIDTH + 8);
-ImGui::SetNextWindowContentSize(ImVec2(tracks * UI.TRACK_WIDTH, patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT));
+ImGui::SetNextWindowContentSize(ImVec2(tracks_list.size() * UI.TRACK_WIDTH, patterns_list[active_pattern].ROWS * UI.CELL_HEIGHT));
 
 ImGui::PushStyleColor(ImGuiCol_ChildBg, color_schemes[active_color_scheme].DATA[PatternBackground].COLOR_VALUE);
 {
