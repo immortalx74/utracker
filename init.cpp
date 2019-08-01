@@ -30,7 +30,7 @@ ERRCHECK(result);
 // create default tracks
 for (int i = 0; i < DEFAULT_TRACK_COUNT; ++i)
 {
-    CreateTrack(tracks_list, tracks_list.size());
+    CreateTrack(tracks_list, tracks_list.size(), true);
 }
 
 CreatePattern(patterns_list, 64, module); // create default PATTERN_

@@ -222,11 +222,63 @@ bool DeleteInstrument()
     return false;
 }
 
-bool CreateTrack(std::vector<TRACK> &tracks_list, int position)
+// position: occupies an existing index. If position is greater than last
+// index, the new track gets pushed back and no module data needs to be moved
+bool CreateTrack(std::vector<TRACK> &tracks_list, int position, bool init)
 {
     if (tracks_list.size() == MAX_TRACKS_PER_MODULE)
     {
         return false;
+    }
+    
+    int rows = module.size();
+    int cols = tracks_list.size();
+    
+    // resize module
+    if (!init)
+    {
+        if (position >= cols) // append to end of module
+        {
+            for (int i = 0; i < rows; ++i)
+            {
+                module[i].resize(cols + 1);
+                
+                module[i][cols].NAME = "---";
+                module[i][cols].FREQUENCY = 0.0f;
+                module[i][cols].INSTRUMENT = 0;
+                module[i][cols].VOLUME = 0;
+                module[i][cols].FX = -1;
+                module[i][cols].FX_PARAM = -1;
+            }
+        }
+        else // insert at position
+        {
+            NOTE_DATA track_data;
+            
+            track_data.NAME = "---";
+            track_data.FREQUENCY = 0.0f;
+            track_data.INSTRUMENT = 0;
+            track_data.VOLUME = 0;
+            track_data.FX = -1;
+            track_data.FX_PARAM = -1;
+            
+            for (int i = 0; i < rows; ++i)
+            {
+                module[i].insert(module[i].begin() + position, track_data);
+            }
+        }
+    }
+    
+    // check for an existing soloed track.
+    // In that case set the new track to mute
+    bool mt = false;
+    
+    for (int i = 0; i < tracks_list.size(); ++i)
+    {
+        if (tracks_list[i].SOLO)
+        {
+            mt = true;
+        }
     }
     
     TRACK new_track;
@@ -235,18 +287,43 @@ bool CreateTrack(std::vector<TRACK> &tracks_list, int position)
     
     new_track.VOLUME = 64;
     new_track.PAN = 0.0f;
-    new_track.MUTE = false;
+    new_track.MUTE = mt;
     new_track.SOLO = false;
     new_track.CHANNELGROUP = new_channel_group;
     
-    if (position == tracks_list.size())
+    if (position >= cols)
     {
         tracks_list.push_back(new_track);
         return true;
     }
+    else
+    {
+        tracks_list.insert(tracks_list.begin() + position, new_track);
+    }
     
     return true;
 }
+
+bool DeleteTrack(std::vector<TRACK> &tracks_list, int position)
+{
+    if (tracks_list.size() == 1)
+    {
+        return false;
+    }
+    
+    // shrink module
+    int rows = module.size();
+    for (int i = 0; i < rows; ++i)
+    {
+        module[i].erase(module[i].begin() + position);
+    }
+    
+    tracks_list.erase(tracks_list.begin() + position);
+    
+    return true;
+}
+
+
 
 void CellSet(int row, int col, NOTE_DATA nd, std::vector<std::vector<NOTE_DATA>> &module)
 {

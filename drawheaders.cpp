@@ -33,22 +33,10 @@ if (ImGui::BeginPopup("Add Track"))
     int selected = 0;
     for (int i = 0; i < tracks_list.size(); ++i)
     {
-        if (ImGui::Selectable(std::to_string(i).c_str(), selected == i))
+        if (ImGui::Selectable(std::to_string(i + 1).c_str(), selected == i))
         {
             selected = i;
-            CreateTrack(tracks_list, tracks_list.size());
-            
-            module.resize(module.size(), std::vector<NOTE_DATA>(9));
-            for (int i = 0; i < module.size(); ++i)
-            {
-                //module[i][8].NAME = "---";
-                //module[i][8].FREQUENCY = 0.0f;
-                //module[i][8].INSTRUMENT = 0;
-                //module[i][8].VOLUME = 0;
-                //module[i][8].FX = -1;
-                //module[i][8].FX_PARAM = -1;
-                
-            }
+            CreateTrack(tracks_list, selected + position, false);
         }
     }
     
@@ -79,9 +67,10 @@ if (ImGui::BeginPopup("Delete Track"))
     int selected = 0;
     for (int i = 0; i < tracks_list.size(); ++i)
     {
-        if (ImGui::Selectable(std::to_string(i).c_str(), selected == i))
+        if (ImGui::Selectable(std::to_string(i + 1).c_str(), selected == i))
         {
             selected = i;
+            DeleteTrack(tracks_list, selected);
         }
     }
     
