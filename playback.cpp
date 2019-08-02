@@ -76,6 +76,28 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
 		ch = tracks_list[i].CHANNEL;
         chgroup = tracks_list[i].CHANNELGROUP;
         ch->setChannelGroup(chgroup);
+        if (tracks_list[i].MUTE)
+        {
+            chgroup->setVolume(0.0f);
+            continue;
+        }
+        else
+        {
+            chgroup->setVolume(1.0f);
+        }
+        
+        
+        if (module[row][i].NAME == "---" && module[row][i].NAME != "= =" && !tracks_list[i].MUTE)
+        {
+            if (module[row][i].VOLUME > 0)
+            {
+                vol_note = ((float)module[row][i].VOLUME / 64.0f);
+                vol_track = ((float)tracks_list[i].VOLUME / 64.0f);
+                vol_master = ((float)master_volume / 64.0f);
+                vol_final = vol_note * vol_track * vol_master;
+                chgroup->setVolume(vol_final);
+            }
+        }
         
         if (module[row][i].NAME != "---" && module[row][i].NAME != "= =" && !tracks_list[i].MUTE)
 		{
@@ -90,6 +112,7 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
             }
             
             chgroup->stop();
+            chgroup->setVolume(1.0f);
             
             sample_index = NoteToSample(module[row][i].NAME, module[row][i].INSTRUMENT);
             s = samples_list[sample_index].SOUND;
@@ -105,7 +128,6 @@ bool PlayRow(FMOD::System *fsystem, int row, int track_count)
             vol_track = ((float)tracks_list[i].VOLUME / 64.0f);
             vol_master = ((float)master_volume / 64.0f);
             vol_final = vol_note * vol_track * vol_master;
-            
             
             ch->setVolume(vol_final);
             ch->setPan(pan_track);

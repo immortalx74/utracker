@@ -57,6 +57,7 @@
 #include "playback.cpp"
 #include "toolbar.cpp"
 #include "ini_settings.cpp"
+#include "fileio.cpp"
 
 #pragma comment (lib, "Comdlg32")
 #pragma comment (lib, "OLE32")
