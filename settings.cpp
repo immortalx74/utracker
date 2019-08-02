@@ -5,6 +5,8 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
 {
     static int page = 0;
     
+    ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
     if (ImGui::Button("Keyboard", ImVec2(80, 0)))
     {
         page = 0;
@@ -24,6 +26,7 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         page = 3;
     }
     
+    ImGui::PopStyleColor(2);
     ImVec2 parent_pos = ImGui::GetWindowPos();
     
     static bool check_ctrl = false;

@@ -67,7 +67,7 @@ int main()
     unsigned int m_width = sf::VideoMode::getDesktopMode().width;
     unsigned int m_height = sf::VideoMode::getDesktopMode().height;
     
-    sf::RenderWindow window(sf::VideoMode(window_metrics.WIDTH, window_metrics.HEIGHT), "Tracker alpha", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode(window_metrics.WIDTH, window_metrics.HEIGHT), "uTracker v0.1", sf::Style::Default);
     window.setFramerateLimit(30);
 	ImGui::SFML::Init(window);
 	ImGuiIO& io = ImGui::GetIO(); (void)io;

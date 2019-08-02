@@ -7,7 +7,6 @@ ImGui::Begin("LeftPane", false,ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResi
 
 // patterns list
 ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
-
 ImGui::Text("Patterns");
 ImGui::PopStyleColor();
 
@@ -19,11 +18,11 @@ ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Tex
 
 if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS_LIST_HEIGHT)))
 {   
-	std::string name;
+    std::string name;
     
     for (int i = 0; i < patterns_list.size(); ++i)
-	{
-		if (i <= 9) 
+    {
+        if (i <= 9) 
         {
             name = "0" + std::to_string(i) + ":" + patterns_list[i].NAME;
         }
@@ -33,10 +32,10 @@ if (ImGui::ListBoxHeader("##patlist", ImVec2(UI.PATTERNS_LIST_WIDTH, UI.PATTERNS
         }
         
         if (ImGui::Selectable(name.c_str(), active_pattern == i))
-		{
-			active_pattern = i;
+        {
+            active_pattern = i;
         }
-	}
+    }
 }
 ImGui::ListBoxFooter();
 ImGui::PopStyleColor();
@@ -88,7 +87,7 @@ UI.SAMPLES_LIST_X = ImGui::GetCursorPosX();
 UI.SAMPLES_LIST_Y = ImGui::GetCursorPosY();
 
 ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
-ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
+
 if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_LIST_HEIGHT)))
 {   
 	std::string name;
@@ -104,12 +103,14 @@ if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_L
             name = std::to_string(i) + ":" + samples_list[i].NAME;
         }
         
+        ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
         if (ImGui::Selectable(name.c_str(), active_sample == i))
         {
 			active_sample = i;
 		}
-        
-		if (ImGui::IsItemHovered())
+        ImGui::PopStyleColor();
+		
+        if (ImGui::IsItemHovered())
 		{
 			ImGui::SetTooltip(samples_list[i].FILENAME.c_str());
 		}
@@ -117,9 +118,10 @@ if (ImGui::ListBoxHeader("##samlist", ImVec2(UI.SAMPLES_LIST_WIDTH, UI.SAMPLES_L
 }
 
 ImGui::ListBoxFooter();
-ImGui::PopStyleColor();
+
 ImGui::PopStyleColor();
 
+ImGui::NewLine();
 
 // Draw sliders
 ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
@@ -138,13 +140,13 @@ ImGui::PopStyleColor();
 ImGui::PopItemWidth();
 
 // show debug info
-ImGui::Spacing();
+//ImGui::Spacing();
 //ImGui::Text("mouse_x:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().x).c_str());
 //ImGui::Text("mouse_y:");ImGui::SameLine();ImGui::Text(std::to_string(ImGui::GetMousePos().y).c_str());
 
 //ImGui::Text("cell_x:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.X).c_str());
 //ImGui::Text("cell_y:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.Y).c_str());
-ImGui::Text("cell_row:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.ROW).c_str());
+//ImGui::Text("cell_row:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.ROW).c_str());
 //ImGui::Text("cell_col:");ImGui::SameLine();ImGui::Text(std::to_string(active_cell.COL).c_str());
 //
 //ImGui::Text("start row:");ImGui::SameLine();ImGui::Text(std::to_string(selection.START_ROW).c_str());
@@ -153,17 +155,17 @@ ImGui::Text("cell_row:");ImGui::SameLine();ImGui::Text(std::to_string(active_cel
 //ImGui::Text("end col:");ImGui::SameLine();ImGui::Text(std::to_string(selection.END_COL).c_str());
 
 // show app state
-ImGui::Spacing();
-std::string as;
-if (application_state == 0) as ="PLAY_MODULE";
-if (application_state == 1) as ="PLAY_PATTERN";
-if (application_state == 2) as ="END_PATTERN";
-if (application_state == 3) as ="PLAYING";
-if (application_state == 4) as ="EDITOR";
+//ImGui::Spacing();
+//std::string as;
+//if (application_state == 0) as ="PLAY_MODULE";
+//if (application_state == 1) as ="PLAY_PATTERN";
+//if (application_state == 2) as ="END_PATTERN";
+//if (application_state == 3) as ="PLAYING";
+//if (application_state == 4) as ="EDITOR";
 
-ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
+//ImGui::Text("state:");ImGui::SameLine();ImGui::Text(as.c_str());
 
-ImGui::Text(std::to_string(active_pattern).c_str());
+//ImGui::Text(std::to_string(active_pattern).c_str());
 
 //=======================
 // Draw PATTERN_ buttons

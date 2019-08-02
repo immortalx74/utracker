@@ -1,6 +1,8 @@
 // draw track headers
 ImVec2 cur_pos = ImGui::GetCursorPos();
 
+ImGui::NewLine();
+
 // track add/delete buttons
 ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
 ImGui::PushID("track_add");
@@ -18,7 +20,7 @@ if (ImGui::IsItemHovered())
 if (ImGui::BeginPopup("Add Track"))
 {
     static int position = 1;
-    ImGui::Text("Add a new track");
+    
     if (ImGui::RadioButton("Before", position == 0))
     {
         position = 0;
@@ -31,9 +33,18 @@ if (ImGui::BeginPopup("Add Track"))
     ImGui::Separator();
     
     int selected = 0;
+    
     for (int i = 0; i < tracks_list.size(); ++i)
     {
-        if (ImGui::Selectable(std::to_string(i + 1).c_str(), selected == i))
+        std::string track_text = "Track: ";
+        
+        if (i < 9)
+        {
+            track_text += "0";
+        }
+        track_text += std::to_string(i + 1);
+        
+        if (ImGui::Selectable(track_text.c_str(), selected == i))
         {
             selected = i;
             CreateTrack(tracks_list, selected + position, false);
@@ -67,7 +78,15 @@ if (ImGui::BeginPopup("Delete Track"))
     int selected = 0;
     for (int i = 0; i < tracks_list.size(); ++i)
     {
-        if (ImGui::Selectable(std::to_string(i + 1).c_str(), selected == i))
+        std::string track_text = "Track: ";
+        
+        if (i < 9)
+        {
+            track_text += "0";
+        }
+        track_text += std::to_string(i + 1);
+        
+        if (ImGui::Selectable(track_text.c_str(), selected == i))
         {
             selected = i;
             DeleteTrack(tracks_list, selected);

@@ -18,8 +18,10 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     ImGui::PopStyleColor();
     
     ImGui::PushItemWidth(200);
-    
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
     ImGui::InputText("##instrumentnname", current_instrument_name, 24, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank);
+    ImGui::PopStyleColor(2);
     ImGui::PopItemWidth();
     
     ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[HeadingText].COLOR_VALUE);
@@ -29,7 +31,9 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
     ImGui::Text("Sample map");
     
     ImGui::PushItemWidth(UI.LEFT_SLIDERS_WIDTH);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, color_schemes[active_color_scheme].DATA[FrameBackground].COLOR_VALUE);
     ImGui::SliderInt("Octave", &samplemap_octave, 0, 9);ImGui::SameLine();
+    ImGui::PopStyleColor();
     ImGui::PopItemWidth();
     
     ImGui::SetCursorPosX(188);
@@ -165,7 +169,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         ImGui::PopStyleColor();
         
         ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
-        
+        ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
         if (ImGui::Button("Current octave"))
         {
             for (int i = 0; i < 12; ++i)
@@ -185,11 +189,14 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         }
         
         ImGui::PopStyleColor();
+        ImGui::PopStyleColor();
     }
     
     float modal_width = ImGui::GetWindowSize().x;
     float modal_height = ImGui::GetWindowSize().y;
     ImGui::SetCursorPos(ImVec2(modal_width- 180, modal_height - 30));
+    
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
     
     if (ImGui::Button("OK", ImVec2(80,0)))
     {
@@ -213,6 +220,7 @@ if (ImGui::BeginPopupModal("Instrument options", &p_opened, ImGuiWindowFlags_NoR
         ImGui::CloseCurrentPopup();
     }
     
+    ImGui::PopStyleColor();
     ImGui::EndPopup();
 }
 
