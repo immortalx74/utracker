@@ -209,8 +209,12 @@ for (int t = 0; t < tracks_list.size(); ++t)
     ImGui::PopStyleColor();
     ImGui::PopStyleColor();
 	ImGui::PopItemWidth();
-	ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
-	ImGui::NextColumn();
+	if (ImGui::GetColumnsCount() > 1)
+    {
+        ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
+        ImGui::NextColumn();
+    }
+    
 }
 
 ImGui::PopStyleColor();

@@ -195,10 +195,16 @@ for (int i = pattern_start; i < pattern_end; ++i)
             ImGui::PopStyleColor();
         }
         
-        ImGui::NextColumn();
+        if (ImGui::GetColumnsCount() > 1)
+        {
+            ImGui::NextColumn();
+        }
+    }
+    if (ImGui::GetColumnsCount() > 1)
+    {
+        ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
     }
     
-    ImGui::SetColumnWidth(-1, UI.TRACK_WIDTH);
 }
 
 ImGui::Columns(1);

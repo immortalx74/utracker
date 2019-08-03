@@ -319,7 +319,6 @@ bool DeleteTrack(std::vector<TRACK> &tracks_list, int position)
     }
     
     tracks_list.erase(tracks_list.begin() + position);
-    
     return true;
 }
 

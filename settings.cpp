@@ -235,7 +235,8 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
     }
     
     ImGui::SetCursorPos(ImVec2(364, 370));
-    
+    ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
     if (ImGui::Button("Reset to Defaults"))
     {
         IniSaveDefaults();
@@ -248,7 +249,7 @@ if (ImGui::BeginPopupModal("Settings", &is_settings_open, ImGuiWindowFlags_NoRes
         is_settings_open= false;
         ImGui::CloseCurrentPopup();
     }
-    
+    ImGui::PopStyleColor(2);
     ImGui::SameLine();
     
     ImGui::EndPopup();
