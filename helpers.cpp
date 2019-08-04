@@ -503,6 +503,10 @@ bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename, FMOD::S
     {
         n = filename.rfind("\\");
     }
+    else
+    {
+        filename.replace(n, 1, "\\");
+    }
     
     std::string name = filename.substr(n+1);
     FMOD::Sound *snd;
@@ -513,6 +517,7 @@ bool LoadSample(std::vector<SAMPLE> &samples_list, std::string filename, FMOD::S
     new_sample.NAME = name;
     new_sample.FILENAME = filename;
     new_sample.SOUND = snd;
+    new_sample.LOOP_TYPE = 0;
     
     samples_list.push_back(new_sample);
     

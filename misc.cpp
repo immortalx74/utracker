@@ -307,6 +307,16 @@ ImVec4 col_text = DEFAULT_COL_TEXT;
 ImVec4 col_pattern_foreground = DEFAULT_COL_PATTERN_FOREGROUND;
 ImVec4 col_window_background = DEFAULT_COL_WINDOW_BACKGROUND;
 
+struct TOGGLE_BUTTONS
+{
+    bool BTN_REPEAT = false;
+    bool BTN_REPEAT_CHANGED = false;
+    bool BTN_PAUSE = false;
+    bool BTN_PAUSE_CHANGED = false;
+};
+
+TOGGLE_BUTTONS toggle_buttons;
+
 int active_pattern = 0;
 int active_instrument = 0;
 int active_sample = 0;
@@ -319,7 +329,7 @@ int master_volume = 64;
 bool btn_repeat = false;
 bool btn_repeat_changed = false;
 int nth_row_highlight = DEFAULT_NTH_ROW_HIGHLIGHT;
-;
+
 bool key_pressed = false;
 
 bool selection_begin = false;

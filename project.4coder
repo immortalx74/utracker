@@ -25,7 +25,7 @@ command_list = {
  },
  { .name = "run",
    .out = "*run*", .footer_panel = false, .save_dirty_files = false, .cursor_at_end = true,
-   .cmd = { { "c:/dev/tracker/build.bat", .os = "win"   },  },
+   .cmd = { { "c:/dev/tracker/build/tracker.exe", .os = "win"   },  },
    },
 };
 
