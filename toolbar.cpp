@@ -30,18 +30,42 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 			ImGui::SameLine();
 		}
 		
-		// check button presses
+        // check button presses
 		if (ImGui::ImageButton(toolbar_buttons[i], ImVec2(24, 24), 0, sf::Color::Transparent,
                                color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE))
 		{
-			if (i == 1) // load
+			if (i == 0) // new
             {
-                ReadModule("module.utr");
+                ImGui::OpenPopup("New Module");
+            }
+            
+            if (i == 1) // load
+            {
+                ImGui::OpenPopup("Open Module");
             }
             
             if (i == 2) // save
             {
-                WriteModule("module.utr");
+                // handle existing module save
+            }
+            
+            if (i == 3) // save as
+            {
+                auto f = pfd::save_file("Save Module", "/tmp/",{ "uTracker Module (.utr)", "*.utr"},true);
+                std::string extension = "";
+                std::string fname = f.result();
+                
+                if (fname.size() >= 5)
+                {
+                    extension = fname.substr(fname.size() -  4, 4);
+                }
+                
+                if (extension != ".utr")
+                {
+                    fname += ".utr";
+                }
+                
+                WriteModule(fname.c_str());
             }
             
             if (i == 4) // play module
@@ -114,7 +138,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 			ImGui::SetTooltip(toolbar_tooltips[i].c_str());
 		}
 		
-		if (toggle_buttons.BTN_PAUSE_CHANGED)
+        if (toggle_buttons.BTN_PAUSE_CHANGED)
 		{
             toggle_buttons.BTN_PAUSE_CHANGED = !toggle_buttons.BTN_PAUSE_CHANGED;
 			ImGui::PopStyleColor();
@@ -127,6 +151,48 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
 		}
 		ImGui::SameLine();
 	}
+    
+    
+    // confirmation dialogs
+    if (ImGui::BeginPopupModal("Open Module", NULL, ImGuiWindowFlags_NoResize))
+    {
+        ImGui::Text("All unsaved data will be lost\n\nAre you sure?");
+        
+        if (ImGui::Button("OK", ImVec2(120, 0)))
+        {
+            auto f = pfd::open_file("Open Module", "/tmp/",{ "uTracker Module (.utr)", "*.utr"}, false);
+            std::vector<std::string> fname = f.result();
+            
+            ReadModule(fname[0].c_str());
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        
+        ImGui::EndPopup();
+    }
+    
+    if (ImGui::BeginPopupModal("New Module", NULL, ImGuiWindowFlags_NoResize))
+    {
+        ImGui::Text("All unsaved data will be lost\n\nAre you sure?");
+        
+        if (ImGui::Button("OK", ImVec2(120, 0)))
+        {
+            // add "reset" code here
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        
+        ImGui::EndPopup();
+    }
+    
     
 	ImGui::End();
 	ImGui::PopStyleColor();
