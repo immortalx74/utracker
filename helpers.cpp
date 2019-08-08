@@ -717,3 +717,52 @@ bool GetModifiers(KEYBOARD_BINDING binding)
                    binding.MDFR_SHIFT == io.KeyShift);
     return result;
 }
+
+void CreateNewModule()
+{
+    // Reset containers
+    module.clear();
+    samples_list.clear();
+    instruments_list.clear();
+    patterns_list.clear();
+    tracks_list.clear();
+    
+    
+    // Release FMOD stuff
+    for (int i = 0; i < tracks_list.size(); ++i)
+    {
+        tracks_list[i].CHANNELGROUP = 0;
+        tracks_list[i].CHANNELGROUP->release();
+    }
+    
+    for (int i = 0; i < samples_list.size(); ++i)
+    {
+        samples_list[i].SOUND = 0;
+        samples_list[i].SOUND->release();
+    }
+    
+    result = fsystem->createChannelGroup("mychannels", &channelgroup);
+    ERRCHECK(result);
+    
+    fsystem->close();
+    
+    result = fsystem->init(1000, FMOD_INIT_NORMAL, 0);
+    ERRCHECK(result);
+    
+    // create default tracks
+    for (int i = 0; i < DEFAULT_TRACK_COUNT; ++i)
+    {
+        CreateTrack(tracks_list, tracks_list.size(), true);
+    }
+    
+    CreatePattern(patterns_list, 64, module); // create default PATTERN_
+    CreateInstrument(instruments_list); // create default instrument (serves as "no instrument" equivalent of MPT)
+    
+    // set defaults
+    octave = 5;
+    bpm= 125;
+    rows_per_beat = 4;
+    step = 0;
+    master_volume = 64;
+    
+}

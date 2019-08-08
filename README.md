@@ -1,15 +1,18 @@
+## uTracker
 uTracker is a tiny, tracker-like music authoring application. It's not meant as an alternative or replacement of any of the fine trackers out there (OpenMPT, ScreamTracker ImpulseTracker, etc.). It's simply a little coding project, which just mimics the very basic functionality and workflow of what is considered to be a tracker.
 
 #### For Beginners: What's a music tracker?
 
-It's a music authoring tool which is based on playing-back sound samples at specified intervals. It's visualized in a grid (called a **pattern**), with rows representing the smallest time interval, and columns (called **tracks** or **channels**) which are used to "stack" several samples together. Several patterns can be created to make a complete song (or in tracker-terms, a **module**). Unlike other music authoring tools, the patterns are arranged and scrolled vertically.
+It's a music authoring tool which is based on playing-back sound samples at specified intervals. It's visualized in a grid (called a **pattern**), with rows representing the smallest time interval, and columns (called **tracks** or **channels**) used to "stack" several samples together. Several patterns can be "stitched" to make a complete song (or in tracker-terms, a **module**). Unlike other music authoring tools, the patterns are arranged and scrolled vertically.
 
 The most basic functionality of a tracker, is the ability to playback a sample at a different frequency, thus producing different musical notes. That means that the resulting file size is orders of magnitude smaller than recorded audio, and was the main reason of the widespread use of trackers through the 80's and 90's.
 
 Although nowadays the drop in prices of audio hardware with pro features, in combination with affordable (or even free) DAW software is the preferred method of producing music at home, hardcore enthusiasts and pros alike still use trackers for music production, as it's the most immediate way to be creative.
 
 #### Quick Guide:
-The uTracker window is split in 3 panels:
+The uTracker window is split in 3 areas. The left panel, the toolbar at the top, and the pattern editor:
+
+![UI](https://dl.dropbox.com/s/g66mh4th0cftvos/uiguide.png?dl=0)
 
  -   **Left Panel**
     
@@ -19,7 +22,7 @@ Use the patterns list buttons to add, remove, move up/down patterns, and access 
  
      - ***Instruments list***
 Use the instruments list buttons to add, remove, move up/down instruments, and access the current instrument's options. Clicking on an entry in the list will set it as the active instrument. At the options window you can change the current instrument's name and edit its sample-map.
-
+![instrument options](https://dl.dropbox.com/s/hw9whc37kf5n0ng/instrument_options.png?dl=0)
 		The sample-map is a matrix where rows correspond to loaded samples and columns to musical notes.
 		By default, a newly created instrument will have all its notes assigned to sample #0. There's an exception to this which depends on the way samples are imported (explained bellow at the Samples list section).
 		At any one time, you can see the mapped samples of a single octave. Drag the "octave" slider to select a different octave. Clicking on a cell assigns a note of the current octave to a sample.
@@ -59,6 +62,7 @@ So if the slider is set to octave 5, the entered notes will have their octave as
     - Copy
     - Paste
     - Open settings
+	At the settings window, you can edit keyboard bindings, select and edit a color scheme, and set the active audio device.
 -   Pattern Editor
 
 	At the top of the pattern editor you'll find the track headers. At the very left of the track headers, the buttons labelled "+", "-" are used to add and remove tracks. When you add a track you'll be asked to select an existing track, and a position (before/after) to add it to.
@@ -77,3 +81,4 @@ To delete a track, just select an existing track from the list in the pop-up.
 	Each track is divided in 5 cells per row which correspond to: Note, Instrument, Volume, FX and FX parameters. In this version of uTracker, FX and FX parameters are not yet implemented so they are combined in a single "dummy" cell for simplicity.
 	
 	Explaining everything having to do with entering data to a tracker is beyond the scope of this guide, so just expected it to be just like any tracker out there!
+

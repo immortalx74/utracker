@@ -154,6 +154,11 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
     
     
     // confirmation dialogs
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_TitleBgActive, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
+    ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
+    
     if (ImGui::BeginPopupModal("Open Module", NULL, ImGuiWindowFlags_NoResize))
     {
         ImGui::Text("All unsaved data will be lost\n\nAre you sure?");
@@ -181,7 +186,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
         
         if (ImGui::Button("OK", ImVec2(120, 0)))
         {
-            // add "reset" code here
+            CreateNewModule();
             ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine();
@@ -193,6 +198,7 @@ void DrawToolbar(std::vector<sf::Texture> &toolbar_buttons,
         ImGui::EndPopup();
     }
     
+    ImGui::PopStyleColor(4);
     
 	ImGui::End();
 	ImGui::PopStyleColor();

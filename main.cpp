@@ -69,6 +69,9 @@ int main()
     unsigned int m_width = sf::VideoMode::getDesktopMode().width;
     unsigned int m_height = sf::VideoMode::getDesktopMode().height;
     
+    bool close_window = false;
+    bool open_close_window_modal = false;
+    
     sf::RenderWindow window(sf::VideoMode(window_metrics.WIDTH, window_metrics.HEIGHT), "uTracker v0.1", sf::Style::Default);
     window.setFramerateLimit(30);
 	ImGui::SFML::Init(window);
@@ -85,12 +88,52 @@ int main()
         while (window.pollEvent(event))
         {
             ImGui::SFML::ProcessEvent(event);
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed)
+            {
+                open_close_window_modal = true;
+            }
 		}
         
-		ImGui::SFML::Update(window, deltaClock.restart());
+        if (close_window)
+        {
+            window.close();
+        }
+        
+        ImGui::SFML::Update(window, deltaClock.restart());
 		fsystem->update();
 		io.KeyRepeatRate = 0.035f;
+        
+        if (open_close_window_modal)
+        {
+            ImGui::OpenPopup("Exit uTracker");
+        }
+        
+        ImGui::PushStyleColor(ImGuiCol_PopupBg, color_schemes[active_color_scheme].DATA[WindowBackground].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_TitleBgActive, color_schemes[active_color_scheme].DATA[PanelBackground].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
+        ImGui::PushStyleColor(ImGuiCol_Text, color_schemes[active_color_scheme].DATA[Text].COLOR_VALUE);
+        if (ImGui::BeginPopupModal("Exit uTracker", NULL, ImGuiWindowFlags_NoResize))
+        {
+            ImGui::Text("All unsaved data will be lost\n\nAre you sure?");
+            
+            if (ImGui::Button("OK", ImVec2(120, 0)))
+            {
+                close_window = true;
+                ImGui::CloseCurrentPopup();
+            }
+            
+            ImGui::SameLine();
+            
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+            {
+                open_close_window_modal = false;
+                close_window = false;
+                ImGui::CloseCurrentPopup();
+            }
+            
+            ImGui::EndPopup();
+        }
+        ImGui::PopStyleColor(4);
         
 		ImGui::PushStyleColor(ImGuiCol_Button, color_schemes[active_color_scheme].DATA[Buttons].COLOR_VALUE);
         
