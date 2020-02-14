@@ -1,33 +1,3 @@
-
-//============================================================================
-// - Check if a sample was removed from disk (popup warning? something else?).
-// - Implement move up/move down for patterns/instruments.
-//   What should happen when moving patterns/instruments?
-// - Bug when playing module. Notes should stop just like when playing
-//   a single pattern.
-// - Add a "pan" field to notes and include it on PlayRow. It will be set by an FX
-// - Prevent sliders (and possibly other ui elements) of having values <>
-//   min/max.NOTE:This is an imgui issue.
-// - Read/Write file format.
-// - WAV export.
-// - Fix Solo/Mute. Should be updated even after firing notes.
-//============================================================================
-
-// imx family's program restructuring MODEL (I.F.P.R.M.)
-//struct {
-//public:
-//int get_myx()
-//{
-//std::cout << "get_myx\n";
-//return this->myx;
-//}
-//private:
-//int myx = 1500;
-//} MY_GLOBS;
-//
-
-// work test
-
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
